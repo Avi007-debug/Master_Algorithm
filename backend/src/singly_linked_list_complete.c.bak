@@ -8,12 +8,11 @@ typedef struct Node {
 } Node;
 
 Node* createNode(int data) {
-    char msg[256];
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
     newNode->next = NULL;
     sprintf(msg, "Created new node with data: %d", data);
-    log_message(msg);
+    log_message(msg);;
     return newNode;
 }
 
@@ -25,8 +24,9 @@ void insertAtBeginning(Node** head, int data) {
     newNode->next = *head;
     *head = newNode;
     sprintf(msg, "Inserted %d at beginning", data);
-    log_message(msg);
+    log_message(msg);;
     log_step_end();
+    log_message("INSERT_AT_BEGINNING");
 }
 
 void insertAtEnd(Node** head, int data) {
@@ -38,7 +38,7 @@ void insertAtEnd(Node** head, int data) {
     if (*head == NULL) {
         *head = newNode;
         sprintf(msg, "List was empty, inserted %d as first node", data);
-        log_message(msg);
+    log_message(msg);;
     } else {
         Node* temp = *head;
         while (temp->next != NULL) {
@@ -46,20 +46,21 @@ void insertAtEnd(Node** head, int data) {
         }
         temp->next = newNode;
         sprintf(msg, "Inserted %d at end", data);
-        log_message(msg);
+    log_message(msg);;
     }
     log_step_end();
+    log_message("INSERT_AT_END");
 }
 
 void insertAtPosition(Node** head, int data, int position) {
     char msg[256];
     log_step_start();
-    sprintf(msg, "INSERT_AT_POSITION %d", position);
-    log_message(msg);
+    log_message("INSERT_AT_POSITION");
     
     if (position == 0) {
         insertAtBeginning(head, data);
         log_step_end();
+    log_message("INSERT_AT_POSITION");
         return;
     }
     
@@ -72,27 +73,28 @@ void insertAtPosition(Node** head, int data, int position) {
     
     if (temp == NULL) {
         sprintf(msg, "Position %d is out of bounds", position);
-        log_message(msg);
+    log_message(msg);;
         free(newNode);
     } else {
         newNode->next = temp->next;
         temp->next = newNode;
         sprintf(msg, "Inserted %d at position %d", data, position);
-        log_message(msg);
+    log_message(msg);;
     }
     
     log_step_end();
+    log_message("INSERT_AT_POSITION");
 }
 
 void deleteByValue(Node** head, int value) {
     char msg[256];
     log_step_start();
-    sprintf(msg, "DELETE_BY_VALUE %d", value);
-    log_message(msg);
+    log_message("DELETE_BY_VALUE");
     
     if (*head == NULL) {
         log_message("List is empty");
         log_step_end();
+    log_message("DELETE_BY_VALUE");
         return;
     }
     
@@ -100,10 +102,10 @@ void deleteByValue(Node** head, int value) {
     if ((*head)->data == value) {
         Node* temp = *head;
         *head = (*head)->next;
-        sprintf(msg, "Deleted node with value %d (was head)", value);
-        log_message(msg);
+        log_message("Deleted node with value %d (was head)", value);
         free(temp);
         log_step_end();
+    log_message("DELETE_BY_VALUE");
         return;
     }
     
@@ -115,37 +117,38 @@ void deleteByValue(Node** head, int value) {
     
     if (temp->next == NULL) {
         sprintf(msg, "Value %d not found in list", value);
-        log_message(msg);
+    log_message(msg);;
     } else {
         Node* toDelete = temp->next;
         temp->next = toDelete->next;
         sprintf(msg, "Deleted node with value %d", value);
-        log_message(msg);
+    log_message(msg);;
         free(toDelete);
     }
     
     log_step_end();
+    log_message("DELETE_BY_VALUE");
 }
 
 void deleteAtPosition(Node** head, int position) {
     char msg[256];
     log_step_start();
-    sprintf(msg, "DELETE_AT_POSITION %d", position);
-    log_message(msg);
+    log_message("DELETE_AT_POSITION");
     
     if (*head == NULL) {
         log_message("List is empty");
         log_step_end();
+    log_message("DELETE_AT_POSITION");
         return;
     }
     
     if (position == 0) {
         Node* temp = *head;
         *head = (*head)->next;
-        sprintf(msg, "Deleted node at position 0 (value: %d)", temp->data);
-        log_message(msg);
+        log_message("Deleted node at position 0 (value: %d)", temp->data);
         free(temp);
         log_step_end();
+    log_message("DELETE_AT_POSITION");
         return;
     }
     
@@ -156,16 +159,16 @@ void deleteAtPosition(Node** head, int position) {
     
     if (temp == NULL || temp->next == NULL) {
         sprintf(msg, "Position %d is out of bounds", position);
-        log_message(msg);
+    log_message(msg);;
     } else {
         Node* toDelete = temp->next;
         temp->next = toDelete->next;
-        sprintf(msg, "Deleted node at position %d (value: %d)", position, toDelete->data);
-        log_message(msg);
+        log_message("Deleted node at position %d (value: %d)", position, toDelete->data);
         free(toDelete);
     }
     
     log_step_end();
+    log_message("DELETE_AT_POSITION");
 }
 
 void display(Node* head) {
@@ -176,6 +179,7 @@ void display(Node* head) {
     if (head == NULL) {
         log_message("List is empty");
         log_step_end();
+    log_message("DISPLAY");
         return;
     }
     
@@ -185,14 +189,16 @@ void display(Node* head) {
     
     while (temp != NULL) {
         sprintf(msg, "[%d] -> %d", position++, temp->data);
-        log_message(msg);
+    log_message(msg);;
         temp = temp->next;
     }
     
     log_step_end();
+    log_message("DISPLAY");
 }
 
 void freeList(Node** head) {
+    char msg[256];
     Node* current = *head;
     while (current != NULL) {
         Node* next = current->next;
@@ -207,14 +213,10 @@ int main() {
     
     Node* head = NULL;
     
-    log_step_start();
-    log_message("=== SINGLY LINKED LIST - COMPLETE IMPLEMENTATION ===");
-    log_step_end();
+    log_message("=== SINGLY LINKED LIST - COMPLETE IMPLEMENTATION ===\n");
     
     // Insertions
-    log_step_start();
     log_message("--- Testing Insertions ---");
-    log_step_end();
     insertAtEnd(&head, 10);
     insertAtEnd(&head, 20);
     insertAtEnd(&head, 30);
@@ -227,24 +229,20 @@ int main() {
     display(head);
     
     // Deletions
-    log_step_start();
-    log_message("--- Testing Deletions ---");
-    log_step_end();
-    deleteByValue(&head, 15);
+    log_message("\n--- Testing Deletions ---");
+    deleteByValue(&head, 20);
     display(head);
     
-    deleteAtPosition(&head, 0);
+    deleteAtPosition(&head, 1);
     display(head);
     
-    deleteByValue(&head, 30);
+    // Final state
+    log_message("\n--- Final List ---");
     display(head);
     
-    log_step_start();
-    log_message("--- Cleanup ---");
-    log_step_end();
+    // Cleanup
     freeList(&head);
-    display(head);
+    log_message("\nMemory freed successfully");
     
-    log_finish();
     return 0;
 }

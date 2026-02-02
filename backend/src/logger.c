@@ -55,6 +55,20 @@ int edge_count = 0;
 // Global message buffer for the step
 char current_message[256] = "";
 
+// Helper function to print JSON-escaped string
+void print_json_string(const char* str) {
+    for (const char* p = str; *p; p++) {
+        switch (*p) {
+            case '\n': printf("\\n"); break;
+            case '\r': printf("\\r"); break;
+            case '\t': printf("\\t"); break;
+            case '\"': printf("\\\""); break;
+            case '\\': printf("\\\\"); break;
+            default: putchar(*p); break;
+        }
+    }
+}
+
 void log_init() {
     printf("[\n");
     first_step = 1;
@@ -155,7 +169,9 @@ void log_step_end() {
 
     printf("    \"nodes\": [");
     for (int i = 0; i < node_count; i++) {
-        printf("{\"id\": %d, \"label\": \"%s\"}%s", tree_nodes[i].id, tree_nodes[i].label, (i < node_count - 1) ? ", " : "");
+        printf("{\"id\": %d, \"label\": \"", tree_nodes[i].id);
+        print_json_string(tree_nodes[i].label);
+        printf("\"}%s", (i < node_count - 1) ? ", " : "");
     }
     printf("],\n");
 
@@ -165,7 +181,9 @@ void log_step_end() {
     }
     printf("],\n");
 
-    printf("    \"message\": \"%s\"\n", current_message);
+    printf("    \"message\": \"");
+    print_json_string(current_message);
+    printf("\"\n");
     printf("  }");
 }
 

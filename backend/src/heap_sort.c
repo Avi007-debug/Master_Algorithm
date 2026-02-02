@@ -21,17 +21,17 @@ void heapify(int arr[], int n, int i) {
     }
     
     if (largest != i) {
-        log_message("Heapify: Swapping %d <-> %d", arr[i], arr[largest]);
+        char msg[256];
+        sprintf(msg, "Heapify: Swapping %d <-> %d", arr[i], arr[largest]);
+        log_message(msg);
         swap(&arr[i], &arr[largest]);
         heapify(arr, n, largest);
     }
 }
 
 void heapSort(int arr[], int n) {
-    log_step_start("HEAP_SORT");
-    
     // Build max heap
-    log_step_start("BUILD_MAX_HEAP");
+    log_step_start();
     log_message("Building max heap from array");
     
     for (int i = n / 2 - 1; i >= 0; i--) {
@@ -46,16 +46,21 @@ void heapSort(int arr[], int n) {
         if (k < n - 1) strcat(heapStr, ", ");
     }
     strcat(heapStr, "]");
-    log_message("Max heap built: %s", heapStr);
-    log_step_end("BUILD_MAX_HEAP");
+    char msg[512];
+    sprintf(msg, "Max heap built: %s", heapStr);
+    log_message(msg);
+    log_step_end();
     
     // Extract elements one by one
-    log_step_start("EXTRACT_SORT");
+    log_step_start();
     log_message("Extracting elements from heap to sort");
+    log_step_end();
     
     for (int i = n - 1; i > 0; i--) {
-        log_step_start("EXTRACT_STEP");
-        log_message("Moving root %d to position %d", arr[0], i);
+        log_step_start();
+        char msg2[256];
+        sprintf(msg2, "Moving root %d to position %d", arr[0], i);
+        log_message(msg2);
         
         swap(&arr[0], &arr[i]);
         
@@ -67,21 +72,23 @@ void heapSort(int arr[], int n) {
             if (k < n - 1) strcat(currentStr, ", ");
         }
         strcat(currentStr, "]");
-        log_message("Array state: %s", currentStr);
+        sprintf(msg2, "Array state: %s", currentStr);
+        log_message(msg2);
         
-        log_message("Heapifying reduced heap (size %d)", i);
+        sprintf(msg2, "Heapifying reduced heap (size %d)", i);
+        log_message(msg2);
         heapify(arr, i, 0);
         
-        log_step_end("EXTRACT_STEP");
+        log_step_end();
     }
     
-    log_step_end("EXTRACT_SORT");
+    log_step_start();
     log_message("Heap sort complete!");
-    log_step_end("HEAP_SORT");
+    log_step_end();
 }
 
 void displayArray(int arr[], int n, const char* label) {
-    log_step_start("DISPLAY_ARRAY");
+    log_step_start();
     
     char arrayStr[256] = "[";
     for (int i = 0; i < n; i++) {
@@ -92,8 +99,10 @@ void displayArray(int arr[], int n, const char* label) {
     }
     strcat(arrayStr, "]");
     
-    log_message("%s: %s", label, arrayStr);
-    log_step_end("DISPLAY_ARRAY");
+    char msg[512];
+    sprintf(msg, "%s: %s", label, arrayStr);
+    log_message(msg);
+    log_step_end();
 }
 
 int main(int argc, char* argv[]) {
@@ -102,15 +111,22 @@ int main(int argc, char* argv[]) {
     int arr[] = {12, 11, 13, 5, 6, 7};
     int n = sizeof(arr) / sizeof(arr[0]);
     
+    log_step_start();
     log_message("=== HEAP SORT ===\n");
+    log_step_end();
     
     displayArray(arr, n, "Original Array");
     
-    log_message("\n--- Sorting ---");
+    log_step_start();
+    log_message("\\n--- Sorting ---");
+    log_step_end();
     heapSort(arr, n);
     
-    log_message("\n--- Result ---");
+    log_step_start();
+    log_message("\\n--- Result ---");
+    log_step_end();
     displayArray(arr, n, "Sorted Array");
     
+    log_finish();
     return 0;
 }

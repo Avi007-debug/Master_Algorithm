@@ -34,33 +34,44 @@ void initHashTable(HashTable* ht) {
 }
 
 void insert(HashTable* ht, int key, int value) {
-    log_step_start("HASH_INSERT");
+    log_step_start();
+    log_message("HASH_INSERT");
     
     int index = hashFunction(key);
-    log_message("Inserting key=%d, value=%d", key, value);
-    log_message("Hash function: %d %% %d = %d", key, TABLE_SIZE, index);
+    char msg[256];
+    sprintf(msg, "Inserting key=%d, value=%d", key, value);
+    log_message(msg);
+    sprintf(msg, "Hash function: %d %% %d = %d", key, TABLE_SIZE, index);
+    log_message(msg);
     
     Node* newNode = createNode(key, value);
     
     // Insert at beginning of chain
     if (ht->buckets[index] == NULL) {
         ht->buckets[index] = newNode;
-        log_message("Created new chain at index %d", index);
+        sprintf(msg, "Created new chain at index %d", index);
+        log_message(msg);
     } else {
-        log_message("Collision! Chaining at index %d", index);
+        sprintf(msg, "Collision! Chaining at index %d", index);
+        log_message(msg);
         newNode->next = ht->buckets[index];
         ht->buckets[index] = newNode;
     }
     
-    log_step_end("HASH_INSERT");
+    log_step_end();
+    log_message("HASH_INSERT");
 }
 
 int search(HashTable* ht, int key) {
-    log_step_start("HASH_SEARCH");
+    log_step_start();
+    log_message("HASH_SEARCH");
     
     int index = hashFunction(key);
-    log_message("Searching for key=%d", key);
-    log_message("Hash index: %d", index);
+    char msg[256];
+    sprintf(msg, "Searching for key=%d", key);
+    log_message(msg);
+    sprintf(msg, "Hash index: %d", index);
+    log_message(msg);
     
     Node* current = ht->buckets[index];
     int chainLength = 0;
@@ -68,23 +79,30 @@ int search(HashTable* ht, int key) {
     while (current != NULL) {
         chainLength++;
         if (current->key == key) {
-            log_message("Found after %d comparisons: value=%d", chainLength, current->value);
-            log_step_end("HASH_SEARCH");
+            sprintf(msg, "Found after %d comparisons: value=%d", chainLength, current->value);
+            log_message(msg);
+            log_step_end();
+            log_message("HASH_SEARCH");
             return current->value;
         }
         current = current->next;
     }
     
-    log_message("Key not found (chain length was %d)", chainLength);
-    log_step_end("HASH_SEARCH");
+    sprintf(msg, "Key not found (chain length was %d)", chainLength);
+    log_message(msg);
+    log_step_end();
+    log_message("HASH_SEARCH");
     return -1;
 }
 
 void deleteKey(HashTable* ht, int key) {
-    log_step_start("HASH_DELETE");
+    log_step_start();
+    log_message("HASH_DELETE");
     
     int index = hashFunction(key);
-    log_message("Deleting key=%d from index %d", key, index);
+    char msg[256];
+    sprintf(msg, "Deleting key=%d from index %d", key, index);
+    log_message(msg);
     
     Node* current = ht->buckets[index];
     Node* prev = NULL;
@@ -96,21 +114,26 @@ void deleteKey(HashTable* ht, int key) {
             } else {
                 prev->next = current->next;
             }
-            log_message("Deleted key=%d", key);
+            sprintf(msg, "Deleted key=%d", key);
+            log_message(msg);
             free(current);
-            log_step_end("HASH_DELETE");
+            log_step_end();
+            log_message("HASH_DELETE");
             return;
         }
         prev = current;
         current = current->next;
     }
     
-    log_message("Key %d not found", key);
-    log_step_end("HASH_DELETE");
+    sprintf(msg, "Key %d not found", key);
+    log_message(msg);
+    log_step_end();
+    log_message("HASH_DELETE");
 }
 
 void display(HashTable* ht) {
-    log_step_start("HASH_DISPLAY");
+    log_step_start();
+    log_message("HASH_DISPLAY");
     
     log_message("\nHash Table (Open Hashing - Chaining):");
     
@@ -132,14 +155,16 @@ void display(HashTable* ht) {
             strcat(chain, "NULL");
         }
         
-        log_message("%s", chain);
+        log_message(chain);
     }
     
-    log_step_end("HASH_DISPLAY");
+    log_step_end();
+    log_message("HASH_DISPLAY");
 }
 
 void analyzeLoadFactor(HashTable* ht) {
-    log_step_start("ANALYZE_LOAD");
+    log_step_start();
+    log_message("ANALYZE_LOAD");
     
     int totalElements = 0;
     int nonEmptyBuckets = 0;
@@ -162,19 +187,28 @@ void analyzeLoadFactor(HashTable* ht) {
     float loadFactor = (float)totalElements / TABLE_SIZE;
     
     log_message("\n--- Hash Table Statistics ---");
-    log_message("Table size: %d", TABLE_SIZE);
-    log_message("Total elements: %d", totalElements);
-    log_message("Non-empty buckets: %d", nonEmptyBuckets);
-    log_message("Max chain length: %d", maxChainLength);
-    log_message("Load factor: %.2f", loadFactor);
+    char msg[256];
+    sprintf(msg, "Table size: %d", TABLE_SIZE);
+    log_message(msg);
+    sprintf(msg, "Total elements: %d", totalElements);
+    log_message(msg);
+    sprintf(msg, "Non-empty buckets: %d", nonEmptyBuckets);
+    log_message(msg);
+    sprintf(msg, "Max chain length: %d", maxChainLength);
+    log_message(msg);
+    sprintf(msg, "Load factor: %.2f", loadFactor);
+    log_message(msg);
     
-    log_step_end("ANALYZE_LOAD");
+    log_step_end();
+    log_message("ANALYZE_LOAD");
 }
 
 int main() {
     log_init();
     
+    log_step_start();
     log_message("=== OPEN HASHING (CHAINING) ===\n");
+    log_step_end();
     
     HashTable ht;
     initHashTable(&ht);

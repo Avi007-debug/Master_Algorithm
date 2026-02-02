@@ -31,8 +31,11 @@ Node* createNode(int data) {
 }
 
 Node* rightRotate(Node* y) {
-    log_step_start("RIGHT_ROTATE");
-    log_message("Right rotating at node %d", y->data);
+    log_step_start();
+    log_message("RIGHT_ROTATE");
+    char msg[256];
+    sprintf(msg, "Right rotating at node %d", y->data);
+    log_message(msg);
     
     Node* x = y->left;
     Node* T2 = x->right;
@@ -45,15 +48,20 @@ Node* rightRotate(Node* y) {
     y->height = max(height(y->left), height(y->right)) + 1;
     x->height = max(height(x->left), height(x->right)) + 1;
     
-    log_message("New root after rotation: %d", x->data);
-    log_step_end("RIGHT_ROTATE");
+    sprintf(msg, "New root after rotation: %d", x->data);
+    log_message(msg);
+    log_step_end();
+    log_message("RIGHT_ROTATE");
     
     return x;
 }
 
 Node* leftRotate(Node* x) {
-    log_step_start("LEFT_ROTATE");
-    log_message("Left rotating at node %d", x->data);
+    log_step_start();
+    log_message("LEFT_ROTATE");
+    char msg[256];
+    sprintf(msg, "Left rotating at node %d", x->data);
+    log_message(msg);
     
     Node* y = x->right;
     Node* T2 = y->left;
@@ -66,31 +74,44 @@ Node* leftRotate(Node* x) {
     x->height = max(height(x->left), height(x->right)) + 1;
     y->height = max(height(y->left), height(y->right)) + 1;
     
-    log_message("New root after rotation: %d", y->data);
-    log_step_end("LEFT_ROTATE");
+    sprintf(msg, "New root after rotation: %d", y->data);
+    log_message(msg);
+    log_step_end();
+    log_message("LEFT_ROTATE");
     
     return y;
 }
 
 Node* insert(Node* node, int data) {
-    log_step_start("AVL_INSERT");
+    log_step_start();
+    log_message("AVL_INSERT");
     
     // Normal BST insertion
     if (node == NULL) {
-        log_message("Inserting new node: %d", data);
-        log_step_end("AVL_INSERT");
+        char msg[256];
+        sprintf(msg, "Inserting new node: %d", data);
+        log_message(msg);
+        log_step_end();
+    log_message("AVL_INSERT");
         return createNode(data);
     }
     
     if (data < node->data) {
-        log_message("%d < %d, going left", data, node->data);
+        char msg[256];
+        sprintf(msg, "%d < %d, going left", data, node->data);
+        log_message(msg);
         node->left = insert(node->left, data);
     } else if (data > node->data) {
-        log_message("%d > %d, going right", data, node->data);
+        char msg[256];
+        sprintf(msg, "%d > %d, going right", data, node->data);
+        log_message(msg);
         node->right = insert(node->right, data);
     } else {
-        log_message("%d already exists", data);
-        log_step_end("AVL_INSERT");
+        char msg[256];
+        sprintf(msg, "%d already exists", data);
+        log_message(msg);
+        log_step_end();
+    log_message("AVL_INSERT");
         return node;
     }
     
@@ -99,63 +120,81 @@ Node* insert(Node* node, int data) {
     
     // Get balance factor
     int balance = getBalance(node);
-    log_message("Node %d: height=%d, balance=%d", node->data, node->height, balance);
+    char msg[256];
+    sprintf(msg, "Node %d: height=%d, balance=%d", node->data, node->height, balance);
+    log_message(msg);
     
     // Left Left Case
     if (balance > 1 && data < node->left->data) {
-        log_message("LL Case detected at node %d", node->data);
-        log_step_end("AVL_INSERT");
+        sprintf(msg, "LL Case detected at node %d", node->data);
+        log_message(msg);
+        log_step_end();
+    log_message("AVL_INSERT");
         return rightRotate(node);
     }
     
     // Right Right Case
     if (balance < -1 && data > node->right->data) {
-        log_message("RR Case detected at node %d", node->data);
-        log_step_end("AVL_INSERT");
+        sprintf(msg, "RR Case detected at node %d", node->data);
+        log_message(msg);
+        log_step_end();
+    log_message("AVL_INSERT");
         return leftRotate(node);
     }
     
     // Left Right Case
     if (balance > 1 && data > node->left->data) {
-        log_message("LR Case detected at node %d", node->data);
+        sprintf(msg, "LR Case detected at node %d", node->data);
+        log_message(msg);
         node->left = leftRotate(node->left);
-        log_step_end("AVL_INSERT");
+        log_step_end();
+    log_message("AVL_INSERT");
         return rightRotate(node);
     }
     
     // Right Left Case
     if (balance < -1 && data < node->right->data) {
-        log_message("RL Case detected at node %d", node->data);
+        sprintf(msg, "RL Case detected at node %d", node->data);
+        log_message(msg);
         node->right = rightRotate(node->right);
-        log_step_end("AVL_INSERT");
+        log_step_end();
+    log_message("AVL_INSERT");
         return leftRotate(node);
     }
     
-    log_message("Node %d is balanced", node->data);
-    log_step_end("AVL_INSERT");
+    sprintf(msg, "Node %d is balanced", node->data);
+    log_message(msg);
+    log_step_end();
+    log_message("AVL_INSERT");
     return node;
 }
 
 void inorderTraversal(Node* root) {
     if (root != NULL) {
         inorderTraversal(root->left);
-        log_message("Node: %d (height: %d, balance: %d)", 
+        char msg[256];
+        sprintf(msg, "Node: %d (height: %d, balance: %d)", 
                    root->data, root->height, getBalance(root));
+        log_message(msg);
         inorderTraversal(root->right);
     }
 }
 
 void displayTree(Node* root) {
-    log_step_start("DISPLAY_AVL");
+    log_step_start();
+    log_message("DISPLAY_AVL");
     log_message("AVL Tree (Inorder):");
     inorderTraversal(root);
-    log_step_end("DISPLAY_AVL");
+    log_step_end();
+    log_message("DISPLAY_AVL");
 }
 
 int main() {
     log_init();
     
+    log_step_start();
     log_message("=== AVL TREE (SELF-BALANCING) ===\n");
+    log_step_end();
     
     Node* root = NULL;
     
@@ -163,11 +202,17 @@ int main() {
     int n = sizeof(values) / sizeof(values[0]);
     
     for (int i = 0; i < n; i++) {
-        log_message("\n--- Inserting %d ---", values[i]);
+        char msg[256];
+        log_step_start();
+        sprintf(msg, "\n--- Inserting %d ---", values[i]);
+        log_message(msg);
+        log_step_end();
         root = insert(root, values[i]);
     }
     
+    log_step_start();
     log_message("\n--- Final AVL Tree ---");
+    log_step_end();
     displayTree(root);
     
     return 0;

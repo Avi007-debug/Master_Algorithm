@@ -768,15 +768,8 @@ export function InterviewMode({ problem, onBack }) {
                             aria-valuemin="0.1"
                             aria-valuemax="5"
                             aria-valuenow={speed}
-                                aria-valuetext={`${speed} times speed`}
-                            />
-                        </div>
-                        <div className="flex gap-1 text-[9px] text-[var(--color-text-tertiary)] justify-center" role="group" aria-label="Speed presets">
-                            <button onClick={() => setSpeed(0.5)} className="px-2 py-0.5 hover:text-[var(--color-accent-primary)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)] rounded" aria-label="Set speed to 0.5x">0.5x</button>
-                            <button onClick={() => setSpeed(1)} className="px-2 py-0.5 hover:text-[var(--color-accent-primary)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)] rounded" aria-label="Set speed to 1x">1x</button>
-                            <button onClick={() => setSpeed(1.5)} className="px-2 py-0.5 hover:text-[var(--color-accent-primary)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)] rounded" aria-label="Set speed to 1.5x">1.5x</button>
-                            <button onClick={() => setSpeed(2)} className="px-2 py-0.5 hover:text-[var(--color-accent-primary)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)] rounded" aria-label="Set speed to 2x">2x</button>
-                        </div>
+                            aria-valuetext={`${speed} times speed`}
+                        />
                     </div>
 
                     {/* Keyboard Shortcuts Hint */}

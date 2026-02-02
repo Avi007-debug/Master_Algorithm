@@ -19,7 +19,9 @@ Node* createNode(int data) {
 }
 
 Node* rightRotate(Node* node) {
-    log_message("Right rotation (Zig) at node %d", node->data);
+    char msg[256];
+    sprintf(msg, "Right rotation (Zig) at node %d", node->data);
+    log_message(msg);
     Node* leftChild = node->left;
     node->left = leftChild->right;
     
@@ -35,7 +37,9 @@ Node* rightRotate(Node* node) {
 }
 
 Node* leftRotate(Node* node) {
-    log_message("Left rotation (Zig) at node %d", node->data);
+    char msg[256];
+    sprintf(msg, "Left rotation (Zig) at node %d", node->data);
+    log_message(msg);
     Node* rightChild = node->right;
     node->right = rightChild->left;
     
@@ -51,22 +55,31 @@ Node* leftRotate(Node* node) {
 }
 
 Node* splay(Node* root, int key) {
-    log_step_start("SPLAY");
-    log_message("Splaying key %d to root", key);
+    log_step_start();
+    log_message("SPLAY");
+    char msg[256];
+    sprintf(msg, "Splaying key %d to root", key);
+    log_message(msg);
     
     if (root == NULL || root->data == key) {
         if (root != NULL) {
-            log_message("Key %d is already root", key);
+            char msg[256];
+            sprintf(msg, "Key %d is already root", key);
+            log_message(msg);
         }
-        log_step_end("SPLAY");
+        log_step_end();
+    log_message("SPLAY");
         return root;
     }
     
     // Key lies in left subtree
     if (key < root->data) {
         if (root->left == NULL) {
-            log_message("Key %d not found", key);
-            log_step_end("SPLAY");
+            char msg[256];
+            sprintf(msg, "Key %d not found", key);
+            log_message(msg);
+            log_step_end();
+    log_message("SPLAY");
             return root;
         }
         
@@ -85,14 +98,18 @@ Node* splay(Node* root, int key) {
             }
         }
         
-        log_step_end("SPLAY");
+        log_step_end();
+    log_message("SPLAY");
         return (root->left == NULL) ? root : rightRotate(root);
     }
     // Key lies in right subtree
     else {
         if (root->right == NULL) {
-            log_message("Key %d not found", key);
-            log_step_end("SPLAY");
+            char msg[256];
+            sprintf(msg, "Key %d not found", key);
+            log_message(msg);
+            log_step_end();
+    log_message("SPLAY");
             return root;
         }
         
@@ -111,18 +128,24 @@ Node* splay(Node* root, int key) {
             root = leftRotate(root);
         }
         
-        log_step_end("SPLAY");
+        log_step_end();
+    log_message("SPLAY");
         return (root->right == NULL) ? root : leftRotate(root);
     }
 }
 
 Node* insert(Node* root, int key) {
-    log_step_start("SPLAY_INSERT");
-    log_message("Inserting key: %d", key);
+    log_step_start();
+    log_message("SPLAY_INSERT");
+    char msg[256];
+    sprintf(msg, "Inserting key: %d", key);
+    log_message(msg);
     
     if (root == NULL) {
-        log_message("Created root node: %d", key);
-        log_step_end("SPLAY_INSERT");
+        sprintf(msg, "Created root node: %d", key);
+        log_message(msg);
+        log_step_end();
+    log_message("SPLAY_INSERT");
         return createNode(key);
     }
     
@@ -130,8 +153,10 @@ Node* insert(Node* root, int key) {
     root = splay(root, key);
     
     if (root->data == key) {
-        log_message("Key %d already exists", key);
-        log_step_end("SPLAY_INSERT");
+        sprintf(msg, "Key %d already exists", key);
+        log_message(msg);
+        log_step_end();
+    log_message("SPLAY_INSERT");
         return root;
     }
     
@@ -155,31 +180,41 @@ Node* insert(Node* root, int key) {
         root->parent = newNode;
     }
     
-    log_message("Inserted %d as new root", key);
-    log_step_end("SPLAY_INSERT");
+    sprintf(msg, "Inserted %d as new root", key);
+    log_message(msg);
+    log_step_end();
+    log_message("SPLAY_INSERT");
     return newNode;
 }
 
 void inorder(Node* root) {
     if (root != NULL) {
         inorder(root->left);
-        log_message("Node: %d", root->data);
+        char msg[256];
+        sprintf(msg, "Node: %d", root->data);
+        log_message(msg);
         inorder(root->right);
     }
 }
 
 void display(Node* root) {
-    log_step_start("DISPLAY_SPLAY");
+    log_step_start();
+    log_message("DISPLAY_SPLAY");
     log_message("Splay Tree (Inorder):");
     inorder(root);
-    log_message("Current root: %d", root ? root->data : -1);
-    log_step_end("DISPLAY_SPLAY");
+    char msg[256];
+    sprintf(msg, "Current root: %d", root ? root->data : -1);
+    log_message(msg);
+    log_step_end();
+    log_message("DISPLAY_SPLAY");
 }
 
 int main() {
     log_init();
     
+    log_step_start();
     log_message("=== SPLAY TREE ===\n");
+    log_step_end();
     
     Node* root = NULL;
     
@@ -187,14 +222,22 @@ int main() {
     int n = sizeof(values) / sizeof(values[0]);
     
     for (int i = 0; i < n; i++) {
-        log_message("\n--- Inserting %d ---", values[i]);
+        char msg[256];
+        log_step_start();
+        sprintf(msg, "\n--- Inserting %d ---", values[i]);
+        log_message(msg);
+        log_step_end();
         root = insert(root, values[i]);
     }
     
+    log_step_start();
     log_message("\n--- Tree After Insertions ---");
+    log_step_end();
     display(root);
     
+    log_step_start();
     log_message("\n--- Searching for 20 (will splay to root) ---");
+    log_step_end();
     root = splay(root, 20);
     display(root);
     

@@ -33,11 +33,15 @@ void insertTerm(Node** poly, int coeff, int exp) {
 }
 
 void displayPolynomial(Node* poly, const char* name) {
-    log_step_start("DISPLAY_POLYNOMIAL");
+    log_step_start();
+    log_message("DISPLAY_POLYNOMIAL");
     
     if (poly == NULL) {
-        log_message("%s = 0", name);
-        log_step_end("DISPLAY_POLYNOMIAL");
+        char msg[256];
+        sprintf(msg, "%s = 0", name);
+        log_message(msg);
+        log_step_end();
+    log_message("DISPLAY_POLYNOMIAL");
         return;
     }
     
@@ -67,16 +71,21 @@ void displayPolynomial(Node* poly, const char* name) {
         first = 0;
     }
     
-    log_message("%s = %s", name, polyStr);
-    log_step_end("DISPLAY_POLYNOMIAL");
+    char msg[512];
+    sprintf(msg, "%s = %s", name, polyStr);
+    log_message(msg);
+    log_step_end();
+    log_message("DISPLAY_POLYNOMIAL");
 }
 
 Node* multiplyPolynomials(Node* poly1, Node* poly2) {
-    log_step_start("MULTIPLY_POLYNOMIALS");
+    log_step_start();
+    log_message("MULTIPLY_POLYNOMIALS");
     
     if (poly1 == NULL || poly2 == NULL) {
         log_message("One or both polynomials are empty");
-        log_step_end("MULTIPLY_POLYNOMIALS");
+        log_step_end();
+    log_message("MULTIPLY_POLYNOMIALS");
         return NULL;
     }
     
@@ -88,8 +97,10 @@ Node* multiplyPolynomials(Node* poly1, Node* poly2) {
             int newCoeff = p1->coeff * p2->coeff;
             int newExp = p1->exp + p2->exp;
             
-            log_message("Multiplying: (%dx^%d) * (%dx^%d) = %dx^%d", 
+            char msg[256];
+            sprintf(msg, "Multiplying: (%dx^%d) * (%dx^%d) = %dx^%d", 
                        p1->coeff, p1->exp, p2->coeff, p2->exp, newCoeff, newExp);
+            log_message(msg);
             
             // Check if this exponent already exists in result
             Node* temp = result;
@@ -99,7 +110,9 @@ Node* multiplyPolynomials(Node* poly1, Node* poly2) {
             while (temp != NULL) {
                 if (temp->exp == newExp) {
                     temp->coeff += newCoeff;
-                    log_message("Combined with existing term: %dx^%d", temp->coeff, temp->exp);
+                    char msg2[256];
+                    sprintf(msg2, "Combined with existing term: %dx^%d", temp->coeff, temp->exp);
+                    log_message(msg2);
                     found = 1;
                     break;
                 }
@@ -114,19 +127,23 @@ Node* multiplyPolynomials(Node* poly1, Node* poly2) {
                 } else {
                     prev->next = newNode;
                 }
-                log_message("Added new term: %dx^%d", newCoeff, newExp);
+                char msg2[256];
+                sprintf(msg2, "Added new term: %dx^%d", newCoeff, newExp);
+                log_message(msg2);
             }
         }
     }
     
-    log_step_end("MULTIPLY_POLYNOMIALS");
+    log_step_end();
+    log_message("MULTIPLY_POLYNOMIALS");
     return result;
 }
 
 void sortPolynomial(Node** poly) {
     if (*poly == NULL) return;
     
-    log_step_start("SORT_POLYNOMIAL");
+    log_step_start();
+    log_message("SORT_POLYNOMIAL");
     
     // Bubble sort by exponent (descending)
     int swapped;
@@ -158,13 +175,16 @@ void sortPolynomial(Node** poly) {
     } while (swapped);
     
     log_message("Polynomial sorted in descending order of exponents");
-    log_step_end("SORT_POLYNOMIAL");
+    log_step_end();
+    log_message("SORT_POLYNOMIAL");
 }
 
 int main() {
     log_init();
     
+    log_step_start();
     log_message("=== POLYNOMIAL MULTIPLICATION ===\n");
+    log_step_end();
     
     // Create first polynomial: 3x^2 + 5x + 2
     Node* poly1 = NULL;

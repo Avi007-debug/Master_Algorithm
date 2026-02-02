@@ -21,28 +21,35 @@ Node* createNode(int vertex, int weight) {
 }
 
 void addEdge(AdjList adjList[], int src, int dest, int weight, int isDirected) {
-    log_step_start("ADD_EDGE");
+    log_step_start();
+    log_message("ADD_EDGE");
     
     // Add edge from src to dest
     Node* newNode = createNode(dest, weight);
     newNode->next = adjList[src].head;
     adjList[src].head = newNode;
     
-    log_message("Added edge: %d -> %d (weight: %d)", src, dest, weight);
+    char msg[256];
+    sprintf(msg, "Added edge: %d -> %d (weight: %d)", src, dest, weight);
+    log_message(msg);
     
     // If undirected, add reverse edge
     if (!isDirected) {
         newNode = createNode(src, weight);
         newNode->next = adjList[dest].head;
         adjList[dest].head = newNode;
-        log_message("Added reverse edge: %d -> %d (undirected)", dest, src);
+        char msg[256];
+        sprintf(msg, "Added reverse edge: %d -> %d (undirected)", dest, src);
+        log_message(msg);
     }
     
-    log_step_end("ADD_EDGE");
+    log_step_end();
+    log_message("ADD_EDGE");
 }
 
 void displayAdjacencyList(AdjList adjList[], int vertices) {
-    log_step_start("DISPLAY_ADJ_LIST");
+    log_step_start();
+    log_message("DISPLAY_ADJ_LIST");
     
     log_message("\nAdjacency List Representation:");
     
@@ -63,14 +70,18 @@ void displayAdjacencyList(AdjList adjList[], int vertices) {
             }
         }
         
-        log_message("%s", listStr);
+        char msg[256];
+        sprintf(msg, "%s", listStr);
+        log_message(msg);
     }
     
-    log_step_end("DISPLAY_ADJ_LIST");
+    log_step_end();
+    log_message("DISPLAY_ADJ_LIST");
 }
 
 void analyzeList(AdjList adjList[], int vertices) {
-    log_step_start("ANALYZE_LIST");
+    log_step_start();
+    log_message("ANALYZE_LIST");
     
     log_message("\nGraph Analysis:");
     
@@ -86,19 +97,26 @@ void analyzeList(AdjList adjList[], int vertices) {
             temp = temp->next;
         }
         
-        log_message("Vertex %d: Degree = %d", i, degree);
+        char msg[256];
+        sprintf(msg, "Vertex %d: Degree = %d", i, degree);
+        log_message(msg);
     }
     
-    log_message("\nTotal edge entries: %d", totalEdges);
+    char msg[256];
+    sprintf(msg, "\nTotal edge entries: %d", totalEdges);
+    log_message(msg);
     log_message("Space Complexity: O(V + E) where V=vertices, E=edges");
     
-    log_step_end("ANALYZE_LIST");
+    log_step_end();
+    log_message("ANALYZE_LIST");
 }
 
 int main() {
     log_init();
     
+    log_step_start();
     log_message("=== ADJACENCY LIST REPRESENTATION ===\n");
+    log_step_end();
     
     int vertices = 5;
     AdjList* adjList = (AdjList*)malloc(sizeof(AdjList) * vertices);
@@ -108,7 +126,9 @@ int main() {
         adjList[i].head = NULL;
     }
     
-    log_message("Creating directed weighted graph with %d vertices\n", vertices);
+    char msg[256];
+    sprintf(msg, "Creating directed weighted graph with %d vertices\n", vertices);
+    log_message(msg);
     
     // Add same edges as adjacency matrix example
     addEdge(adjList, 0, 1, 5, 1);
@@ -122,11 +142,13 @@ int main() {
     displayAdjacencyList(adjList, vertices);
     analyzeList(adjList, vertices);
     
+    log_step_start();
     log_message("\n--- Comparison with Adjacency Matrix ---");
     log_message("Matrix: O(V²) space - Good for dense graphs");
     log_message("List:   O(V+E) space - Good for sparse graphs");
     log_message("Matrix: O(1) edge lookup");
     log_message("List:   O(degree) edge lookup");
+    log_step_end();
     
     return 0;
 }

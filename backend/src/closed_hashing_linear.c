@@ -23,61 +23,77 @@ void initHashTable(HashTable* ht) {
 }
 
 void insert(HashTable* ht, int key, int value) {
-    log_step_start("LINEAR_PROBE_INSERT");
+    log_step_start();
+    log_message("LINEAR_PROBE_INSERT");
     
     int index = hashFunction(key);
     int originalIndex = index;
     int probeCount = 0;
+    char msg[256];
     
-    log_message("Inserting key=%d, value=%d", key, value);
-    log_message("Hash function: %d %% %d = %d", key, TABLE_SIZE, index);
+    sprintf(msg, "Inserting key=%d, value=%d", key, value);
+    log_message(msg);
+    sprintf(msg, "Hash function: %d %% %d = %d", key, TABLE_SIZE, index);
+    log_message(msg);
     
     while (ht->keys[index] != EMPTY && ht->keys[index] != DELETED) {
         if (ht->keys[index] == key) {
             log_message("Key already exists, updating value");
             ht->values[index] = value;
-            log_step_end("LINEAR_PROBE_INSERT");
+            log_step_end();
+    log_message("LINEAR_PROBE_INSERT");
             return;
         }
         
         probeCount++;
-        log_message("Collision at index %d, probing...", index);
+        sprintf(msg, "Collision at index %d, probing...", index);
+        log_message(msg);
         index = (index + 1) % TABLE_SIZE;
         
         if (index == originalIndex) {
             log_message("Table is full!");
-            log_step_end("LINEAR_PROBE_INSERT");
+            log_step_end();
+    log_message("LINEAR_PROBE_INSERT");
             return;
         }
     }
     
     ht->keys[index] = key;
     ht->values[index] = value;
-    log_message("Inserted at index %d after %d probes", index, probeCount);
+    sprintf(msg, "Inserted at index %d after %d probes", index, probeCount);
+    log_message(msg);
     
-    log_step_end("LINEAR_PROBE_INSERT");
+    log_step_end();
+    log_message("LINEAR_PROBE_INSERT");
 }
 
 int search(HashTable* ht, int key) {
-    log_step_start("LINEAR_PROBE_SEARCH");
+    log_step_start();
+    log_message("LINEAR_PROBE_SEARCH");
     
     int index = hashFunction(key);
     int originalIndex = index;
     int probeCount = 0;
+    char msg[256];
     
-    log_message("Searching for key=%d", key);
-    log_message("Starting at index: %d", index);
+    sprintf(msg, "Searching for key=%d", key);
+    log_message(msg);
+    sprintf(msg, "Starting at index: %d", index);
+    log_message(msg);
     
     while (ht->keys[index] != EMPTY) {
         probeCount++;
         
         if (ht->keys[index] == key) {
-            log_message("Found after %d probes: value=%d", probeCount, ht->values[index]);
-            log_step_end("LINEAR_PROBE_SEARCH");
+            sprintf(msg, "Found after %d probes: value=%d", probeCount, ht->values[index]);
+            log_message(msg);
+            log_step_end();
+    log_message("LINEAR_PROBE_SEARCH");
             return ht->values[index];
         }
         
-        log_message("Probe %d: index %d (key=%d) - not a match", probeCount, index, ht->keys[index]);
+        sprintf(msg, "Probe %d: index %d (key=%d) - not a match", probeCount, index, ht->keys[index]);
+        log_message(msg);
         index = (index + 1) % TABLE_SIZE;
         
         if (index == originalIndex) {
@@ -85,25 +101,32 @@ int search(HashTable* ht, int key) {
         }
     }
     
-    log_message("Key not found after %d probes", probeCount);
-    log_step_end("LINEAR_PROBE_SEARCH");
+    sprintf(msg, "Key not found after %d probes", probeCount);
+    log_message(msg);
+    log_step_end();
+    log_message("LINEAR_PROBE_SEARCH");
     return -1;
 }
 
 void deleteKey(HashTable* ht, int key) {
-    log_step_start("LINEAR_PROBE_DELETE");
+    log_step_start();
+    log_message("LINEAR_PROBE_DELETE");
     
     int index = hashFunction(key);
     int originalIndex = index;
+    char msg[256];
     
-    log_message("Deleting key=%d", key);
+    sprintf(msg, "Deleting key=%d", key);
+    log_message(msg);
     
     while (ht->keys[index] != EMPTY) {
         if (ht->keys[index] == key) {
             ht->keys[index] = DELETED;
             ht->values[index] = DELETED;
-            log_message("Deleted key=%d at index %d (marked as DELETED)", key, index);
-            log_step_end("LINEAR_PROBE_DELETE");
+            sprintf(msg, "Deleted key=%d at index %d (marked as DELETED)", key, index);
+            log_message(msg);
+            log_step_end();
+    log_message("LINEAR_PROBE_DELETE");
             return;
         }
         
@@ -114,32 +137,42 @@ void deleteKey(HashTable* ht, int key) {
         }
     }
     
-    log_message("Key %d not found", key);
-    log_step_end("LINEAR_PROBE_DELETE");
+    sprintf(msg, "Key %d not found", key);
+    log_message(msg);
+    log_step_end();
+    log_message("LINEAR_PROBE_DELETE");
 }
 
 void display(HashTable* ht) {
-    log_step_start("HASH_DISPLAY");
+    log_step_start();
+    log_message("HASH_DISPLAY");
     
     log_message("\nHash Table (Closed Hashing - Linear Probing):");
+    char msg[256];
     
     for (int i = 0; i < TABLE_SIZE; i++) {
         if (ht->keys[i] == EMPTY) {
-            log_message("[%d]: (empty)", i);
+            sprintf(msg, "[%d]: (empty)", i);
+            log_message(msg);
         } else if (ht->keys[i] == DELETED) {
-            log_message("[%d]: (deleted)", i);
+            sprintf(msg, "[%d]: (deleted)", i);
+            log_message(msg);
         } else {
-            log_message("[%d]: key=%d, value=%d", i, ht->keys[i], ht->values[i]);
+            sprintf(msg, "[%d]: key=%d, value=%d", i, ht->keys[i], ht->values[i]);
+            log_message(msg);
         }
     }
     
-    log_step_end("HASH_DISPLAY");
+    log_step_end();
+    log_message("HASH_DISPLAY");
 }
 
 int main() {
     log_init();
     
+    log_step_start();
     log_message("=== CLOSED HASHING - LINEAR PROBING ===\n");
+    log_step_end();
     
     HashTable ht;
     initHashTable(&ht);

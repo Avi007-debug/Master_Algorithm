@@ -26,18 +26,25 @@ int isFull(MessageQueue* q) {
 
 void enqueue(MessageQueue* q, const char* message) {
     if (isFull(q)) {
-        log_message("Queue is FULL! Cannot enqueue: %s", message);
+        char msg[256];
+        sprintf(msg, "Queue is FULL! Cannot enqueue: %s", message);
+        log_message(msg);
         return;
     }
     
-    log_step_start("ENQUEUE");
+    log_step_start();
+    log_message("ENQUEUE");
     q->rear = (q->rear + 1) % MAX;
     strcpy(q->messages[q->rear], message);
     q->size++;
     
-    log_message("Enqueued message: '%s'", message);
-    log_message("Front: %d, Rear: %d, Size: %d", q->front, q->rear, q->size);
-    log_step_end("ENQUEUE");
+    char msg[256];
+    sprintf(msg, "Enqueued message: '%s'", message);
+    log_message(msg);
+    sprintf(msg, "Front: %d, Rear: %d, Size: %d", q->front, q->rear, q->size);
+    log_message(msg);
+    log_step_end();
+    log_message("ENQUEUE");
 }
 
 void dequeue(MessageQueue* q) {
@@ -46,13 +53,18 @@ void dequeue(MessageQueue* q) {
         return;
     }
     
-    log_step_start("DEQUEUE");
-    log_message("Dequeued message: '%s'", q->messages[q->front]);
+    log_step_start();
+    log_message("DEQUEUE");
+    char msg[256];
+    sprintf(msg, "Dequeued message: '%s'", q->messages[q->front]);
+    log_message(msg);
     q->front = (q->front + 1) % MAX;
     q->size--;
     
-    log_message("Front: %d, Rear: %d, Size: %d", q->front, q->rear, q->size);
-    log_step_end("DEQUEUE");
+    sprintf(msg, "Front: %d, Rear: %d, Size: %d", q->front, q->rear, q->size);
+    log_message(msg);
+    log_step_end();
+    log_message("DEQUEUE");
 }
 
 void displayQueue(MessageQueue* q) {
@@ -61,16 +73,21 @@ void displayQueue(MessageQueue* q) {
         return;
     }
     
-    log_step_start("DISPLAY_QUEUE");
-    log_message("Current messages in queue (%d):", q->size);
+    log_step_start();
+    log_message("DISPLAY_QUEUE");
+    char msg[256];
+    sprintf(msg, "Current messages in queue (%d):", q->size);
+    log_message(msg);
     
     int i = q->front;
     for (int count = 0; count < q->size; count++) {
-        log_message("[%d] %s", count + 1, q->messages[i]);
+        sprintf(msg, "[%d] %s", count + 1, q->messages[i]);
+        log_message(msg);
         i = (i + 1) % MAX;
     }
     
-    log_step_end("DISPLAY_QUEUE");
+    log_step_end();
+    log_message("DISPLAY_QUEUE");
 }
 
 int main() {
@@ -79,8 +96,10 @@ int main() {
     MessageQueue mq;
     initQueue(&mq);
     
+    log_step_start();
     log_message("=== MESSAGE QUEUE APPLICATION ===");
     log_message("Simulating a messaging system using circular queue\n");
+    log_step_end();
     
     // Enqueue messages
     enqueue(&mq, "User1: Hello!");

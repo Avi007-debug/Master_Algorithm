@@ -5,10 +5,10 @@
 #define MAX_VERTICES 10
 
 void displayAdjacencyMatrix(int graph[][MAX_VERTICES], int vertices) {
-    log_step_start("DISPLAY_ADJ_MATRIX");
+    log_step_start();
+    log_message("DISPLAY_ADJ_MATRIX");
     
     log_message("\nAdjacency Matrix Representation:");
-    log_message("  ", vertices);
     
     // Header
     char header[256] = "   ";
@@ -17,8 +17,8 @@ void displayAdjacencyMatrix(int graph[][MAX_VERTICES], int vertices) {
         sprintf(temp, "%2d ", i);
         strcat(header, temp);
     }
-    log_message("%s", header);
-    log_message("  %s", "---");
+    log_message(header);
+    log_message("  ---");
     
     // Matrix rows
     for (int i = 0; i < vertices; i++) {
@@ -30,28 +30,35 @@ void displayAdjacencyMatrix(int graph[][MAX_VERTICES], int vertices) {
             sprintf(temp, "%2d ", graph[i][j]);
             strcat(row, temp);
         }
-        log_message("%s", row);
+        log_message(row);
     }
     
-    log_step_end("DISPLAY_ADJ_MATRIX");
+    log_step_end();
+    log_message("DISPLAY_ADJ_MATRIX");
 }
 
 void addEdge(int graph[][MAX_VERTICES], int src, int dest, int isDirected, int weight) {
-    log_step_start("ADD_EDGE");
+    log_step_start();
+    log_message("ADD_EDGE");
     
     graph[src][dest] = weight;
-    log_message("Added edge: %d -> %d (weight: %d)", src, dest, weight);
+    char msg[256];
+    sprintf(msg, "Added edge: %d -> %d (weight: %d)", src, dest, weight);
+    log_message(msg);
     
     if (!isDirected) {
         graph[dest][src] = weight;
-        log_message("Added reverse edge: %d -> %d (undirected)", dest, src);
+        sprintf(msg, "Added reverse edge: %d -> %d (undirected)", dest, src);
+        log_message(msg);
     }
     
-    log_step_end("ADD_EDGE");
+    log_step_end();
+    log_message("ADD_EDGE");
 }
 
 void analyzeMatrix(int graph[][MAX_VERTICES], int vertices) {
-    log_step_start("ANALYZE_MATRIX");
+    log_step_start();
+    log_message("ANALYZE_MATRIX");
     
     log_message("\nGraph Analysis:");
     
@@ -64,16 +71,21 @@ void analyzeMatrix(int graph[][MAX_VERTICES], int vertices) {
             if (graph[j][i] != 0) inDegree++;
         }
         
-        log_message("Vertex %d: Out-degree=%d, In-degree=%d", i, outDegree, inDegree);
+        char msg[256];
+        sprintf(msg, "Vertex %d: Out-degree=%d, In-degree=%d", i, outDegree, inDegree);
+        log_message(msg);
     }
     
-    log_step_end("ANALYZE_MATRIX");
+    log_step_end();
+    log_message("ANALYZE_MATRIX");
 }
 
 int main() {
     log_init();
     
+    log_step_start();
     log_message("=== ADJACENCY MATRIX REPRESENTATION ===\n");
+    log_step_end();
     
     int vertices = 5;
     int graph[MAX_VERTICES][MAX_VERTICES] = {0};
@@ -85,7 +97,9 @@ int main() {
         }
     }
     
-    log_message("Creating directed weighted graph with %d vertices\n", vertices);
+    char msg[256];
+    sprintf(msg, "Creating directed weighted graph with %d vertices\n", vertices);
+    log_message(msg);
     
     // Add edges
     addEdge(graph, 0, 1, 1, 5);
@@ -100,6 +114,7 @@ int main() {
     analyzeMatrix(graph, vertices);
     
     // Space complexity analysis
+    log_step_start();
     log_message("\n--- Space Complexity Analysis ---");
     int totalCells = vertices * vertices;
     int usedCells = 0;
@@ -110,10 +125,14 @@ int main() {
         }
     }
     
-    log_message("Total cells: %d", totalCells);
-    log_message("Used cells: %d", usedCells);
-    log_message("Space efficiency: %.1f%%", (usedCells * 100.0) / totalCells);
+    sprintf(msg, "Total cells: %d", totalCells);
+    log_message(msg);
+    sprintf(msg, "Used cells: %d", usedCells);
+    log_message(msg);
+    sprintf(msg, "Space efficiency: %.1f%%", (usedCells * 100.0) / totalCells);
+    log_message(msg);
     log_message("Space Complexity: O(V²) where V = number of vertices");
+    log_step_end();
     
     return 0;
 }

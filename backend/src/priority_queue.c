@@ -30,8 +30,10 @@ void heapifyUp(PriorityQueue* pq, int i) {
         
         // Min heap: higher priority = smaller number
         if (pq->heap[i].priority < pq->heap[parent].priority) {
-            log_message("Heapify up: Swapping element (priority %d) with parent (priority %d)",
+            char msg[256];
+            sprintf(msg, "Heapify up: Swapping element (priority %d) with parent (priority %d)",
                        pq->heap[i].priority, pq->heap[parent].priority);
+            log_message(msg);
             swap(&pq->heap[i], &pq->heap[parent]);
             i = parent;
         } else {
@@ -54,8 +56,10 @@ void heapifyDown(PriorityQueue* pq, int i) {
         }
         
         if (smallest != i) {
-            log_message("Heapify down: Swapping priority %d with %d",
+            char msg[256];
+            sprintf(msg, "Heapify down: Swapping priority %d with %d",
                        pq->heap[i].priority, pq->heap[smallest].priority);
+            log_message(msg);
             swap(&pq->heap[i], &pq->heap[smallest]);
             i = smallest;
         } else {
@@ -65,11 +69,13 @@ void heapifyDown(PriorityQueue* pq, int i) {
 }
 
 void insert(PriorityQueue* pq, int data, int priority) {
-    log_step_start("PQ_INSERT");
+    log_step_start();
+    log_message("PQ_INSERT");
     
     if (pq->size >= MAX) {
         log_message("Priority queue is full!");
-        log_step_end("PQ_INSERT");
+        log_step_end();
+        log_message("PQ_INSERT");
         return;
     }
     
@@ -78,27 +84,35 @@ void insert(PriorityQueue* pq, int data, int priority) {
     pq->heap[i].priority = priority;
     pq->size++;
     
-    log_message("Inserted: data=%d, priority=%d at index %d", data, priority, i);
+    char msg[256];
+    sprintf(msg, "Inserted: data=%d, priority=%d at index %d", data, priority, i);
+    log_message(msg);
     
     heapifyUp(pq, i);
     
-    log_message("Insert complete. Queue size: %d", pq->size);
-    log_step_end("PQ_INSERT");
+    sprintf(msg, "Insert complete. Queue size: %d", pq->size);
+    log_message(msg);
+    log_step_end();
+    log_message("PQ_INSERT");
 }
 
 Element extractMin(PriorityQueue* pq) {
-    log_step_start("PQ_EXTRACT_MIN");
+    log_step_start();
+    log_message("PQ_EXTRACT_MIN");
     
     Element empty = {-1, -1};
     
     if (pq->size == 0) {
         log_message("Priority queue is empty!");
-        log_step_end("PQ_EXTRACT_MIN");
+        log_step_end();
+        log_message("PQ_EXTRACT_MIN");
         return empty;
     }
     
     Element min = pq->heap[0];
-    log_message("Extracting minimum: data=%d, priority=%d", min.data, min.priority);
+    char msg[256];
+    sprintf(msg, "Extracting minimum: data=%d, priority=%d", min.data, min.priority);
+    log_message(msg);
     
     pq->heap[0] = pq->heap[pq->size - 1];
     pq->size--;
@@ -108,8 +122,10 @@ Element extractMin(PriorityQueue* pq) {
         heapifyDown(pq, 0);
     }
     
-    log_message("Extract complete. Queue size: %d", pq->size);
-    log_step_end("PQ_EXTRACT_MIN");
+    sprintf(msg, "Extract complete. Queue size: %d", pq->size);
+    log_message(msg);
+    log_step_end();
+    log_message("PQ_EXTRACT_MIN");
     
     return min;
 }
@@ -126,21 +142,27 @@ Element peek(PriorityQueue* pq) {
 }
 
 void display(PriorityQueue* pq) {
-    log_step_start("PQ_DISPLAY");
+    log_step_start();
+    log_message("PQ_DISPLAY");
     
     if (pq->size == 0) {
         log_message("Priority queue is empty");
-        log_step_end("PQ_DISPLAY");
+        log_step_end();
+        log_message("PQ_DISPLAY");
         return;
     }
     
-    log_message("Priority Queue (size=%d):", pq->size);
+    char msg[256];
+    sprintf(msg, "Priority Queue (size=%d):", pq->size);
+    log_message(msg);
     for (int i = 0; i < pq->size; i++) {
-        log_message("[%d] Data: %d, Priority: %d", 
+        sprintf(msg, "[%d] Data: %d, Priority: %d", 
                    i, pq->heap[i].data, pq->heap[i].priority);
+        log_message(msg);
     }
     
-    log_step_end("PQ_DISPLAY");
+    log_step_end();
+    log_message("PQ_DISPLAY");
 }
 
 int main() {
@@ -149,7 +171,9 @@ int main() {
     PriorityQueue pq;
     initPQ(&pq);
     
+    log_step_start();
     log_message("=== PRIORITY QUEUE (MIN HEAP) ===\n");
+    log_step_end();
     
     log_message("--- Inserting Elements ---");
     insert(&pq, 100, 3);
@@ -163,7 +187,9 @@ int main() {
     log_message("\n--- Extracting Elements (in priority order) ---");
     while (pq.size > 0) {
         Element e = extractMin(&pq);
-        log_message("Extracted: data=%d, priority=%d", e.data, e.priority);
+        char msg[256];
+        sprintf(msg, "Extracted: data=%d, priority=%d", e.data, e.priority);
+        log_message(msg);
     }
     
     display(&pq);

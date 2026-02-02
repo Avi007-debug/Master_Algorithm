@@ -70,20 +70,24 @@ void reverseString(char* str) {
 void infixToPrefix(char* infix, char* prefix) {
     Stack s;
     initStack(&s);
+    char msg[256];
     
-    log_step_start("INFIX_TO_PREFIX");
-    log_message("Original Infix: %s", infix);
+    log_step_start();
+    sprintf(msg, "Original Infix: %s", infix);
+    log_message(msg);
     
     // Step 1: Reverse the infix expression
     reverseString(infix);
-    log_message("Step 1: Reversed Infix: %s", infix);
+    sprintf(msg, "Step 1: Reversed Infix: %s", infix);
+    log_message(msg);
     
     // Step 2: Replace ( with ) and vice versa
     for (int i = 0; infix[i] != '\0'; i++) {
         if (infix[i] == '(') infix[i] = ')';
         else if (infix[i] == ')') infix[i] = '(';
     }
-    log_message("Step 2: Swapped parentheses: %s", infix);
+    sprintf(msg, "Step 2: Swapped parentheses: %s", infix);
+    log_message(msg);
     
     // Step 3: Convert to postfix
     char postfix[MAX] = "";
@@ -96,7 +100,8 @@ void infixToPrefix(char* infix, char* prefix) {
         
         if (isalnum(current)) {
             postfix[j++] = current;
-            log_message("Operand '%c' added", current);
+            sprintf(msg, "Operand '%c' added", current);
+            log_message(msg);
         }
         else if (current == '(') {
             push(&s, current);
@@ -115,7 +120,8 @@ void infixToPrefix(char* infix, char* prefix) {
                 postfix[j++] = pop(&s);
             }
             push(&s, current);
-            log_message("Operator '%c' processed", current);
+            sprintf(msg, "Operator '%c' processed", current);
+            log_message(msg);
         }
         i++;
     }
@@ -125,14 +131,16 @@ void infixToPrefix(char* infix, char* prefix) {
     }
     postfix[j] = '\0';
     
-    log_message("Postfix result: %s", postfix);
+    sprintf(msg, "Postfix result: %s", postfix);
+    log_message(msg);
     
     // Step 4: Reverse the postfix to get prefix
     reverseString(postfix);
     strcpy(prefix, postfix);
     
-    log_message("Step 4: Reversed to get Prefix: %s", prefix);
-    log_step_end("INFIX_TO_PREFIX");
+    sprintf(msg, "Step 4: Reversed to get Prefix: %s", prefix);
+    log_message(msg);
+    log_step_end();
 }
 
 int main(int argc, char* argv[]) {
@@ -140,6 +148,7 @@ int main(int argc, char* argv[]) {
     
     char infix[MAX];
     char prefix[MAX] = "";
+    char msg[256];
     
     if (argc > 1) {
         strcpy(infix, argv[1]);
@@ -151,13 +160,20 @@ int main(int argc, char* argv[]) {
     char original[MAX];
     strcpy(original, infix);
     
+    log_step_start();
     log_message("=== INFIX TO PREFIX CONVERSION ===");
+    log_step_end();
     
     infixToPrefix(infix, prefix);
     
+    log_step_start();
     log_message("\n=== RESULT ===");
-    log_message("Infix Expression:  %s", original);
-    log_message("Prefix Expression: %s", prefix);
+    sprintf(msg, "Infix Expression:  %s", original);
+    log_message(msg);
+    sprintf(msg, "Prefix Expression: %s", prefix);
+    log_message(msg);
+    log_step_end();
     
+    log_finish();
     return 0;
 }

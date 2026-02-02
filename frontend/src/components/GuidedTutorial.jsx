@@ -436,6 +436,406 @@ const TUTORIALS = {
                 checkpoint: "Do you see why load factor matters?"
             }
         ]
+    },
+    // Stack Algorithms
+    stack_ll: {
+        title: "Stack using Linked List Tutorial",
+        steps: [
+            {
+                title: "Welcome to Stack!",
+                content: "A stack is a LIFO (Last In, First Out) data structure. Think of a stack of plates - you can only add or remove from the top!",
+                highlight: "description",
+                checkpoint: "Can you think of real-world LIFO examples?"
+            },
+            {
+                title: "Push Operation",
+                content: "Push adds an element to the top of the stack. Using a linked list, we insert at the head (O(1) time). The new node becomes the new top!",
+                highlight: "visualization",
+                checkpoint: "Do you see why head insertion is O(1)?"
+            },
+            {
+                title: "Watch Push Operations",
+                content: "Click 'Visualize' and watch elements being pushed. Notice how each new element becomes the top and the stack grows upward!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you observe the LIFO order?"
+            },
+            {
+                title: "Pop Operation",
+                content: "Pop removes and returns the top element. We simply move the head pointer to the next node and free the old top. Also O(1)!",
+                highlight: "visualization",
+                checkpoint: "Can you trace what happens to pointers during pop?"
+            },
+            {
+                title: "Applications",
+                content: "Stacks are used in: function call management (call stack), undo/redo features, expression evaluation, backtracking algorithms, and browser history!",
+                highlight: "complexity",
+                checkpoint: "Can you explain how browser's back button uses a stack?"
+            }
+        ]
+    },
+    valid_parentheses: {
+        title: "Valid Parentheses Tutorial",
+        steps: [
+            {
+                title: "The Matching Problem",
+                content: "Given a string with brackets like '({[]})', we need to check if every opening bracket has a matching closing bracket in the right order. Stacks are perfect for this!",
+                highlight: "description",
+                checkpoint: "Do you see why order matters?"
+            },
+            {
+                title: "The Stack Strategy",
+                content: "For each character: if it's an opening bracket (, [, or {, push it. If it's a closing bracket, pop and check if it matches. Stack ensures correct nesting!",
+                highlight: "visualization",
+                checkpoint: "Can you trace through '([])'?"
+            },
+            {
+                title: "Watch the Algorithm",
+                content: "Click 'Visualize' and see how opening brackets go into the stack, and closing brackets pop for matching. Invalid strings leave stack non-empty or cause mismatch!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see how mismatches are detected?"
+            },
+            {
+                title: "Edge Cases",
+                content: "Remember to check: 1) Stack shouldn't be empty when popping, 2) Brackets must match type (not ')' matching '['), 3) Stack must be empty at the end!",
+                highlight: "visualization",
+                checkpoint: "Can you identify what makes '([)]' invalid?"
+            },
+            {
+                title: "Real-World Usage",
+                content: "This algorithm validates code syntax in compilers, checks HTML/XML tags, and verifies mathematical expressions. O(n) time and space!",
+                highlight: "complexity",
+                checkpoint: "Why is this important for programming languages?"
+            }
+        ]
+    },
+    postfix_evaluation: {
+        title: "Postfix Expression Evaluation Tutorial",
+        steps: [
+            {
+                title: "What is Postfix?",
+                content: "Postfix (Reverse Polish) notation writes operators after operands: 'AB+' instead of 'A+B'. It eliminates the need for parentheses and operator precedence!",
+                highlight: "description",
+                checkpoint: "Can you convert '3+4' to postfix?"
+            },
+            {
+                title: "The Evaluation Algorithm",
+                content: "Scan left to right. If you see a number, push it. If you see an operator, pop two numbers, apply the operation, push the result. Simple!",
+                highlight: "visualization",
+                checkpoint: "Can you trace '34+' mentally?"
+            },
+            {
+                title: "Watch Step-by-Step",
+                content: "Click 'Visualize' with expression like '53+82-*'. Watch how numbers stack up, operators pop two values, compute, and push result back!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the push-pop-push pattern?"
+            },
+            {
+                title: "Order Matters!",
+                content: "When popping for subtraction/division, order is crucial: second_pop - first_pop (not the reverse!). The stack naturally handles this correctly.",
+                highlight: "visualization",
+                checkpoint: "Can you explain why '52-' gives 3, not -3?"
+            },
+            {
+                title: "Why Use Postfix?",
+                content: "Compilers love postfix because it's trivial to evaluate - just one linear scan with a stack. No parsing precedence or parentheses! O(n) time complexity.",
+                highlight: "complexity",
+                checkpoint: "Do you see why calculators use postfix internally?"
+            }
+        ]
+    },
+    infix_to_prefix: {
+        title: "Infix to Prefix Conversion Tutorial",
+        steps: [
+            {
+                title: "What is Prefix Notation?",
+                content: "Prefix notation writes operators before operands: '+AB' instead of 'A+B'. Like postfix, it eliminates parentheses. Also called Polish Notation!",
+                highlight: "description",
+                checkpoint: "Can you see the difference from postfix?"
+            },
+            {
+                title: "The Clever Trick",
+                content: "To convert infix to prefix: 1) Reverse the infix expression, 2) Swap ( and ), 3) Convert to postfix, 4) Reverse the result. Four simple steps!",
+                highlight: "visualization",
+                checkpoint: "Can you trace why this works?"
+            },
+            {
+                title: "Watch the Transformation",
+                content: "Click 'Visualize' with 'A+B*C'. See how it becomes 'C*B+A', then converts to postfix 'CB*A+', then reverses to '+A*BC'. Magic!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you follow all four steps?"
+            },
+            {
+                title: "Handling Precedence",
+                content: "During the postfix conversion step (step 3), operator precedence is handled the same way as infix→postfix, but with reversed input!",
+                highlight: "visualization",
+                checkpoint: "Do precedence rules still apply?"
+            },
+            {
+                title: "Prefix Applications",
+                content: "Prefix is used in LISP programming language and some calculators. Evaluation is similar to postfix but scan right-to-left. O(n) conversion time!",
+                highlight: "complexity",
+                checkpoint: "Can you evaluate '+34' mentally?"
+            }
+        ]
+    },
+    // Queue Algorithms
+    queue_ll: {
+        title: "Queue using Linked List Tutorial",
+        steps: [
+            {
+                title: "Welcome to Queue!",
+                content: "A queue is a FIFO (First In, First Out) data structure. Like a line at a store - first person in line is served first. Front and rear pointers manage it!",
+                highlight: "description",
+                checkpoint: "Can you name a real-world queue example?"
+            },
+            {
+                title: "Enqueue Operation",
+                content: "Enqueue adds an element to the rear of the queue. Using linked list, we insert at the tail. The rear pointer moves to the new node. O(1) time!",
+                highlight: "visualization",
+                checkpoint: "Why do we add at rear, not front?"
+            },
+            {
+                title: "Watch Enqueue",
+                content: "Click 'Visualize' and enqueue several elements. Notice how each new element joins the back of the line, and rear pointer moves forward!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the queue growing from rear?"
+            },
+            {
+                title: "Dequeue Operation",
+                content: "Dequeue removes from the front. We return the front element, move front pointer to next node, and free the old front. Also O(1)!",
+                highlight: "visualization",
+                checkpoint: "Can you explain why we remove from front?"
+            },
+            {
+                title: "Queue Applications",
+                content: "Queues are used in: CPU task scheduling, printer job management, BFS graph traversal, handling requests in web servers, and message passing systems!",
+                highlight: "complexity",
+                checkpoint: "Which OS component uses queues heavily?"
+            }
+        ]
+    },
+    deque_ll: {
+        title: "Deque (Double-Ended Queue) Tutorial",
+        steps: [
+            {
+                title: "Welcome to Deque!",
+                content: "Deque (deck) is a queue where you can add/remove from BOTH ends! It's more flexible than regular queues and stacks. Doubly linked list is perfect for this.",
+                highlight: "description",
+                checkpoint: "Can you see how deque combines stack and queue?"
+            },
+            {
+                title: "Four Core Operations",
+                content: "1) addFront: insert at front, 2) addRear: insert at rear, 3) deleteFront: remove from front, 4) deleteRear: remove from rear. All O(1)!",
+                highlight: "visualization",
+                checkpoint: "Which data structure can't do all four in O(1)?"
+            },
+            {
+                title: "Watch Both-Ended Operations",
+                content: "Click 'Visualize' and try operations from both ends. Notice how the doubly linked list allows efficient insertion/deletion anywhere!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see operations from both ends?"
+            },
+            {
+                title: "Why Doubly Linked?",
+                content: "Doubly linked list has prev and next pointers. This allows O(1) deletion from rear (impossible with singly linked list without tail traverse)!",
+                highlight: "visualization",
+                checkpoint: "Can you explain why singly linked list struggles with deleteRear?"
+            },
+            {
+                title: "Deque Applications",
+                content: "Used in: browser history (forward/back), undo/redo with multi-level, sliding window algorithms, job scheduling with priorities, palindrome checking!",
+                highlight: "complexity",
+                checkpoint: "How would you check palindrome with deque?"
+            }
+        ]
+    },
+    message_queue: {
+        title: "Message Queue Application Tutorial",
+        steps: [
+            {
+                title: "Real-World Queue Usage",
+                content: "Message queues are used in chat apps, notification systems, and distributed systems. They ensure messages are processed in order - FIFO principle!",
+                highlight: "description",
+                checkpoint: "Can you think of apps that need message ordering?"
+            },
+            {
+                title: "Circular Queue Implementation",
+                content: "This uses a circular queue to efficiently manage fixed-size message buffer. When rear reaches the end, it wraps to index 0, reusing space!",
+                highlight: "visualization",
+                checkpoint: "Why circular instead of linear queue?"
+            },
+            {
+                title: "Watch Message Flow",
+                content: "Click 'Visualize' and watch messages being sent and received. Notice how old messages are dequeued as new ones arrive, simulating a real chat!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the wraparound behavior?"
+            },
+            {
+                title: "Buffer Management",
+                content: "The circular nature prevents wasted space. In linear queues, dequeue leaves gaps. Circular queues reuse those gaps by wrapping around!",
+                highlight: "visualization",
+                checkpoint: "Can you spot when wraparound occurs?"
+            },
+            {
+                title: "Production Systems",
+                content: "Real message queues (RabbitMQ, Kafka) use similar concepts but add: persistence, multiple consumers, priority handling, and distributed operation!",
+                highlight: "complexity",
+                checkpoint: "What happens if queue fills up?"
+            }
+        ]
+    },
+    // Array Algorithms
+    two_sum: {
+        title: "Two Sum Problem Tutorial",
+        steps: [
+            {
+                title: "The Classic Interview Problem!",
+                content: "Given an array and a target, find two numbers that add up to the target. This is THE most common coding interview question. Let's master it!",
+                highlight: "description",
+                checkpoint: "Can you solve it with brute force?"
+            },
+            {
+                title: "Hash Map Strategy",
+                content: "For each number, check if (target - number) exists in hash map. If yes, we found the pair! If no, add current number to map. One pass, O(n) time!",
+                highlight: "visualization",
+                checkpoint: "Why is hash map lookup O(1)?"
+            },
+            {
+                title: "Watch the Algorithm",
+                content: "Click 'Visualize' with array [2,7,11,15] and target 9. Watch how when we see 7, we check for (9-7=2) in the map and find it!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the complement lookup?"
+            },
+            {
+                title: "The Complement Concept",
+                content: "The key insight: instead of checking all pairs, we store what we've seen and check if the 'complement' (target - current) was seen before. Brilliant!",
+                highlight: "visualization",
+                checkpoint: "Can you calculate complements for target=10?"
+            },
+            {
+                title: "Trade-off Analysis",
+                content: "Brute force: O(n²) time, O(1) space. Hash map: O(n) time, O(n) space. We trade space for speed - a common algorithmic pattern!",
+                highlight: "complexity",
+                checkpoint: "When would you prefer brute force?"
+            }
+        ]
+    },
+    three_sum: {
+        title: "Three Sum Problem Tutorial",
+        steps: [
+            {
+                title: "The 3-Number Challenge",
+                content: "Find all unique triplets in an array that sum to zero. This extends Two Sum but requires handling duplicates and finding ALL solutions, not just one!",
+                highlight: "description",
+                checkpoint: "How is this harder than Two Sum?"
+            },
+            {
+                title: "Sort + Two Pointer Approach",
+                content: "First, sort the array. Then: fix one number, use two pointers (left, right) to find pairs that complete the triplet. Sorting enables duplicate skipping!",
+                highlight: "visualization",
+                checkpoint: "Why does sorting help?"
+            },
+            {
+                title: "Watch the Algorithm",
+                content: "Click 'Visualize' with array [-1,0,1,2,-1,-4]. See how we fix -1, then use pointers to find [0,1] that sum to 1, giving triplet [-1,0,1]!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the pointer movements?"
+            },
+            {
+                title: "Handling Duplicates",
+                content: "After finding a triplet, skip duplicate values by advancing pointers past repeated numbers. This ensures unique triplets only! Critical detail.",
+                highlight: "visualization",
+                checkpoint: "What happens if we don't skip duplicates?"
+            },
+            {
+                title: "Complexity Analysis",
+                content: "O(n²) time: O(n log n) for sorting + O(n²) for nested loops (outer fixes number, inner uses two pointers). O(1) extra space if we don't count output!",
+                highlight: "complexity",
+                checkpoint: "Can you beat O(n²) time?"
+            }
+        ]
+    },
+    longest_substring: {
+        title: "Longest Substring Without Repeating Characters Tutorial",
+        steps: [
+            {
+                title: "The Sliding Window Problem",
+                content: "Find the length of the longest substring without repeating characters in a string. This is a classic sliding window problem with hash map tracking!",
+                highlight: "description",
+                checkpoint: "Can you think of an example string?"
+            },
+            {
+                title: "The Window Concept",
+                content: "We maintain a window [left, right] that contains no duplicates. Expand right to grow window. When duplicate found, shrink from left until it's removed!",
+                highlight: "visualization",
+                checkpoint: "Can you visualize the expanding/shrinking window?"
+            },
+            {
+                title: "Watch the Sliding Window",
+                content: "Click 'Visualize' with string 'abcabcbb'. Watch the window grow to 'abc' (length 3), then shrink when second 'a' appears, maintaining no duplicates!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the window adjust?"
+            },
+            {
+                title: "Hash Map for Tracking",
+                content: "We use a hash map to store last seen index of each character. When we see a character we've seen before, we know where to move left pointer to!",
+                highlight: "visualization",
+                checkpoint: "Why store index, not just boolean?"
+            },
+            {
+                title: "Linear Time Solution",
+                content: "O(n) time because each character is visited at most twice (once by right, once by left). O(min(n, m)) space where m is charset size (26 for lowercase).",
+                highlight: "complexity",
+                checkpoint: "Why is each character visited at most twice?"
+            }
+        ]
+    },
+    // Searching Algorithms
+    bst_search: {
+        title: "BST Search Tutorial",
+        steps: [
+            {
+                title: "Searching in Binary Search Tree",
+                content: "BSTs maintain order: left < parent < right. This makes searching efficient - at each node, we know which subtree must contain our target!",
+                highlight: "description",
+                checkpoint: "How is BST different from binary tree?"
+            },
+            {
+                title: "The Decision Process",
+                content: "At each node: if value equals target, found! If target < value, go left. If target > value, go right. We eliminate half the remaining tree each time!",
+                highlight: "visualization",
+                checkpoint: "Sounds familiar? Like binary search?"
+            },
+            {
+                title: "Watch the Search",
+                content: "Click 'Visualize' searching for a value. Notice how the algorithm traverses down the tree, making binary decisions at each node. Very efficient!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the path taken?"
+            },
+            {
+                title: "Balanced vs Skewed",
+                content: "In balanced BST: O(log n) search - height is log n. In skewed BST (essentially a linked list): O(n) search. Balance matters tremendously!",
+                highlight: "visualization",
+                checkpoint: "Can you visualize a completely skewed BST?"
+            },
+            {
+                title: "BST vs Binary Search Array",
+                content: "Both are O(log n) search, but BST allows O(log n) insertion/deletion too! Arrays need O(n) for insertions. This is BST's killer advantage!",
+                highlight: "complexity",
+                checkpoint: "When would you use array over BST?"
+            }
+        ]
     }
 };
 

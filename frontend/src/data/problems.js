@@ -461,8 +461,8 @@ int main() {
     },
     {
         id: 'randomized_quick_sort',
-        title: 'Randomized Qu
-        inSyllabus: false, // Advanced variant not in syllabusick Sort',
+        title: 'Randomized Quick Sort',
+        inSyllabus: false, // Advanced variant not in syllabus
         category: CATEGORIES.SORTING,
         difficulty: 'Medium',
         beginnerTips: [
@@ -785,7 +785,8 @@ int main() {
             "Using while (left < right) instead of while (left <= right) - misses single element case",
             "Not handling the case when array is empty or null",
             "Forgetting array must be sorted - binary search fails on unsorted data",
-            "Using mid instead of mid+1 or mid-1 when updating left/right pointers (infinite loop)\"\n        ]
+            "Using mid instead of mid+1 or mid-1 when updating left/right pointers (infinite loop)"
+        ]
     },
     {
         id: "two_sum",
@@ -1076,11 +1077,12 @@ int main() {
         ],
         runCommand: 'valid_parentheses',
         commonMistakes: [
-            \"Forgetting to check if stack is empty before popping/peeking - causes segmentation fault\",
-            \"Not returning false when closing bracket doesn't match opening bracket\",
-            \"Forgetting to check if stack is empty at the end (unmatched opening brackets)\",
-            \"Mixing up bracket pairs in comparison (e.g., checking ')' with '[' instead of '(')\",
-            \"Not handling string with only closing brackets - should return false immediately\"\n        ]
+            "Forgetting to check if stack is empty before popping/peeking - causes segmentation fault",
+            "Not returning false when closing bracket doesn't match opening bracket",
+            "Forgetting to check if stack is empty at the end (unmatched opening brackets)",
+            "Mixing up bracket pairs in comparison (e.g., checking ')' with '[' instead of '(')",
+            "Not handling string with only closing brackets - should return false immediately"
+        ]
     },
     {
         inSyllabus: true, // Unit-II: Linked List operations
@@ -2705,11 +2707,12 @@ for(int i = 0; infix[i]; i++) {
         ],
         runCommand: 'infix_to_postfix',
         commonMistakes: [
-            \"Not handling operator precedence correctly (*, / before +, -)\",
-            \"Forgetting to pop all remaining operators from stack at the end\",
-            \"Not handling parentheses - should pop until matching '(' is found\",
-            \"Treating operands as operators or vice versa\",
-            \"Not popping operators with higher or equal precedence before pushing new operator\"\n        ]
+            "Not handling operator precedence correctly (*, / before +, -)",
+            "Forgetting to pop all remaining operators from stack at the end",
+            "Not handling parentheses - should pop until matching '(' is found",
+            "Treating operands as operators or vice versa",
+            "Not popping operators with higher or equal precedence before pushing new operator"
+        ]
     },
     {
         id: "infix_to_prefix",

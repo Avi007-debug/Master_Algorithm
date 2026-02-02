@@ -66,20 +66,25 @@ void infixToPostfix(char* infix, char* postfix) {
     Stack s;
     initStack(&s);
     int i = 0, j = 0;
+    char msg[256];
     
-    log_step_start("INFIX_TO_POSTFIX");
-    log_message("Original Infix Expression: %s", infix);
+    log_step_start();
+    sprintf(msg, "Original Infix Expression: %s", infix);
+    log_message(msg);
+    log_step_end();
     
     while (infix[i] != '\0') {
         char current = infix[i];
         
-        log_step_start("PROCESS_CHAR");
-        log_message("Processing character: '%c'", current);
+        log_step_start();
+        sprintf(msg, "Processing character: '%c'", current);
+        log_message(msg);
         
         // If operand, add to output
         if (isalnum(current)) {
             postfix[j++] = current;
-            log_message("Operand '%c' added to postfix", current);
+            sprintf(msg, "Operand '%c' added to postfix", current);
+            log_message(msg);
         }
         // If '(', push to stack
         else if (current == '(') {
@@ -98,15 +103,18 @@ void infixToPostfix(char* infix, char* postfix) {
         }
         // If operator
         else if (isOperator(current)) {
-            log_message("Operator '%c' found (precedence: %d)", current, precedence(current));
+            sprintf(msg, "Operator '%c' found (precedence: %d)", current, precedence(current));
+            log_message(msg);
             
             while (!isEmpty(&s) && precedence(peek(&s)) >= precedence(current)) {
                 char popped = pop(&s);
                 postfix[j++] = popped;
-                log_message("Popped '%c' (higher precedence) to postfix", popped);
+                sprintf(msg, "Popped '%c' (higher precedence) to postfix", popped);
+                log_message(msg);
             }
             push(&s, current);
-            log_message("Pushed '%c' to stack", current);
+            sprintf(msg, "Pushed '%c' to stack", current);
+            log_message(msg);
         }
         
         // Show current stack state
@@ -116,26 +124,30 @@ void infixToPostfix(char* infix, char* postfix) {
             sprintf(temp, "%c ", s.items[k]);
             strcat(stackStr, temp);
         }
-        log_message("Stack: [%s]", stackStr);
+        sprintf(msg, "Stack: [%s]", stackStr);
+        log_message(msg);
         
         // Show current postfix
         postfix[j] = '\0';
-        log_message("Postfix so far: %s", postfix);
-        log_step_end("PROCESS_CHAR");
+        sprintf(msg, "Postfix so far: %s", postfix);
+        log_message(msg);
+        log_step_end();
         
         i++;
     }
     
     // Pop remaining operators
+    log_step_start();
     log_message("Popping remaining operators from stack");
     while (!isEmpty(&s)) {
         char popped = pop(&s);
         postfix[j++] = popped;
-        log_message("Popped '%c' to postfix", popped);
+        sprintf(msg, "Popped '%c' to postfix", popped);
+        log_message(msg);
     }
     
     postfix[j] = '\0';
-    log_step_end("INFIX_TO_POSTFIX");
+    log_step_end();
 }
 
 int main(int argc, char* argv[]) {
@@ -143,6 +155,7 @@ int main(int argc, char* argv[]) {
     
     char infix[MAX];
     char postfix[MAX] = "";
+    char msg[256];
     
     // Default expression or use command line argument
     if (argc > 1) {
@@ -151,13 +164,20 @@ int main(int argc, char* argv[]) {
         strcpy(infix, "A+B*C-D/E");
     }
     
+    log_step_start();
     log_message("=== INFIX TO POSTFIX CONVERSION ===");
+    log_step_end();
     
     infixToPostfix(infix, postfix);
     
+    log_step_start();
     log_message("\n=== RESULT ===");
-    log_message("Infix Expression:   %s", infix);
-    log_message("Postfix Expression: %s", postfix);
+    sprintf(msg, "Infix Expression:   %s", infix);
+    log_message(msg);
+    sprintf(msg, "Postfix Expression: %s", postfix);
+    log_message(msg);
+    log_step_end();
     
+    log_finish();
     return 0;
 }

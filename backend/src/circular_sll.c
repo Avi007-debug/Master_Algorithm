@@ -15,13 +15,16 @@ Node* createNode(int data) {
 }
 
 void insertAtEnd(Node** head, int data) {
-    log_step_start("INSERT_CSLL");
+    log_step_start();
+    log_message("INSERT_CSLL");
     Node* newNode = createNode(data);
     
     if (*head == NULL) {
         *head = newNode;
         newNode->next = *head; // Point to itself
-        log_message("Created first node: %d (points to itself)", data);
+        char msg[256];
+        sprintf(msg, "Created first node: %d (points to itself)", data);
+        log_message(msg);
     } else {
         Node* temp = *head;
         while (temp->next != *head) {
@@ -29,18 +32,23 @@ void insertAtEnd(Node** head, int data) {
         }
         temp->next = newNode;
         newNode->next = *head; // Complete the circle
-        log_message("Inserted %d at end, linked back to head", data);
+        char msg[256];
+        sprintf(msg, "Inserted %d at end, linked back to head", data);
+        log_message(msg);
     }
     
-    log_step_end("INSERT_CSLL");
+    log_step_end();
+    log_message("INSERT_CSLL");
 }
 
 void deleteNode(Node** head, int value) {
-    log_step_start("DELETE_CSLL");
+    log_step_start();
+    log_message("DELETE_CSLL");
     
     if (*head == NULL) {
         log_message("List is empty");
-        log_step_end("DELETE_CSLL");
+        log_step_end();
+    log_message("DELETE_CSLL");
         return;
     }
     
@@ -57,15 +65,20 @@ void deleteNode(Node** head, int value) {
             // Only one node
             free(*head);
             *head = NULL;
-            log_message("Deleted only node: %d", value);
+            char msg[256];
+            sprintf(msg, "Deleted only node: %d", value);
+            log_message(msg);
         } else {
             current->next = (*head)->next;
             Node* temp = *head;
             *head = (*head)->next;
             free(temp);
-            log_message("Deleted head node: %d", value);
+            char msg[256];
+            sprintf(msg, "Deleted head node: %d", value);
+            log_message(msg);
         }
-        log_step_end("DELETE_CSLL");
+        log_step_end();
+    log_message("DELETE_CSLL");
         return;
     }
     
@@ -79,22 +92,29 @@ void deleteNode(Node** head, int value) {
     }
     
     if (current == *head) {
-        log_message("Value %d not found", value);
+        char msg[256];
+        sprintf(msg, "Value %d not found", value);
+        log_message(msg);
     } else {
         prev->next = current->next;
-        log_message("Deleted node: %d", value);
+        char msg[256];
+        sprintf(msg, "Deleted node: %d", value);
+        log_message(msg);
         free(current);
     }
     
-    log_step_end("DELETE_CSLL");
+    log_step_end();
+    log_message("DELETE_CSLL");
 }
 
 void display(Node* head) {
-    log_step_start("DISPLAY_CSLL");
+    log_step_start();
+    log_message("DISPLAY_CSLL");
     
     if (head == NULL) {
         log_message("List is empty");
-        log_step_end("DISPLAY_CSLL");
+        log_step_end();
+    log_message("DISPLAY_CSLL");
         return;
     }
     
@@ -103,12 +123,17 @@ void display(Node* head) {
     
     log_message("Circular List:");
     do {
-        log_message("[%d] -> %d", count++, temp->data);
+        char msg[256];
+        sprintf(msg, "[%d] -> %d", count++, temp->data);
+        log_message(msg);
         temp = temp->next;
     } while (temp != head);
     
-    log_message("... (back to head: %d)", head->data);
-    log_step_end("DISPLAY_CSLL");
+    char msg[256];
+    sprintf(msg, "... (back to head: %d)", head->data);
+    log_message(msg);
+    log_step_end();
+    log_message("DISPLAY_CSLL");
 }
 
 int main() {
@@ -116,7 +141,9 @@ int main() {
     
     Node* head = NULL;
     
+    log_step_start();
     log_message("=== CIRCULAR SINGLY LINKED LIST ===\n");
+    log_step_end();
     
     insertAtEnd(&head, 10);
     insertAtEnd(&head, 20);

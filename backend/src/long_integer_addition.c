@@ -43,11 +43,15 @@ Node* stringToList(const char* str) {
 }
 
 void displayNumber(Node* head, const char* label) {
-    log_step_start("DISPLAY_NUMBER");
+    log_step_start();
+    log_message("DISPLAY_NUMBER");
     
     if (head == NULL) {
-        log_message("%s = 0", label);
-        log_step_end("DISPLAY_NUMBER");
+        char msg[256];
+        sprintf(msg, "%s = 0", label);
+        log_message(msg);
+        log_step_end();
+    log_message("DISPLAY_NUMBER");
         return;
     }
     
@@ -61,8 +65,11 @@ void displayNumber(Node* head, const char* label) {
         temp = temp->next;
     }
     
-    log_message("%s = %s", label, numStr);
-    log_step_end("DISPLAY_NUMBER");
+    char msg[512];
+    sprintf(msg, "%s = %s", label, numStr);
+    log_message(msg);
+    log_step_end();
+    log_message("DISPLAY_NUMBER");
 }
 
 Node* reverseList(Node* head) {
@@ -81,7 +88,8 @@ Node* reverseList(Node* head) {
 }
 
 Node* addLongIntegers(Node* num1, Node* num2) {
-    log_step_start("ADD_LONG_INTEGERS");
+    log_step_start();
+    log_message("ADD_LONG_INTEGERS");
     
     // Reverse both numbers for easier addition (right to left)
     num1 = reverseList(num1);
@@ -108,11 +116,14 @@ Node* addLongIntegers(Node* num1, Node* num2) {
         
         insertAtBeginning(&result, digit);
         
-        log_message("Sum = %d, Digit = %d, Carry = %d", sum, digit, carry);
+        char msg[256];
+        sprintf(msg, "Sum = %d, Digit = %d, Carry = %d", sum, digit, carry);
+        log_message(msg);
     }
     
     log_message("Addition complete");
-    log_step_end("ADD_LONG_INTEGERS");
+    log_step_end();
+    log_message("ADD_LONG_INTEGERS");
     
     return result;
 }
@@ -131,7 +142,9 @@ int main(int argc, char* argv[]) {
         num2Str = "987654321098765432109876543210";
     }
     
+    log_step_start();
     log_message("=== ADDITION OF LONG POSITIVE INTEGERS ===\n");
+    log_step_end();
     
     Node* num1 = stringToList(num1Str);
     Node* num2 = stringToList(num2Str);

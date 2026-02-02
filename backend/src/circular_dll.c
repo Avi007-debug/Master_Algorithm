@@ -17,14 +17,17 @@ Node* createNode(int data) {
 }
 
 void insertAtEnd(Node** head, int data) {
-    log_step_start("INSERT_CDLL");
+    log_step_start();
+    log_message("INSERT_CDLL");
     Node* newNode = createNode(data);
     
     if (*head == NULL) {
         *head = newNode;
         newNode->next = newNode;
         newNode->prev = newNode;
-        log_message("Created first node: %d (bidirectional self-loop)", data);
+        char msg[256];
+        sprintf(msg, "Created first node: %d (bidirectional self-loop)", data);
+        log_message(msg);
     } else {
         Node* last = (*head)->prev;
         
@@ -33,18 +36,23 @@ void insertAtEnd(Node** head, int data) {
         newNode->next = *head;
         (*head)->prev = newNode;
         
-        log_message("Inserted %d at end with bidirectional links", data);
+        char msg[256];
+        sprintf(msg, "Inserted %d at end with bidirectional links", data);
+        log_message(msg);
     }
     
-    log_step_end("INSERT_CDLL");
+    log_step_end();
+    log_message("INSERT_CDLL");
 }
 
 void deleteNode(Node** head, int value) {
-    log_step_start("DELETE_CDLL");
+    log_step_start();
+    log_message("DELETE_CDLL");
     
     if (*head == NULL) {
         log_message("List is empty");
-        log_step_end("DELETE_CDLL");
+        log_step_end();
+    log_message("DELETE_CDLL");
         return;
     }
     
@@ -57,7 +65,9 @@ void deleteNode(Node** head, int value) {
             if (current->next == current) {
                 free(current);
                 *head = NULL;
-                log_message("Deleted only node: %d", value);
+                char msg[256];
+                sprintf(msg, "Deleted only node: %d", value);
+                log_message(msg);
             }
             // Multiple nodes
             else {
@@ -68,26 +78,34 @@ void deleteNode(Node** head, int value) {
                     *head = current->next;
                 }
                 
-                log_message("Deleted node: %d (updated bidirectional links)", value);
+                char msg[256];
+                sprintf(msg, "Deleted node: %d (updated bidirectional links)", value);
+                log_message(msg);
                 free(current);
             }
             
-            log_step_end("DELETE_CDLL");
+            log_step_end();
+    log_message("DELETE_CDLL");
             return;
         }
         current = current->next;
     } while (current != *head);
     
-    log_message("Value %d not found", value);
-    log_step_end("DELETE_CDLL");
+    char msg[256];
+    sprintf(msg, "Value %d not found", value);
+    log_message(msg);
+    log_step_end();
+    log_message("DELETE_CDLL");
 }
 
 void displayForward(Node* head) {
-    log_step_start("DISPLAY_FORWARD");
+    log_step_start();
+    log_message("DISPLAY_FORWARD");
     
     if (head == NULL) {
         log_message("List is empty");
-        log_step_end("DISPLAY_FORWARD");
+        log_step_end();
+    log_message("DISPLAY_FORWARD");
         return;
     }
     
@@ -96,20 +114,27 @@ void displayForward(Node* head) {
     
     log_message("Forward traversal:");
     do {
-        log_message("[%d] -> %d", count++, temp->data);
+        char msg[256];
+        sprintf(msg, "[%d] -> %d", count++, temp->data);
+        log_message(msg);
         temp = temp->next;
     } while (temp != head);
     
-    log_message("... (back to head: %d)", head->data);
-    log_step_end("DISPLAY_FORWARD");
+    char msg[256];
+    sprintf(msg, "... (back to head: %d)", head->data);
+    log_message(msg);
+    log_step_end();
+    log_message("DISPLAY_FORWARD");
 }
 
 void displayBackward(Node* head) {
-    log_step_start("DISPLAY_BACKWARD");
+    log_step_start();
+    log_message("DISPLAY_BACKWARD");
     
     if (head == NULL) {
         log_message("List is empty");
-        log_step_end("DISPLAY_BACKWARD");
+        log_step_end();
+    log_message("DISPLAY_BACKWARD");
         return;
     }
     
@@ -118,12 +143,17 @@ void displayBackward(Node* head) {
     
     log_message("Backward traversal:");
     do {
-        log_message("[%d] <- %d", count++, temp->data);
+        char msg[256];
+        sprintf(msg, "[%d] <- %d", count++, temp->data);
+        log_message(msg);
         temp = temp->prev;
     } while (temp != head->prev);
     
-    log_message("... (back to last: %d)", head->prev->data);
-    log_step_end("DISPLAY_BACKWARD");
+    char msg[256];
+    sprintf(msg, "... (back to last: %d)", head->prev->data);
+    log_message(msg);
+    log_step_end();
+    log_message("DISPLAY_BACKWARD");
 }
 
 int main() {
@@ -131,7 +161,9 @@ int main() {
     
     Node* head = NULL;
     
+    log_step_start();
     log_message("=== CIRCULAR DOUBLY LINKED LIST ===\n");
+    log_step_end();
     
     insertAtEnd(&head, 10);
     insertAtEnd(&head, 20);

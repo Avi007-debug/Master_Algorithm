@@ -22,14 +22,18 @@ int isEmpty(Stack* s) {
 void push(Stack* s, int value) {
     if (s->top < MAX - 1) {
         s->items[++(s->top)] = value;
-        log_message("Pushed %d to stack", value);
+        char msg[100];
+        sprintf(msg, "Pushed %d to stack", value);
+        log_message(msg);
     }
 }
 
 int pop(Stack* s) {
     if (!isEmpty(s)) {
         int value = s->items[(s->top)--];
-        log_message("Popped %d from stack", value);
+        char msg[100];
+        sprintf(msg, "Popped %d from stack", value);
+        log_message(msg);
         return value;
     }
     return 0;
@@ -59,35 +63,41 @@ int performOperation(int a, int b, char op) {
 int evaluatePostfix(char* postfix) {
     Stack s;
     initStack(&s);
+    char msg[256];
     
-    log_step_start("POSTFIX_EVALUATION");
-    log_message("Postfix Expression: %s", postfix);
+    log_step_start();
+    sprintf(msg, "Postfix Expression: %s", postfix);
+    log_message(msg);
     
     for (int i = 0; postfix[i] != '\0'; i++) {
         char current = postfix[i];
         
         if (current == ' ') continue;
         
-        log_step_start("PROCESS_CHAR");
-        log_message("Processing: '%c'", current);
+        log_step_start();
+        sprintf(msg, "Processing: '%c'", current);
+        log_message(msg);
         
         // If operand (digit)
         if (isdigit(current)) {
             int num = current - '0';
             push(&s, num);
-            log_message("Operand: %d", num);
+            sprintf(msg, "Operand: %d", num);
+            log_message(msg);
         }
         // If operator
         else if (isOperator(current)) {
             int operand2 = pop(&s);
             int operand1 = pop(&s);
             
-            log_message("Operation: %d %c %d", operand1, current, operand2);
+            sprintf(msg, "Operation: %d %c %d", operand1, current, operand2);
+            log_message(msg);
             
             int result = performOperation(operand1, operand2, current);
             push(&s, result);
             
-            log_message("Result: %d", result);
+            sprintf(msg, "Result: %d", result);
+            log_message(msg);
         }
         
         // Show stack state
@@ -99,13 +109,14 @@ int evaluatePostfix(char* postfix) {
             if (k < s.top) strcat(stackStr, ", ");
         }
         strcat(stackStr, "]");
-        log_message("Stack: %s", stackStr);
+        sprintf(msg, "Stack: %s", stackStr);
+        log_message(msg);
         
-        log_step_end("PROCESS_CHAR");
+        log_step_end();
     }
     
     int finalResult = pop(&s);
-    log_step_end("POSTFIX_EVALUATION");
+    log_step_end();
     
     return finalResult;
 }
@@ -114,6 +125,7 @@ int main(int argc, char* argv[]) {
     log_init();
     
     char postfix[MAX];
+    char msg[256];
     
     // Default expression or use command line argument
     if (argc > 1) {
@@ -122,13 +134,20 @@ int main(int argc, char* argv[]) {
         strcpy(postfix, "53+82-*"); // (5+3)*(8-2) = 8*6 = 48
     }
     
+    log_step_start();
     log_message("=== POSTFIX EXPRESSION EVALUATION ===");
+    log_step_end();
     
     int result = evaluatePostfix(postfix);
     
+    log_step_start();
     log_message("\n=== RESULT ===");
-    log_message("Postfix Expression: %s", postfix);
-    log_message("Evaluation Result: %d", result);
+    sprintf(msg, "Postfix Expression: %s", postfix);
+    log_message(msg);
+    sprintf(msg, "Evaluation Result: %d", result);
+    log_message(msg);
+    log_step_end();
     
+    log_finish();
     return 0;
 }

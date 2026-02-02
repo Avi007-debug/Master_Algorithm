@@ -49,7 +49,8 @@ int isOperator(char c) {
 }
 
 Node* buildFromPostfix(char* postfix) {
-    log_step_start("BUILD_EXPRESSION_TREE");
+    log_step_start();
+    log_message("BUILD_EXPRESSION_TREE");
     Stack s;
     initStack(&s);
     
@@ -58,27 +59,36 @@ Node* buildFromPostfix(char* postfix) {
         
         if (current == ' ') continue;
         
-        log_step_start("PROCESS_CHAR");
-        log_message("Processing: '%c'", current);
+        log_step_start();
+    log_message("PROCESS_CHAR");
+        char msg[256];
+        sprintf(msg, "Processing: '%c'", current);
+        log_message(msg);
         
         if (isOperator(current)) {
             Node* node = createNode(current, 1);
             node->right = pop(&s);
             node->left = pop(&s);
             push(&s, node);
-            log_message("Created operator node: %c", current);
+            char msg2[256];
+            sprintf(msg2, "Created operator node: %c", current);
+            log_message(msg2);
         } else {
             Node* node = createNode(current, 0);
             push(&s, node);
-            log_message("Created operand node: %c", current);
+            char msg2[256];
+            sprintf(msg2, "Created operand node: %c", current);
+            log_message(msg2);
         }
         
-        log_step_end("PROCESS_CHAR");
+        log_step_end();
+    log_message("PROCESS_CHAR");
     }
     
     Node* root = pop(&s);
     log_message("Expression tree built successfully");
-    log_step_end("BUILD_EXPRESSION_TREE");
+    log_step_end();
+    log_message("BUILD_EXPRESSION_TREE");
     
     return root;
 }
@@ -93,7 +103,9 @@ int evaluate(Node* root) {
     int leftVal = evaluate(root->left);
     int rightVal = evaluate(root->right);
     
-    log_message("Evaluating: %d %c %d", leftVal, root->value, rightVal);
+    char msg[256];
+    sprintf(msg, "Evaluating: %d %c %d", leftVal, root->value, rightVal);
+    log_message(msg);
     
     switch(root->value) {
         case '+': return leftVal + rightVal;
@@ -155,32 +167,44 @@ int main(int argc, char* argv[]) {
         strcpy(postfix, "ab+cd-*"); // (a+b)*(c-d)
     }
     
+    log_step_start();
     log_message("=== EXPRESSION TREE ===\n");
-    log_message("Postfix Expression: %s\n", postfix);
+    char msg[256];
+    sprintf(msg, "Postfix Expression: %s\n", postfix);
+    log_message(msg);
+    log_step_end();
     
     Node* root = buildFromPostfix(postfix);
     
+    log_step_start();
     log_message("\n--- Traversals ---");
     
     char inorderStr[MAX] = "";
     inorder(root, inorderStr);
-    log_message("Inorder (Infix):  %s", inorderStr);
+    sprintf(msg, "Inorder (Infix):  %s", inorderStr);
+    log_message(msg);
     
     char preorderStr[MAX] = "";
     preorder(root, preorderStr);
-    log_message("Preorder (Prefix): %s", preorderStr);
+    sprintf(msg, "Preorder (Prefix): %s", preorderStr);
+    log_message(msg);
     
     char postorderStr[MAX] = "";
     postorder(root, postorderStr);
-    log_message("Postorder:         %s", postorderStr);
+    sprintf(msg, "Postorder:         %s", postorderStr);
+    log_message(msg);
+    log_step_end();
     
     // If using digits, evaluate
     if (isdigit(postfix[0])) {
         log_message("\n--- Evaluation ---");
-        log_step_start("EVALUATE_TREE");
+        log_step_start();
+    log_message("EVALUATE_TREE");
         int result = evaluate(root);
-        log_message("Result: %d", result);
-        log_step_end("EVALUATE_TREE");
+        sprintf(msg, "Result: %d", result);
+        log_message(msg);
+        log_step_end();
+    log_message("EVALUATE_TREE");
     }
     
     return 0;

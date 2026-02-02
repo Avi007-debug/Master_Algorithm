@@ -39,7 +39,9 @@ void insertNonFull(BPlusNode* node, int key) {
         node->keys[i + 1] = key;
         node->numKeys++;
         
-        log_message("Inserted %d in leaf node", key);
+        char msg[256];
+        sprintf(msg, "Inserted %d in leaf node", key);
+        log_message(msg);
     } else {
         // Find child to insert
         while (i >= 0 && node->keys[i] > key) {
@@ -52,15 +54,21 @@ void insertNonFull(BPlusNode* node, int key) {
 }
 
 BPlusNode* insert(BPlusNode* root, int key) {
-    log_step_start("BPLUS_INSERT");
-    log_message("Inserting key: %d", key);
+    log_step_start();
+    log_message("BPLUS_INSERT");
+    char msg[256];
+    sprintf(msg, "Inserting key: %d", key);
+    log_message(msg);
     
     if (root == NULL) {
         root = createNode(1);
         root->keys[0] = key;
         root->numKeys = 1;
-        log_message("Created root with key %d", key);
-        log_step_end("BPLUS_INSERT");
+        char msg[256];
+        sprintf(msg, "Created root with key %d", key);
+        log_message(msg);
+        log_step_end();
+    log_message("BPLUS_INSERT");
         return root;
     }
     
@@ -71,17 +79,22 @@ BPlusNode* insert(BPlusNode* root, int key) {
         log_message("Root is full, would split here (simplified implementation)");
     }
     
-    log_step_end("BPLUS_INSERT");
+    log_step_end();
+    log_message("BPLUS_INSERT");
     return root;
 }
 
 void search(BPlusNode* root, int key) {
-    log_step_start("BPLUS_SEARCH");
-    log_message("Searching for key: %d", key);
+    log_step_start();
+    log_message("BPLUS_SEARCH");
+    char msg[256];
+    sprintf(msg, "Searching for key: %d", key);
+    log_message(msg);
     
     if (root == NULL) {
         log_message("Tree is empty");
-        log_step_end("BPLUS_SEARCH");
+        log_step_end();
+    log_message("BPLUS_SEARCH");
         return;
     }
     
@@ -98,25 +111,34 @@ void search(BPlusNode* root, int key) {
         // Check if key found
         if (i < current->numKeys && key == current->keys[i]) {
             if (current->isLeaf) {
-                log_message("Key %d FOUND in leaf node", key);
-                log_step_end("BPLUS_SEARCH");
+                char msg[256];
+                sprintf(msg, "Key %d FOUND in leaf node", key);
+                log_message(msg);
+                log_step_end();
+    log_message("BPLUS_SEARCH");
                 return;
             }
         }
         
         // If leaf, key not found
         if (current->isLeaf) {
-            log_message("Key %d NOT FOUND", key);
-            log_step_end("BPLUS_SEARCH");
+            char msg[256];
+            sprintf(msg, "Key %d NOT FOUND", key);
+            log_message(msg);
+            log_step_end();
+    log_message("BPLUS_SEARCH");
             return;
         }
         
         // Go to appropriate child
-        log_message("Moving to child at index %d", i);
+        char msg[256];
+        sprintf(msg, "Moving to child at index %d", i);
+        log_message(msg);
         current = current->children[i];
     }
     
-    log_step_end("BPLUS_SEARCH");
+    log_step_end();
+    log_message("BPLUS_SEARCH");
 }
 
 void displayNode(BPlusNode* node, int level) {
@@ -131,7 +153,9 @@ void displayNode(BPlusNode* node, int level) {
     }
     strcat(keys, "]");
     
-    log_message("Level %d (%s): %s", level, node->isLeaf ? "leaf" : "internal", keys);
+    char msg[256];
+    sprintf(msg, "Level %d (%s): %s", level, node->isLeaf ? "leaf" : "internal", keys);
+    log_message(msg);
     
     if (!node->isLeaf) {
         for (int i = 0; i <= node->numKeys; i++) {
@@ -143,17 +167,21 @@ void displayNode(BPlusNode* node, int level) {
 }
 
 void display(BPlusNode* root) {
-    log_step_start("BPLUS_DISPLAY");
+    log_step_start();
+    log_message("BPLUS_DISPLAY");
     log_message("B+ Tree structure:");
     displayNode(root, 0);
-    log_step_end("BPLUS_DISPLAY");
+    log_step_end();
+    log_message("BPLUS_DISPLAY");
 }
 
 int main() {
     log_init();
     
+    log_step_start();
     log_message("=== B+ TREE (SIMPLIFIED) ===\n");
     log_message("Note: This is a simplified B+ Tree for demonstration\n");
+    log_step_end();
     
     BPlusNode* root = NULL;
     
@@ -161,14 +189,22 @@ int main() {
     int n = sizeof(values) / sizeof(values[0]);
     
     for (int i = 0; i < n; i++) {
-        log_message("\n--- Inserting %d ---", values[i]);
+        char msg[256];
+        log_step_start();
+        sprintf(msg, "\n--- Inserting %d ---", values[i]);
+        log_message(msg);
+        log_step_end();
         root = insert(root, values[i]);
     }
     
+    log_step_start();
     log_message("\n--- Tree Structure ---");
+    log_step_end();
     display(root);
     
+    log_step_start();
     log_message("\n--- Searching ---");
+    log_step_end();
     search(root, 12);
     search(root, 15);
     
