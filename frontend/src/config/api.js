@@ -1,5 +1,7 @@
 // API Configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+// Remove trailing slash from API URL to prevent double slashes
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_BASE_URL = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
 
 export const API = {
   BASE_URL: API_BASE_URL,
