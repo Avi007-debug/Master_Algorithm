@@ -3,10 +3,16 @@
 Interactive platform for visualizing data structures and algorithms with step-by-step execution. Perfect for interview preparation and learning CS fundamentals.
 
 ![Status](https://img.shields.io/badge/status-active-success.svg)
-![Deployment](https://img.shields.io/badge/deployment-ready-brightgreen.svg)
-![Algorithms](https://img.shields.io/badge/algorithms-36%2F57_working-yellow.svg)
+![Deployment](https://img.shields.io/badge/deployment-live-brightgreen.svg)
+![Algorithms](https://img.shields.io/badge/algorithms-57%2F57-success.svg)
+![React](https://img.shields.io/badge/react-19-blue.svg)
 ![Node](https://img.shields.io/badge/node-16%2B-blue.svg)
-![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
+
+### 🌐 Live Deployment
+
+- **Frontend**: https://master-algorithm.vercel.app/
+- **Backend API**: https://master-algorithm.onrender.com/
+- **GitHub Repo**: https://github.com/yourusername/ALGO-VISUALIZATION
 
 ---
 
@@ -33,26 +39,12 @@ cd frontend
 npm run dev           # http://localhost:5173
 ```
 
-### Production Deployment
+### Production Links
 
-See **[DEPLOYMENT.md](DEPLOYMENT.md)** for comprehensive deployment guides:
-- VPS deployment (DigitalOcean, AWS, Linode)
-- Platform-as-a-Service (Vercel, Netlify, Railway)
-- Docker deployment
-- Environment configuration
-- SSL/HTTPS setup
-- Monitoring and maintenance
+- **Live Frontend**: https://master-algorithm.vercel.app/
+- **Live Backend**: https://master-algorithm.onrender.com/
 
-**Quick Deploy with Docker:**
-```bash
-# Copy and configure environment
-cp .env.docker .env
-
-# Build and run
-docker-compose up -d
-
-# Access at http://localhost
-```
+> The application is fully deployed and live! Access the links above to see the platform in action.
 
 **⚠️ First time?** Run `npm install` in both directories before starting!
 
@@ -89,12 +81,18 @@ ALGO-VISUALIZATION/
 ## ✨ Features
 
 ### 🎨 Visualization & UI
-- **60+ Algorithms**: Sorting, searching, trees, graphs, DP, backtracking
+- **57 Algorithms**: Sorting, searching, trees, graphs, DP, backtracking, hashing, and more
 - **Step-by-Step Visualization**: Watch algorithms execute with visual feedback
-- **📚 Current Syllabus Filter**: Show only algorithms from your DS course syllabus
+- **Advanced Tree Visualizations**: 9 algorithms with graphical tree structure arrays, 4 complex algorithms with text-based visualizations
+- **📚 Syllabus Filter**: Show only algorithms from your Data Structures course syllabus (46 algorithms aligned)
+- **Category & Difficulty Filters**: Organize algorithms by type (Arrays, Sorting, Trees, Graphs, etc.) and difficulty
+- **Search Functionality**: Quickly find algorithms by name
+- **Sort Options**: By name, complexity, or difficulty
+- **Persistent Dashboard State**: All filter selections saved to localStorage - navigate freely without resetting
 - **Rich Themed UI**: Beautiful dark mode and lavender-tinted light mode
 - **Smooth Animations**: Framer Motion-powered transitions
 - **Speed Control**: Adjust playback speed from 0.25x to 3x
+- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
 
 ### 📚 Learning & Education
 - **Guided Interactive Tutorials**: Step-by-step walkthroughs with checkpoint questions
@@ -129,16 +127,22 @@ ALGO-VISUALIZATION/
 
 ## 🎯 Algorithm Categories
 
-| Category | Algorithms | Examples |
-|----------|-----------|----------|
-| **Sorting** | 8 | Bubble, Merge, Quick, Radix |
+| Category | Count | Examples |
+|----------|-------|----------|
+| **Sorting** | 9 | Bubble, Selection, Insertion, Merge, Quick, Counting, Radix, Heap, Randomized Quick |
 | **Searching** | 2 | Binary Search, BST Search |
-| **Data Structures** | 5 | Stack, Queue, Linked Lists |
-| **Trees** | 2 | Level Order, BST |
-| **Graphs** | 1 | BFS Traversal |
-| **Dynamic Programming** | 2 | Fibonacci DP, Memoization |
+| **Data Structures** | 5 | Stack, Queue, Deque, Priority Queue, Message Queue |
+| **Linked Lists** | 8 | Singly, Doubly, Circular SLL, Circular DLL, Reverse, Polynomial, Long Integer |
+| **Trees** | 13 | BST (Insert/Delete/Search), Inorder/Preorder/Postorder, AVL, Splay, Trie, B+ Tree, Threaded BT, Heap, Expression Tree |
+| **Graphs** | 4 | BFS, DFS, Adjacency Matrix, Adjacency List |
+| **Hashing** | 4 | Open Hashing, Linear Probing, Quadratic Probing, Double Hashing |
+| **Recursion** | 3 | Factorial, Fibonacci, Fibonacci DP |
 | **Backtracking** | 1 | N-Queens |
-| **LeetCode Style** | 10+ | Two Sum, Three Sum, Valid Parentheses |
+| **Stack Applications** | 4 | Valid Parentheses, Infix to Postfix, Infix to Prefix, Postfix Evaluation |
+| **Array Problems** | 2 | Two Sum, Three Sum |
+| **String** | 1 | Longest Substring |
+
+**Total: 57 Algorithms** | **Syllabus Aligned: 46 Algorithms**
 
 ---
 
@@ -156,7 +160,9 @@ ALGO-VISUALIZATION/
 ## 📚 Documentation
 
 - **[SETUP.md](SETUP.md)** - Installation, running, troubleshooting
+- **[FEATURES.md](FEATURES.md)** - Comprehensive features and algorithm details
 - **[FILE_GUIDE.md](FILE_GUIDE.md)** - Complete file structure explanation
+- **[FUTURE_IMPROVEMENTS.md](FUTURE_IMPROVEMENTS.md)** - Planned features and roadmap
 - **[LICENSE](LICENSE)** - Project license
 
 ---
@@ -223,6 +229,7 @@ GitHub Actions runs on every push/PR:
 - ✅ Unit tests (Vitest)
 - ✅ C code format check (clang-format)
 - ✅ Security audit (npm audit)
+- ✅ Auto-deploy to Vercel (frontend) and Render (backend)
 
 See [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
 
@@ -273,9 +280,37 @@ See [LICENSE](LICENSE) file.
 
 - **Project Setup**: [SETUP.md](SETUP.md)
 - **File Structure**: [FILE_GUIDE.md](FILE_GUIDE.md)
+- **All Features**: [FEATURES.md](FEATURES.md)
+- **Future Roadmap**: [FUTURE_IMPROVEMENTS.md](FUTURE_IMPROVEMENTS.md)
 - **React Docs**: [react.dev](https://react.dev)
 - **Vite Docs**: [vitejs.dev](https://vitejs.dev)
 
 ---
 
+## 🎓 Algorithm Showcase
+
+### Complete Algorithm Coverage (57 Total)
+
+**Sorting (9)**: Bubble, Selection, Insertion, Merge, Quick, Randomized Quick, Counting, Radix, Heap
+
+**Trees (13)**: Binary Tree Level Order, BST Search, BST Insert, BST Delete, Inorder, Preorder, Postorder, Expression Tree, Heap Construction, AVL Tree, Threaded BT, B+ Tree, Splay Tree, Trie
+
+**Data Structures & Linked Lists (13)**: Stack, Queue, Circular Queue, Message Queue, Priority Queue, Deque, Singly LL, Doubly LL, Reverse LL, Circular SLL, Circular DLL, Polynomial Multiplication, Long Integer Addition
+
+**Graphs (4)**: BFS Graph, DFS Graph, Adjacency Matrix, Adjacency List
+
+**Hashing (4)**: Open Hashing, Linear Probing, Quadratic Probing, Double Hashing
+
+**Stack Applications (4)**: Valid Parentheses, Infix to Postfix, Infix to Prefix, Postfix Evaluation
+
+**Recursion (3)**: Factorial, Fibonacci, Fibonacci DP
+
+**Arrays & Strings (3)**: Two Sum, Three Sum, Longest Substring
+
+**Backtracking (1)**: N-Queens
+
+---
+
 **Made with ❤️ for algorithm learners and interview prep**
+
+**Last Updated**: February 2026 | **Status**: Production Ready
