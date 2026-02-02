@@ -82,9 +82,9 @@ app.post('/run/:algorithm', (req, res) => {
     }
 
     // Construct command with arguments
-    // Ensure inputs are safe: basic sanitization (only numbers for now for Two Sum)
-    // In a production app, robust sanitization is needed.
-    const safeInputs = inputs.map(arg => String(arg).replace(/[^a-zA-Z0-9\-\s,()[\]{}]/g, ''));
+    // Ensure inputs are safe: basic sanitization
+    // Allow operators (+, -, *, /, ^) for expression algorithms
+    const safeInputs = inputs.map(arg => String(arg).replace(/[^a-zA-Z0-9\-\s,()[\]{}+*\/^.]/g, ''));
     const args = safeInputs.map(arg => `"${arg}"`).join(' ');
 
     // Execute the C program with timeout

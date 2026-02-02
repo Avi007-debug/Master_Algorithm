@@ -47,7 +47,6 @@ void insert(TrieNode* root, const char* word) {
     current->isEndOfWord = 1;
     log_message("Marked end of word");
     log_step_end();
-    log_message("TRIE_INSERT");
 }
 
 int search(TrieNode* root, const char* word) {
@@ -66,8 +65,6 @@ int search(TrieNode* root, const char* word) {
             sprintf(msg, "Character '%c' not found - word doesn't exist", word[i]);
             log_message(msg);
             log_step_end();
-    log_message("TRIE_SEARCH");
-            log_finish();
             return 0;
         }
         
@@ -80,7 +77,6 @@ int search(TrieNode* root, const char* word) {
     sprintf(msg, "Search result: %s", found ? "FOUND" : "NOT FOUND");
     log_message(msg);
     log_step_end();
-    log_message("TRIE_SEARCH");
     
     return found;
 }
@@ -100,8 +96,6 @@ int startsWith(TrieNode* root, const char* prefix) {
         if (current->children[index] == NULL) {
             log_message("Prefix not found");
             log_step_end();
-    log_message("TRIE_STARTS_WITH");
-            log_finish();
             return 0;
         }
         
@@ -110,7 +104,6 @@ int startsWith(TrieNode* root, const char* prefix) {
     
     log_message("Prefix exists");
     log_step_end();
-    log_message("TRIE_STARTS_WITH");
     return 1;
 }
 

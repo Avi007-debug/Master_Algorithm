@@ -6,6 +6,7 @@ import { GuidedTutorial } from './GuidedTutorial';
 import { ThemeSelector } from './ThemeSelector';
 import { BookmarkManager } from './BookmarkManager';
 import { PROBLEMS } from '../data/problems';
+import { API } from '../config/api';
 
 export function InterviewMode({ problem, onBack }) {
     const [logs, setLogs] = useState([]);

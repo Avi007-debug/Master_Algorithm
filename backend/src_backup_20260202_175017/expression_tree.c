@@ -59,7 +59,7 @@ Node* buildFromPostfix(char* postfix) {
         
         char msg[256];
         sprintf(msg, "Processing: '%c'", current);
-        // log_message(msg);
+        log_message(msg);
         
         if (isOperator(current)) {
             Node* node = createNode(current, 1);
@@ -68,18 +68,18 @@ Node* buildFromPostfix(char* postfix) {
             push(&s, node);
             char msg2[256];
             sprintf(msg2, "Created operator node: %c", current);
-            // log_message(msg2);
+            log_message(msg2);
         } else {
             Node* node = createNode(current, 0);
             push(&s, node);
             char msg2[256];
             sprintf(msg2, "Created operand node: %c", current);
-            // log_message(msg2);
+            log_message(msg2);
         }
     }
     
     Node* root = pop(&s);
-    // log_message("Expression tree built successfully");
+    log_message("Expression tree built successfully");
     
     return root;
 }
@@ -96,7 +96,7 @@ int evaluate(Node* root) {
     
     char msg[256];
     sprintf(msg, "Evaluating: %d %c %d", leftVal, root->value, rightVal);
-    // log_message(msg);
+    log_message(msg);
     
     switch(root->value) {
         case '+': return leftVal + rightVal;

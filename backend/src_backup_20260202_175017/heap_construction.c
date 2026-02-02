@@ -14,7 +14,7 @@ void heapifyDown(int arr[], int n, int i, int isMaxHeap) {
     int right = 2 * i + 2;
     char msg[256];
     sprintf(msg, "Heapifying at index %d (value: %d)", i, arr[i]);
-    // log_message(msg);
+    log_message(msg);
     
     if (isMaxHeap) {
         if (left < n && arr[left] > arr[target]) {
@@ -36,7 +36,7 @@ void heapifyDown(int arr[], int n, int i, int isMaxHeap) {
         char msg[256];
         sprintf(msg, "Swapping %d (index %d) with %d (index %d)", 
                    arr[i], i, arr[target], target);
-        // log_message(msg);
+        log_message(msg);
         swap(&arr[i], &arr[target]);
         
         // Show array state
@@ -48,28 +48,28 @@ void heapifyDown(int arr[], int n, int i, int isMaxHeap) {
             if (k < n - 1) strcat(arrayStr, ", ");
         }
         strcat(arrayStr, "]");
-        // log_message(arrayStr);
+        log_message(arrayStr);
         heapifyDown(arr, n, target, isMaxHeap);
     } else {
         char msg[256];
         sprintf(msg, "Node %d is in correct position", arr[i]);
-        // log_message(msg);
+        log_message(msg);
     }
 }
 
 void buildHeap(int arr[], int n, int isMaxHeap) {
     char msg[256];
     sprintf(msg, "Building %s", isMaxHeap ? "MAX HEAP" : "MIN HEAP");
-    // log_message(msg);
+    log_message(msg);
     
     // Start from last non-leaf node
     for (int i = n / 2 - 1; i >= 0; i--) {
         sprintf(msg, "\n--- Processing node at index %d ---", i);
-        // log_message(msg);
+        log_message(msg);
         heapifyDown(arr, n, i, isMaxHeap);
     }
     
-    // log_message("\nHeap construction complete!");
+    log_message("\nHeap construction complete!");
 }
 
 void insertHeap(int arr[], int* n, int value, int isMaxHeap) {
@@ -79,7 +79,7 @@ void insertHeap(int arr[], int* n, int value, int isMaxHeap) {
     
     char msg[256];
     sprintf(msg, "Inserted %d at index %d", value, i);
-    // log_message(msg);
+    log_message(msg);
     
     // Heapify up
     while (i > 0) {
@@ -89,7 +89,7 @@ void insertHeap(int arr[], int* n, int value, int isMaxHeap) {
         
         if (shouldSwap) {
             sprintf(msg, "Swapping with parent: %d <-> %d", arr[i], arr[parent]);
-            // log_message(msg);
+            log_message(msg);
             swap(&arr[i], &arr[parent]);
             i = parent;
         } else {
@@ -97,25 +97,25 @@ void insertHeap(int arr[], int* n, int value, int isMaxHeap) {
         }
     }
     
-    // log_message("Insert complete");
+    log_message("Insert complete");
 }
 
 int extractRoot(int arr[], int* n, int isMaxHeap) {
     if (*n <= 0) {
-        // log_message("Heap is empty");
+        log_message("Heap is empty");
         return -1;
     }
     
     int root = arr[0];
     char msg[256];
     sprintf(msg, "Extracting root: %d", root);
-    // log_message(msg);
+    log_message(msg);
     
     arr[0] = arr[*n - 1];
     (*n)--;
     
     sprintf(msg, "Replaced root with last element: %d", arr[0]);
-    // log_message(msg);
+    log_message(msg);
     
     if (*n > 0) {
         heapifyDown(arr, *n, 0, isMaxHeap);
@@ -126,7 +126,7 @@ int extractRoot(int arr[], int* n, int isMaxHeap) {
 void displayHeap(int arr[], int n, const char* label) {
     char msg[256];
     sprintf(msg, "%s:", label);
-    // log_message(msg);
+    log_message(msg);
     char heapStr[256] = "[";
     for (int i = 0; i < n; i++) {
         char temp[20];
@@ -135,7 +135,7 @@ void displayHeap(int arr[], int n, const char* label) {
         if (i < n - 1) strcat(heapStr, ", ");
     }
     strcat(heapStr, "]");
-    // log_message(heapStr);
+    log_message(heapStr);
 }
 
 int main() {

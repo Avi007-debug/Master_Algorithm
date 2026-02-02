@@ -62,9 +62,13 @@ void insertionSort(int arr[], int n) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) return 1;
-
-    char* input = argv[1];
+    char inputBuffer[256];
+    if (argc > 1) {
+        strncpy(inputBuffer, argv[1], sizeof(inputBuffer) - 1);
+        inputBuffer[sizeof(inputBuffer) - 1] = '\0';
+    } else {
+        strcpy(inputBuffer, "64,25,12,22,11"); // default dataset
+    }
     int arr[100];
     int n = 0;
 
@@ -75,7 +79,7 @@ int main(int argc, char* argv[]) {
         }
     } else {
         // Single argument case "64, 25, 12"
-        char* token = strtok(input, ", ");
+        char* token = strtok(inputBuffer, ", ");
         while (token != NULL) {
             arr[n++] = atoi(token);
             token = strtok(NULL, ", ");

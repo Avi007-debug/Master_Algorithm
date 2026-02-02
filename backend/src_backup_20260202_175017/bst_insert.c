@@ -21,21 +21,21 @@ Node* insert(Node* root, int data) {
 
     if (root == NULL) {
         sprintf(msg, "Inserting %d as new node", data);
-        // log_message(msg);
+        log_message(msg);
         return createNode(data);
     }
 
     if (data < root->data) {
         sprintf(msg, "%d < %d, going left", data, root->data);
-        // log_message(msg);
+        log_message(msg);
         root->left = insert(root->left, data);
     } else if (data > root->data) {
         sprintf(msg, "%d > %d, going right", data, root->data);
-        // log_message(msg);
+        log_message(msg);
         root->right = insert(root->right, data);
     } else {
         sprintf(msg, "%d already exists, ignoring", data);
-        // log_message(msg);
+        log_message(msg);
     }
 
     return root;
@@ -46,7 +46,7 @@ void inorderTraversal(Node* root) {
         inorderTraversal(root->left);
         char msg[256];
         sprintf(msg, "Node: %d", root->data);
-        // log_message(msg);
+        log_message(msg);
         inorderTraversal(root->right);
     }
 }

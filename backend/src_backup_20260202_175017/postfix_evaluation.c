@@ -24,7 +24,7 @@ void push(Stack* s, int value) {
         s->items[++(s->top)] = value;
         char msg[100];
         sprintf(msg, "Pushed %d to stack", value);
-        // log_message(msg);
+        log_message(msg);
     }
 }
 
@@ -33,7 +33,7 @@ int pop(Stack* s) {
         int value = s->items[(s->top)--];
         char msg[100];
         sprintf(msg, "Popped %d from stack", value);
-        // log_message(msg);
+        log_message(msg);
         return value;
     }
     return 0;
@@ -66,7 +66,7 @@ int evaluatePostfix(char* postfix) {
     char msg[256];
     
     sprintf(msg, "Postfix Expression: %s", postfix);
-    // log_message(msg);
+    log_message(msg);
     
     for (int i = 0; postfix[i] != '\0'; i++) {
         char current = postfix[i];
@@ -74,14 +74,14 @@ int evaluatePostfix(char* postfix) {
         if (current == ' ') continue;
         
         sprintf(msg, "Processing: '%c'", current);
-        // log_message(msg);
+        log_message(msg);
         
         // If operand (digit)
         if (isdigit(current)) {
             int num = current - '0';
             push(&s, num);
             sprintf(msg, "Operand: %d", num);
-            // log_message(msg);
+            log_message(msg);
         }
         // If operator
         else if (isOperator(current)) {
@@ -89,13 +89,13 @@ int evaluatePostfix(char* postfix) {
             int operand1 = pop(&s);
             
             sprintf(msg, "Operation: %d %c %d", operand1, current, operand2);
-            // log_message(msg);
+            log_message(msg);
             
             int result = performOperation(operand1, operand2, current);
             push(&s, result);
             
             sprintf(msg, "Result: %d", result);
-            // log_message(msg);
+            log_message(msg);
         }
         
         // Show stack state
@@ -108,7 +108,7 @@ int evaluatePostfix(char* postfix) {
         }
         strcat(stackStr, "]");
         sprintf(msg, "Stack: %s", stackStr);
-        // log_message(msg);
+        log_message(msg);
         
     }
     

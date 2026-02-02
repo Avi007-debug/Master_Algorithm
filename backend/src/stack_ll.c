@@ -87,9 +87,13 @@ void stackOperations(int* input_vals, int n) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) return 1;
-
-    char* input = argv[1];
+    char inputBuffer[256];
+    if (argc > 1) {
+        strncpy(inputBuffer, argv[1], sizeof(inputBuffer) - 1);
+        inputBuffer[sizeof(inputBuffer) - 1] = '\0';
+    } else {
+        strcpy(inputBuffer, "10,20,30"); // default dataset
+    }
     int arr[100];
     int n = 0;
 
@@ -98,7 +102,7 @@ int main(int argc, char* argv[]) {
             arr[n++] = atoi(argv[i]);
         }
     } else {
-        char* token = strtok(input, ", ");
+        char* token = strtok(inputBuffer, ", ");
         while (token != NULL) {
             arr[n++] = atoi(token);
             token = strtok(NULL, ", ");

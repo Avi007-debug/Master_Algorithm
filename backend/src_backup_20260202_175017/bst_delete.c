@@ -39,48 +39,48 @@ Node* deleteNode(Node* root, int data) {
     if (root == NULL) {
         char msg[256];
         sprintf(msg, "Value %d not found", data);
-        // log_message(msg);
+        log_message(msg);
         return root;
     }
     
     if (data < root->data) {
         char msg[256];
         sprintf(msg, "%d < %d, going left", data, root->data);
-        // log_message(msg);
+        log_message(msg);
         root->left = deleteNode(root->left, data);
     } else if (data > root->data) {
         char msg[256];
         sprintf(msg, "%d > %d, going right", data, root->data);
-        // log_message(msg);
+        log_message(msg);
         root->right = deleteNode(root->right, data);
     } else {
         char msg[256];
         sprintf(msg, "Found node to delete: %d", data);
-        // log_message(msg);
+        log_message(msg);
         
         if (root->left == NULL && root->right == NULL) {
-            // log_message("Case: Leaf node - simply deleting");
+            log_message("Case: Leaf node - simply deleting");
             free(root);
             return NULL;
         } else if (root->left == NULL) {
-            // log_message("Case: One child (right) - replacing with right child");
+            log_message("Case: One child (right) - replacing with right child");
             Node* temp = root->right;
             free(root);
             return temp;
         } else if (root->right == NULL) {
-            // log_message("Case: One child (left) - replacing with left child");
+            log_message("Case: One child (left) - replacing with left child");
             Node* temp = root->left;
             free(root);
             return temp;
         } else {
-            // log_message("Case: Two children - finding inorder successor");
+            log_message("Case: Two children - finding inorder successor");
             Node* temp = findMin(root->right);
             sprintf(msg, "Inorder successor: %d", temp->data);
-            // log_message(msg);
+            log_message(msg);
             root->data = temp->data;
             sprintf(msg, "Replaced %d with %d", data, temp->data);
-            // log_message(msg);
-            // log_message("Now deleting successor from right subtree");
+            log_message(msg);
+            log_message("Now deleting successor from right subtree");
             root->right = deleteNode(root->right, temp->data);
         }
     }
@@ -93,7 +93,7 @@ void inorderTraversal(Node* root) {
         inorderTraversal(root->left);
         char msg[256];
         sprintf(msg, "Node: %d", root->data);
-        // log_message(msg);
+        log_message(msg);
         inorderTraversal(root->right);
     }
 }

@@ -86,21 +86,21 @@ Node* insert(Node* node, int data) {
     // Normal BST insertion
     if (node == NULL) {
         sprintf(msg, "Inserting new node: %d", data);
-        // log_message(msg);
+        log_message(msg);
         return createNode(data);
     }
     
     if (data < node->data) {
         sprintf(msg, "%d < %d, going left", data, node->data);
-        // log_message(msg);
+        log_message(msg);
         node->left = insert(node->left, data);
     } else if (data > node->data) {
         sprintf(msg, "%d > %d, going right", data, node->data);
-        // log_message(msg);
+        log_message(msg);
         node->right = insert(node->right, data);
     } else {
         sprintf(msg, "%d already exists", data);
-        // log_message(msg);
+        log_message(msg);
         return node;
     }
     
@@ -110,26 +110,26 @@ Node* insert(Node* node, int data) {
     // Get balance factor
     int balance = getBalance(node);
     sprintf(msg, "Node %d: height=%d, balance=%d", node->data, node->height, balance);
-    // log_message(msg);
+    log_message(msg);
     
     // Left Left Case
     if (balance > 1 && data < node->left->data) {
         sprintf(msg, "LL Case detected at node %d", node->data);
-        // log_message(msg);
+        log_message(msg);
         return rightRotate(node);
     }
     
     // Right Right Case
     if (balance < -1 && data > node->right->data) {
         sprintf(msg, "RR Case detected at node %d", node->data);
-        // log_message(msg);
+        log_message(msg);
         return leftRotate(node);
     }
     
     // Left Right Case
     if (balance > 1 && data > node->left->data) {
         sprintf(msg, "LR Case detected at node %d", node->data);
-        // log_message(msg);
+        log_message(msg);
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
@@ -137,13 +137,13 @@ Node* insert(Node* node, int data) {
     // Right Left Case
     if (balance < -1 && data < node->right->data) {
         sprintf(msg, "RL Case detected at node %d", node->data);
-        // log_message(msg);
+        log_message(msg);
         node->right = rightRotate(node->right);
         return leftRotate(node);
     }
     
     sprintf(msg, "Node %d is balanced", node->data);
-    // log_message(msg);
+    log_message(msg);
     return node;
 }
 
@@ -153,7 +153,7 @@ void inorderTraversal(Node* root) {
         char msg[256];
         sprintf(msg, "Node: %d (height: %d, balance: %d)", 
                    root->data, root->height, getBalance(root));
-        // log_message(msg);
+        log_message(msg);
         inorderTraversal(root->right);
     }
 }

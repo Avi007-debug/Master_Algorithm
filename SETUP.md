@@ -1,6 +1,6 @@
 # Setup Guide
 
-Complete setup instructions for ALGO-VISUALIZATION project.
+Complete setup instructions for ALGO-VISUALIZATION project - local development and production configuration.
 
 ---
 

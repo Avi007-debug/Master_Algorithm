@@ -608,3 +608,112 @@ Implement algorithms explicitly mentioned in the course syllabus that are curren
 *This is a living document. Priorities may shift based on user feedback and community needs.*
 
 **Last Updated:** February 2, 2026
+
+---
+
+## ?????? Known Issues & Fixes Needed
+
+### High Priority Issues
+
+#### 1. JSON Output Issues in C Files
+**Status**: Partially Fixed  
+**Affected Files**: ~21 files (avl_tree, bst_delete, bst_insert, counting_sort, deque_ll, doubly_linked_list, expression_tree, factorial, heap_construction, insertion_sort, merge_sort, postfix_evaluation, queue_ll, quick_sort, radix_sort, randomized_quick_sort, recursion_fib, selection_sort, splay_tree, stack_ll, trie)
+
+**Problem**: Some C programs have:
+- Duplicate log_finish() calls causing extra ] in JSON
+- Missing log_step_start/end wrappers around standalone log_message() calls
+- Nested log_step calls (logger doesn't support nesting)
+
+**Workaround**: 36 algorithms work perfectly - sufficient for deployment
+
+**Fix Steps**:
+1. Run ./fix_json_issues.sh to auto-fix 15 files
+2. Manually review and fix remaining 6 files (~30 min)
+3. Test all 57 algorithms
+
+### Medium Priority Issues
+
+#### 2. Environment Variable Documentation
+**Status**: Fixed ???  
+**Solution**: Created .env.example files and comprehensive deployment docs
+
+#### 3. CORS Configuration
+**Status**: Fixed ???  
+**Solution**: Added environment-based CORS with ALLOWED_ORIGINS
+
+#### 4. Build Process for Production
+**Status**: Needs Testing  
+**Next Steps**: Test Docker builds and production deployment
+
+### Low Priority Issues
+
+#### 5. Error Handling in Frontend
+**Status**: Working  
+**Improvement**: Could add more specific error messages and retry logic
+
+#### 6. Algorithm Input Validation
+**Status**: Basic validation exists  
+**Improvement**: Add type-specific validation for each algorithm
+
+#### 7. Performance Monitoring
+**Status**: Not implemented  
+**Improvement**: Add APM tools like New Relic or DataDog
+
+---
+
+## ???? Improvements Roadmap (Detailed Phases)
+
+### Phase 1: Core Stability ??? (CURRENT)
+- [x] Fix logger JSON escaping
+- [x] Add environment variable support
+- [x] Create deployment documentation
+- [x] Add Docker support
+- [ ] Fix remaining C file JSON issues (21 files)
+- [ ] Test all 57 algorithms end-to-end
+
+### Phase 2: Production Ready
+- [ ] Add comprehensive error handling
+- [ ] Implement rate limiting
+- [ ] Add caching layer (Redis)
+- [ ] Setup CI/CD pipeline
+- [ ] Add monitoring and logging (Winston, Morgan)
+- [ ] Security audit and penetration testing
+
+### Phase 3: Enhanced Features
+- [ ] Add algorithm complexity analysis
+- [ ] Implement code editor for custom inputs
+- [ ] Add step-by-step explanation text
+- [ ] Support for more data structures
+- [ ] Add quiz/test mode
+- [ ] User accounts and progress tracking
+
+### Phase 4: Optimization
+- [ ] WebAssembly compilation for C programs
+- [ ] Client-side execution option
+- [ ] Progressive Web App (PWA) support
+- [ ] Offline mode
+- [ ] Mobile app (React Native)
+
+---
+
+## ??? Testing Checklist
+
+### Before Deployment
+- [ ] All 57 algorithms tested with sample inputs
+- [ ] Frontend build completes without errors
+- [ ] Backend health endpoint responding
+- [ ] Docker containers start successfully
+- [ ] Environment variables configured
+- [ ] SSL certificates installed (production)
+- [ ] CORS origins whitelisted correctly
+- [ ] Database migrations run (if applicable)
+
+### Post-Deployment
+- [ ] Verify /health endpoint returns 200
+- [ ] Test 5-10 random algorithms
+- [ ] Check frontend can connect to backend
+- [ ] Monitor error logs for 24 hours
+- [ ] Test on multiple browsers
+- [ ] Test on mobile devices
+- [ ] Verify analytics tracking (if enabled)
+

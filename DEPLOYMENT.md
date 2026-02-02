@@ -1,387 +1,477 @@
 # Deployment Guide
 
-This guide covers deploying the Algorithm Visualization Platform for both development and production environments.
+**Recommended Setup:** Vercel (Frontend) + Render (Backend)
 
-## Table of Contents
-- [Prerequisites](#prerequisites)
-- [Local Development](#local-development)
-- [Production Deployment](#production-deployment)
-- [Environment Variables](#environment-variables)
-- [Common Issues](#common-issues)
+Complete guide to deploying the Algorithm Visualization Platform using free hosting.
 
-## Prerequisites
+---
 
-### System Requirements
-- **Node.js**: v18 or higher
-- **npm**: v9 or higher  
-- **GCC/Clang**: For compiling C programs
-- **Make**: Build automation tool
-- **OS**: Linux, macOS, or WSL2 on Windows
+## 🚀 Quick Deploy (15 Minutes)
 
-### Dependencies Installation
+### **Best Free Setup: Vercel + Render**
 
+**Frontend on Vercel** (Free)
+- Global CDN
+- Automatic HTTPS
+- Auto-deploy on git push
+- Unlimited bandwidth
+
+**Backend on Render** (Free tier available)
+- Supports C compilation
+- Automatic HTTPS
+- 750 hours/month free
+- Easy setup
+
+**Total Cost:** $0/month (free tier)
+
+---
+
+## 📦 Step-by-Step Deployment
+
+### Part 1: Deploy Frontend to Vercel (5 minutes)
+
+#### Prerequisites
+- GitHub account
+- Code pushed to GitHub repository
+
+#### Steps
+
+**1. Sign up for Vercel**
+- Go to [vercel.com](https://vercel.com)
+- Click "Sign Up" → Choose "Continue with GitHub"
+- Authorize Vercel to access your repositories
+
+**2. Import Your Project**
+- Click "Add New..." → "Project"
+- Select your `ALGO-VISUALIZATION` repository
+- Click "Import"
+
+**3. Configure Build Settings**
+- **Framework Preset:** Vite
+- **Root Directory:** `frontend`
+- **Build Command:** `npm run build`
+- **Output Directory:** `dist`
+- **Install Command:** `npm install`
+
+**4. Add Environment Variables**
+Click "Environment Variables" and add:
+```
+Name: VITE_API_URL
+Value: https://your-backend-name.onrender.com/api
+```
+*(We'll get the backend URL in Part 2, you can add this later)*
+
+**5. Deploy**
+- Click "Deploy"
+- Wait 2-3 minutes for build to complete
+- Copy your frontend URL (e.g., `https://algo-viz.vercel.app`)
+
+**6. Update Environment Variable**
+After backend is deployed:
+- Go to Project Settings → Environment Variables
+- Update `VITE_API_URL` with your Render backend URL
+- Redeploy: Deployments → Click ⋯ → Redeploy
+
+---
+
+### Part 2: Deploy Backend to Render (10 minutes)
+
+#### Prerequisites
+- GitHub repository
+- Render account
+
+#### Steps
+
+**1. Sign up for Render**
+- Go to [render.com](https://render.com)
+- Click "Get Started" → "Sign Up with GitHub"
+- Authorize Render
+
+**2. Create New Web Service**
+- Dashboard → Click "New +"
+- Select "Web Service"
+- Click "Connect" next to your repository
+- If repo not listed, click "Configure Account" to grant access
+
+**3. Configure Service**
+
+**Basic Settings:**
+- **Name:** `algo-viz-backend` (or your preferred name)
+- **Region:** Oregon (US West) or closest to you
+- **Branch:** `main`
+- **Root Directory:** `backend`
+
+**Build Settings:**
+- **Runtime:** Node
+- **Build Command:**
+  ```bash
+  npm install && make all
+  ```
+- **Start Command:**
+  ```bash
+  npm start
+  ```
+
+**4. Add Environment Variables**
+Scroll to "Environment Variables" section and add:
+
+| Key | Value |
+|-----|-------|
+| `NODE_ENV` | `production` |
+| `ALLOWED_ORIGINS` | `https://algo-viz.vercel.app` |
+| `ALGORITHM_TIMEOUT` | `5000` |
+| `MAX_INPUT_SIZE` | `1000` |
+| `MAX_INPUT_COUNT` | `100` |
+
+*(Replace `algo-viz.vercel.app` with your actual Vercel URL from Part 1)*
+
+**5. Select Plan**
+- Choose **"Free"** plan
+- Note: Free tier sleeps after 15 min of inactivity
+- First request after sleep takes ~30 seconds to wake up
+- For always-on, upgrade to Starter ($7/month)
+
+**6. Create Web Service**
+- Click "Create Web Service"
+- Wait 5-10 minutes for build to complete
+- Watch the build logs for any errors
+
+**7. Verify Deployment**
+Once deployed, test your backend:
+- Copy your Render URL (e.g., `https://algo-viz-backend.onrender.com`)
+- Test health endpoint:
+  ```bash
+  curl https://your-backend.onrender.com/health
+  ```
+- Should return: `{"status":"ok","timestamp":"..."}`
+
+**8. Update Frontend Environment Variable**
+- Go back to Vercel
+- Project Settings → Environment Variables
+- Update `VITE_API_URL` to: `https://your-backend.onrender.com/api`
+- Go to Deployments → Click ⋯ on latest → Redeploy
+
+---
+
+## ✅ Verification
+
+### Test Your Deployment
+
+**1. Check Backend Health**
 ```bash
-# Install system dependencies (Ubuntu/Debian)
-sudo apt-get update
-sudo apt-get install build-essential gcc make
-
-# Install system dependencies (macOS)
-brew install gcc make
-
-# Install Node.js dependencies
-cd backend && npm install
-cd ../frontend && npm install
+curl https://your-backend.onrender.com/health
 ```
+Expected: `{"status":"ok","timestamp":"2026-02-02T..."}`
 
-## Local Development
-
-### 1. Backend Setup
-
+**2. Test an Algorithm**
 ```bash
-cd backend
-
-# Create environment file
-cp .env.example .env
-
-# Edit .env with your local settings
-# Default values work for local development
-
-# Build C programs
-make all
-
-# Verify build (should show 57+ executables)
-ls build/ | grep -v "\.o$" | wc -l
-
-# Start backend server
-npm start
-# Server runs on http://localhost:3001
+curl -X POST https://your-backend.onrender.com/api/run/bubble_sort \
+  -H "Content-Type: application/json" \
+  -d '{"inputs":["5","2","8","1","9"]}'
 ```
+Expected: JSON array with visualization steps
 
-### 2. Frontend Setup
+**3. Test Frontend**
+- Visit your Vercel URL
+- Select an algorithm (e.g., Bubble Sort)
+- Enter input values
+- Click "Visualize"
+- Should see step-by-step visualization
 
-```bash
-cd frontend
+---
 
-# Create environment file
-cp .env.example .env
-
-# Start development server
-npm run dev
-# Frontend runs on http://localhost:5173
-```
-
-### 3. Access Application
-
-Open your browser and navigate to:
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:3001
-- **Health Check**: http://localhost:3001/health
-
-## Production Deployment
-
-### Option 1: VPS Deployment (DigitalOcean, Linode, AWS EC2)
-
-#### Backend Deployment
-
-```bash
-# 1. SSH into your server
-ssh user@your-server-ip
-
-# 2. Clone repository
-git clone https://github.com/yourusername/ALGO-VISUALIZATION.git
-cd ALGO-VISUALIZATION/backend
-
-# 3. Install dependencies
-npm install --production
-
-# 4. Build C programs
-make all
-
-# 5. Create production environment
-cp .env.production .env
-nano .env  # Edit with your production values
-
-# 6. Install PM2 for process management
-npm install -g pm2
-
-# 7. Start backend with PM2
-pm2 start server.js --name algo-viz-backend
-pm2 save
-pm2 startup  # Follow instructions to enable startup on boot
-
-# 8. Setup Nginx reverse proxy
-sudo apt-get install nginx
-
-# Create Nginx configuration
-sudo nano /etc/nginx/sites-available/algo-viz-backend
-```
-
-**Nginx Backend Configuration** (`/etc/nginx/sites-available/algo-viz-backend`):
-```nginx
-server {
-    listen 80;
-    server_name api.yourdomain.com;
-
-    location / {
-        proxy_pass http://localhost:3001;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-}
-```
-
-```bash
-# Enable site
-sudo ln -s /etc/nginx/sites-available/algo-viz-backend /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl reload nginx
-
-# Setup SSL with Let's Encrypt
-sudo apt-get install certbot python3-certbot-nginx
-sudo certbot --nginx -d api.yourdomain.com
-```
-
-#### Frontend Deployment
-
-```bash
-cd ../frontend
-
-# 1. Create production environment
-cp .env.production .env
-nano .env  # Set VITE_API_URL=https://api.yourdomain.com
-
-# 2. Build for production
-npm run build
-
-# 3. Create Nginx configuration
-sudo nano /etc/nginx/sites-available/algo-viz-frontend
-```
-
-**Nginx Frontend Configuration** (`/etc/nginx/sites-available/algo-viz-frontend`):
-```nginx
-server {
-    listen 80;
-    server_name yourdomain.com www.yourdomain.com;
-
-    root /path/to/ALGO-VISUALIZATION/frontend/dist;
-    index index.html;
-
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-
-    # Cache static assets
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-
-    # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-}
-```
-
-```bash
-# Enable site
-sudo ln -s /etc/nginx/sites-available/algo-viz-frontend /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl reload nginx
-
-# Setup SSL
-sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
-```
-
-### Option 2: Platform-as-a-Service (Vercel, Netlify, Railway)
-
-#### Frontend on Vercel/Netlify
-
-1. **Connect Repository**: Link your GitHub repository
-2. **Configure Build Settings**:
-   - Build Command: `npm run build`
-   - Publish Directory: `dist`
-   - Root Directory: `frontend`
-3. **Environment Variables**: Add `VITE_API_URL` in platform settings
-4. **Deploy**: Platform auto-deploys on git push
-
-#### Backend on Railway/Render
-
-1. **Create New Service**: Select your repository
-2. **Configure**:
-   - Root Directory: `backend`
-   - Build Command: `npm install && make all`
-   - Start Command: `npm start`
-3. **Environment Variables**: Add all variables from `.env.production`
-4. **Deploy**: Platform auto-deploys
-
-### Option 3: Docker Deployment
-
-```bash
-# Build and run with Docker Compose
-docker-compose up -d
-
-# Or build individually
-docker build -t algo-viz-backend ./backend
-docker build -t algo-viz-frontend ./frontend
-
-docker run -p 3001:3001 --env-file backend/.env algo-viz-backend
-docker run -p 80:80 algo-viz-frontend
-```
-
-## Environment Variables
-
-### Backend (.env)
-
-| Variable | Development | Production | Description |
-|----------|-------------|------------|-------------|
-| `PORT` | 3001 | 3001 or dynamic | Server port |
-| `NODE_ENV` | development | production | Environment mode |
-| `EXECUTION_TIMEOUT` | 5000 | 5000 | Max execution time (ms) |
-| `MAX_INPUT_LENGTH` | 1000 | 1000 | Max input string length |
-| `MAX_INPUTS` | 100 | 100 | Max number of inputs |
-| `ALLOWED_ORIGINS` | localhost:5173 | your-domain.com | CORS allowed origins |
+## 🔧 Environment Variables Reference
 
 ### Frontend (.env)
-
-| Variable | Development | Production | Description |
-|----------|-------------|------------|-------------|
-| `VITE_API_URL` | http://localhost:3001 | https://api.yourdomain.com | Backend API URL |
-
-## Post-Deployment Checks
-
 ```bash
-# 1. Health check
-curl https://api.yourdomain.com/health
-
-# 2. Test algorithm execution
-curl -X POST https://api.yourdomain.com/run/bubble_sort \
-  -H "Content-Type: application/json" \
-  -d '{"inputs": []}'
-
-# 3. Check frontend loads
-curl https://yourdomain.com
-
-# 4. Monitor backend logs
-pm2 logs algo-viz-backend
-
-# 5. Check Nginx logs
-sudo tail -f /var/log/nginx/access.log
-sudo tail -f /var/log/nginx/error.log
+VITE_API_URL=https://your-backend.onrender.com/api
 ```
 
-## Performance Optimization
-
-### Backend
-- Enable gzip compression in Nginx
-- Use PM2 cluster mode: `pm2 start server.js -i max`
-- Implement Redis caching for frequently used algorithms
-- Add rate limiting with `express-rate-limit`
-
-### Frontend
-- Enable CDN for static assets
-- Implement code splitting (already configured)
-- Use service workers for offline support
-- Optimize images and assets
-
-## Security Checklist
-
-- [ ] Update all `ALLOWED_ORIGINS` in production
-- [ ] Enable HTTPS/SSL certificates
-- [ ] Set strong `NODE_ENV=production`
-- [ ] Implement rate limiting on API endpoints
-- [ ] Regular dependency updates (`npm audit fix`)
-- [ ] Firewall rules to restrict backend access
-- [ ] Monitor logs for suspicious activity
-- [ ] Backup database/configs regularly
-
-## Monitoring
-
-### PM2 Monitoring
+### Backend (.env on Render)
 ```bash
-pm2 monit
-pm2 status
-pm2 logs
+NODE_ENV=production
+PORT=3001
+ALLOWED_ORIGINS=https://your-frontend.vercel.app
+ALGORITHM_TIMEOUT=5000
+MAX_INPUT_SIZE=1000
+MAX_INPUT_COUNT=100
 ```
 
-### Nginx Monitoring
+---
+
+## 🚨 Troubleshooting
+
+### Frontend Issues
+
+**Problem:** "Failed to fetch" or CORS errors
+
+**Solutions:**
+1. Check `ALLOWED_ORIGINS` in Render includes your Vercel URL
+2. Ensure no trailing slash in `VITE_API_URL`
+3. Check browser console for specific error
+4. Verify backend is running: test `/health` endpoint
+
+**Problem:** Build fails on Vercel
+
+**Solutions:**
+1. Check build logs in Vercel dashboard
+2. Verify `frontend/package.json` has all dependencies
+3. Ensure root directory is set to `frontend`
+4. Try clearing Vercel cache: Settings → Clear Cache
+
+### Backend Issues
+
+**Problem:** Build fails on Render
+
+**Solutions:**
+1. Check build logs - look for gcc errors
+2. Verify `backend/Makefile` exists
+3. Ensure all C source files are in `backend/src/`
+4. Check that `build` command is: `npm install && make all`
+
+**Problem:** "Algorithm not found"
+
+**Solutions:**
+1. Build command must include `make all`
+2. Check build logs - ensure all 57 executables compiled
+3. Verify build directory exists with executables
+
+**Problem:** First request very slow (30+ seconds)
+
+**Explanation:** Free tier sleeps after 15 min inactivity
+
+**Solutions:**
+1. Accept the delay (free tier limitation)
+2. Upgrade to Render Starter plan ($7/month) for always-on
+3. Keep service awake with uptime monitor (see below)
+
+**Problem:** Backend crashes or restarts
+
+**Solutions:**
+1. Check Render logs for errors
+2. Increase instance size if out of memory
+3. Check for infinite loops in C programs
+
+---
+
+## 💡 Pro Tips
+
+### Keep Free Tier Awake (Optional)
+
+If you want to avoid the 30s wake-up delay on Render free tier, use an uptime monitor:
+
+**Option 1: Cron-job.org (Free)**
+1. Go to [cron-job.org](https://cron-job.org)
+2. Create free account
+3. Create new cron job:
+   - URL: `https://your-backend.onrender.com/health`
+   - Schedule: Every 14 minutes
+   - This keeps your backend awake 24/7
+
+**Option 2: UptimeRobot (Free)**
+1. Go to [uptimerobot.com](https://uptimerobot.com)
+2. Add New Monitor
+3. Monitor Type: HTTP(s)
+4. URL: `https://your-backend.onrender.com/health`
+5. Monitoring Interval: 5 minutes
+
+⚠️ **Note:** This uses your free tier hours. 750 hours/month ≈ 31 days, so you're fine.
+
+### Custom Domain (Optional)
+
+**Vercel (Frontend):**
+1. Go to Project Settings → Domains
+2. Add your domain (e.g., `algos.yourdomain.com`)
+3. Update DNS records as instructed
+4. SSL automatically configured
+
+**Render (Backend):**
+1. Go to Settings → Custom Domain
+2. Add domain (e.g., `api.yourdomain.com`)
+3. Update DNS with CNAME
+4. SSL automatically configured
+
+### Auto-Deploy on Git Push
+
+Both Vercel and Render automatically deploy when you push to your main branch.
+
+**Workflow:**
 ```bash
-sudo systemctl status nginx
-sudo nginx -t  # Test configuration
+# Make changes
+git add .
+git commit -m "Update algorithm"
+git push origin main
+
+# Vercel and Render automatically detect and deploy
+# Wait 2-3 minutes
+# Changes live!
 ```
 
-## Common Issues
+### Monitoring & Logs
 
-### C Programs Not Compiling
+**Vercel Logs:**
+- Dashboard → Your Project → Deployments
+- Click on deployment to see build logs
+- Runtime logs available in Functions tab
+
+**Render Logs:**
+- Dashboard → Your Service → Logs
+- Real-time streaming logs
+- Filter by date/time
+- Download logs for debugging
+
+---
+
+## 📊 Cost Breakdown
+
+| Service | Free Tier | Paid Plan | Recommended |
+|---------|-----------|-----------|-------------|
+| **Vercel (Frontend)** | ✅ Free forever<br>100GB bandwidth<br>Unlimited sites | $20/mo Pro | Free ✅ |
+| **Render (Backend)** | ✅ Free<br>750 hrs/month<br>Sleeps after 15min | $7/mo Starter<br>Always-on | Free ✅ |
+| **Total** | **$0/month** | $27/mo | **$0** ✅ |
+
+**Upgrade When:**
+- Backend uptime critical → Render Starter ($7/mo)
+- Need team features → Vercel Pro ($20/mo)
+- High traffic → Both paid tiers
+
+---
+
+## 🔄 Updating Your Deployment
+
+### Update Frontend
 ```bash
-# Check GCC version
-gcc --version
-
-# Rebuild all
-cd backend
-make clean
-make all
-
-# Check specific errors
-make 2>&1 | grep error
-```
-
-### CORS Errors
-- Verify `ALLOWED_ORIGINS` in backend `.env`
-- Check browser console for actual origin
-- Ensure frontend URL matches exactly (with/without trailing slash)
-
-### 502 Bad Gateway
-- Backend not running: `pm2 status`
-- Port mismatch in Nginx config
-- Check backend logs: `pm2 logs`
-
-### Frontend Build Fails
-```bash
-# Clear cache and rebuild
-rm -rf node_modules dist
-npm install
-npm run build
-```
-
-## Scaling Considerations
-
-### Horizontal Scaling
-- Use load balancer (Nginx, AWS ELB)
-- Run multiple backend instances
-- Share build directory via NFS or S3
-
-### Vertical Scaling
-- Increase server resources
-- Optimize C program compilation with `-O2` or `-O3`
-- Use faster CPU for compilation
-
-## Rollback Procedure
-
-```bash
-# Backend rollback
-pm2 stop algo-viz-backend
-git checkout previous-commit
-npm install
-make all
-pm2 restart algo-viz-backend
-
-# Frontend rollback
 cd frontend
-git checkout previous-commit
-npm install
-npm run build
-# Or revert deployment in platform UI
+# Make changes to React components
+git add .
+git commit -m "Update UI"
+git push origin main
+# Vercel auto-deploys in 2-3 minutes
 ```
 
-## Support
+### Update Backend
+```bash
+cd backend
+# Make changes to C files or server.js
+make clean && make all  # Test locally
+git add .
+git commit -m "Update algorithm"
+git push origin main
+# Render auto-builds and deploys in 5-10 minutes
+```
 
-For issues or questions:
-- GitHub Issues: [Repository Issues Page]
-- Documentation: See README.md and FEATURES.md
-- Logs: Check PM2 and Nginx logs for errors
+### Update Environment Variables
+
+**Vercel:**
+1. Project Settings → Environment Variables
+2. Edit or add variables
+3. Redeploy: Deployments → ⋯ → Redeploy
+
+**Render:**
+1. Service → Environment
+2. Add/Edit variables
+3. Saves automatically
+4. May need to manually deploy: Manual Deploy → Deploy latest commit
+
+---
+
+## 🎯 Complete Setup Checklist
+
+### Pre-Deployment
+- [ ] Code pushed to GitHub (main branch)
+- [ ] All 57 algorithms compile locally (`make all`)
+- [ ] Frontend builds successfully (`npm run build`)
+- [ ] No errors in code
+- [ ] `.env.example` files exist
+
+### Vercel (Frontend)
+- [ ] Account created and linked to GitHub
+- [ ] Project imported and configured
+- [ ] Root directory set to `frontend`
+- [ ] Build command: `npm run build`
+- [ ] Output directory: `dist`
+- [ ] Environment variable `VITE_API_URL` added
+- [ ] First deployment successful
+- [ ] Site accessible at Vercel URL
+
+### Render (Backend)
+- [ ] Account created and linked to GitHub
+- [ ] Web service created
+- [ ] Root directory set to `backend`
+- [ ] Build command: `npm install && make all`
+- [ ] Start command: `npm start`
+- [ ] All environment variables added
+- [ ] Free plan selected
+- [ ] Build completed successfully (check logs)
+- [ ] Health endpoint responding
+- [ ] All 57 algorithms compiled (check logs)
+
+### Final Verification
+- [ ] Backend `/health` returns `{"status":"ok"}`
+- [ ] Test algorithm via curl works
+- [ ] Frontend loads without errors
+- [ ] Can select and run an algorithm
+- [ ] Visualization displays correctly
+- [ ] No CORS errors in browser console
+- [ ] Update `VITE_API_URL` in Vercel if needed
+- [ ] Redeploy frontend after backend URL confirmed
+
+---
+
+## 📞 Getting Help
+
+**Vercel Issues:**
+- [Vercel Documentation](https://vercel.com/docs)
+- [Vercel Community](https://github.com/vercel/vercel/discussions)
+- [Discord](https://vercel.com/discord)
+
+**Render Issues:**
+- [Render Documentation](https://render.com/docs)
+- [Render Community](https://community.render.com)
+- [Support](https://render.com/support)
+
+**Project-Specific:**
+- Check [SETUP.md](SETUP.md) for local development
+- See [FUTURE_IMPROVEMENTS.md](FUTURE_IMPROVEMENTS.md) for known issues
+- Review [FILE_GUIDE.md](FILE_GUIDE.md) for code structure
+
+---
+
+## 🔐 Security Notes
+
+### Environment Variables
+- Never commit `.env` files to git
+- Use environment variables for all secrets
+- Both platforms encrypt environment variables
+- Vercel/Render have secure variable management
+
+### CORS Configuration
+- Always specify exact domains in `ALLOWED_ORIGINS`
+- Never use `*` in production
+- Update CORS when adding new frontends
+
+### Input Validation
+- Backend validates all inputs (already implemented)
+- 5-second execution timeout prevents infinite loops
+- Buffer limits prevent memory issues
+
+---
+
+## Alternative Deployment Options
+
+### If You Need More Control: VPS
+
+**DigitalOcean Droplet** ($6/month)
+- Full control over environment
+- No sleep/wake delays
+- Suitable for production with steady traffic
+
+See previous version of this file for VPS deployment instructions, or deploy with Docker.
+
+### If Backend Build Fails on Render
+
+**Railway** (Alternative)
+- Better build support for C programs
+- $5 free credit/month
+- Similar to Render but different build system
+

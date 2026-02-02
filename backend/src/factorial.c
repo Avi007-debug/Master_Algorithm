@@ -47,9 +47,7 @@ long long factorial(int n, int parent_id) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) return 1;
-    
-    int n = atoi(argv[1]);
+    int n = (argc > 1) ? atoi(argv[1]) : 5; // default value
 
     log_init();
     factorial(n, -1);
