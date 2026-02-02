@@ -5,11 +5,22 @@ import { ArrowRight, Code2, Cpu, Clock, Boxes, Search, Star, BookOpen, TrendingU
 import { motion } from 'framer-motion';
 
 export function Dashboard({ onSelectProblem }) {
-    const [selectedCategory, setSelectedCategory] = useState("All");
-    const [showOnlySyllabus, setShowOnlySyllabus] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [selectedDifficulty, setSelectedDifficulty] = useState("All");
-    const [sortBy, setSortBy] = useState("default"); // default, difficulty, name
+    // Persist dashboard state
+    const [selectedCategory, setSelectedCategory] = useState(() => {
+        return localStorage.getItem('dashboardCategory') || "All";
+    });
+    const [showOnlySyllabus, setShowOnlySyllabus] = useState(() => {
+        return localStorage.getItem('dashboardSyllabus') === 'true';
+    });
+    const [searchQuery, setSearchQuery] = useState(() => {
+        return localStorage.getItem('dashboardSearch') || "";
+    });
+    const [selectedDifficulty, setSelectedDifficulty] = useState(() => {
+        return localStorage.getItem('dashboardDifficulty') || "All";
+    });
+    const [sortBy, setSortBy] = useState(() => {
+        return localStorage.getItem('dashboardSort') || "default";
+    });
     const [recentProblems, setRecentProblems] = useState([]);
     const [theme, setTheme] = useState(() => {
         if (typeof window !== 'undefined') {
@@ -31,6 +42,27 @@ export function Dashboard({ onSelectProblem }) {
         const recent = JSON.parse(localStorage.getItem('recentProblems') || '[]');
         setRecentProblems(recent.slice(0, 3)); // Show last 3
     }, []);
+
+    // Save dashboard state to localStorage
+    useEffect(() => {
+        localStorage.setItem('dashboardCategory', selectedCategory);
+    }, [selectedCategory]);
+    
+    useEffect(() => {
+        localStorage.setItem('dashboardSyllabus', String(showOnlySyllabus));
+    }, [showOnlySyllabus]);
+    
+    useEffect(() => {
+        localStorage.setItem('dashboardSearch', searchQuery);
+    }, [searchQuery]);
+    
+    useEffect(() => {
+        localStorage.setItem('dashboardDifficulty', selectedDifficulty);
+    }, [selectedDifficulty]);
+    
+    useEffect(() => {
+        localStorage.setItem('dashboardSort', sortBy);
+    }, [sortBy]);
 
     // Algorithm IDs that have tutorials
     const algorithmsWithTutorials = new Set([
@@ -371,6 +403,15 @@ export function Dashboard({ onSelectProblem }) {
                                 <p className="text-sm text-[var(--color-text-secondary)] line-clamp-2 mb-6 flex-1">
                                     {problem.description}
                                 </p>
+
+                                {/* Visualization Note for Complex Algorithms */}
+                                {problem.visualizationNote && (
+                                    <div className="mb-3 p-2.5 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
+                                        <p className="text-xs font-medium text-yellow-700 dark:text-yellow-400">
+                                            {problem.visualizationNote}
+                                        </p>
+                                    </div>
+                                )}
 
                                 <div className={`grid grid-cols-2 gap-2 mt-auto text-xs text-[var(--color-text-secondary)] font-mono ${isDark ? 'border-t border-[var(--color-border)]' : 'border-t border-[var(--color-border)]'} pt-4`}>
                                     <div className="flex items-center gap-1.5">

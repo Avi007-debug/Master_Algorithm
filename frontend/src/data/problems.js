@@ -3338,6 +3338,7 @@ Node* insert(Node* root, int key) {
         timeComplexity: "O(m)",
         spaceComplexity: "O(n×m)",
         description: "Prefix tree for efficient string storage and prefix matching. Each node represents a character.",
+        visualizationNote: "⚠️ Complex visualization - Multi-way tree with character edges shown in text format",
         beginnerTips: [
             "Used for autocomplete",
             "Insert/Search: O(word length)",
@@ -3385,6 +3386,7 @@ int search(TrieNode* root, char* word) {
         timeComplexity: "O(n)",
         spaceComplexity: "O(1)",
         description: "Binary tree where null pointers are replaced with threads to inorder successor/predecessor.",
+        visualizationNote: "⚠️ Complex visualization - Shows text-based representation with thread pointers",
         beginnerTips: [
             "Threads replace NULL pointers",
             "Inorder traversal without stack",
@@ -3425,6 +3427,7 @@ void inorder(Node* root) {
         timeComplexity: "O(log n)",
         spaceComplexity: "O(n)",
         description: "Multi-level index structure. All data in leaves, internal nodes for navigation. Used in databases.",
+        visualizationNote: "⚠️ Complex visualization - Multi-way tree with linked leaves shown in text format",
         beginnerTips: [
             "Order M: max M-1 keys per node",
             "All data in leaf nodes",
@@ -3466,6 +3469,7 @@ void insert(BPlusNode** root, int key) {
         timeComplexity: "O(log n) amortized",
         spaceComplexity: "O(n)",
         description: "Self-adjusting BST. Recently accessed elements move to root via splaying (Zig, Zig-Zig, Zig-Zag).",
+        visualizationNote: "⚠️ Complex visualization - Splay operations shown via text descriptions",
         beginnerTips: [
             "No balance factor stored",
             "Amortized O(log n) operations",
