@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { PROBLEMS, CATEGORIES } from '../data/problems';
 import { Card, Button } from './ui/common';
-import { ArrowRight, Code2, Cpu, Clock, Boxes } from 'lucide-react';
+import { ArrowRight, Code2, Cpu, Clock, Boxes, Search, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export function Dashboard({ onSelectProblem }) {
     const [selectedCategory, setSelectedCategory] = useState("All");
+    const [showOnlySyllabus, setShowOnlySyllabus] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedDifficulty, setSelectedDifficulty] = useState("All");
     const [theme, setTheme] = useState(() => {
         if (typeof window !== 'undefined') {
             return document.documentElement.getAttribute('data-theme') || 'dark';
@@ -22,10 +25,17 @@ export function Dashboard({ onSelectProblem }) {
     }, []);
 
     const categories = ["All", ...Object.values(CATEGORIES)];
+    const difficulties = ["All", "Easy", "Medium", "Hard"];
 
-    const filteredProblems = selectedCategory === "All"
-        ? PROBLEMS
-        : PROBLEMS.filter(p => p.category === selectedCategory);
+    const filteredProblems = PROBLEMS.filter(p => {
+        const categoryMatch = selectedCategory === "All" || p.category === selectedCategory;
+        const syllabusMatch = !showOnlySyllabus || p.inSyllabus;
+        const difficultyMatch = selectedDifficulty === "All" || p.difficulty === selectedDifficulty;
+        const searchMatch = searchQuery === "" || 
+            p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            p.description.toLowerCase().includes(searchQuery.toLowerCase());
+        return categoryMatch && syllabusMatch && difficultyMatch && searchMatch;
+    });
 
     const isDark = theme === 'dark';
 
@@ -33,16 +43,16 @@ export function Dashboard({ onSelectProblem }) {
         <div className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] font-sans selection:bg-[var(--color-accent-primary)] selection:text-white pb-20">
 
             {/* Hero Section */}
-            <div className="relative pt-32 pb-20 px-6 overflow-hidden">
+            <div className="relative pt-24 pb-16 px-6 overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-r from-[var(--color-accent-primary)] via-[var(--color-accent-secondary)] to-[var(--color-accent-pink)] opacity-[0.08] blur-[120px] rounded-full pointer-events-none" />
 
-                <div className="max-w-5xl mx-auto text-center relative z-10">
+                <div className="max-w-6xl mx-auto text-center relative z-10">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight mb-6">
+                        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
                             <span className="bg-gradient-to-br from-[var(--color-text-primary)] via-purple-300 to-blue-300 bg-clip-text text-transparent">
                                 Master{' '}
                             </span>
@@ -50,12 +60,12 @@ export function Dashboard({ onSelectProblem }) {
                                 Algorithms
                             </span>
                         </h1>
-                        <p className="text-xl text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-lg text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed">
                             Visualize, understand, and conquer coding interview problems with
                             <span className="text-[var(--color-accent-primary)] font-semibold"> interactive step-by-step executions</span>.
                         </p>
                         <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
-                            <span className="px-3 py-1 bg-[var(--color-accent-green)]/10 text-[var(--color-accent-green)] rounded-full border border-[var(--color-accent-green)]/20 font-medium">✓ Beginner Friendly</span>
+                            <span className="px-3 py-1 bg-[var(--color-accent-green)]/10 text-[var(--color-accent-green)] rounded-full border border-[var(--color-accent-green)]/20 font-medium">✓ {PROBLEMS.length} Algorithms</span>
                             <span className="px-3 py-1 bg-[var(--color-accent-cyan)]/10 text-[var(--color-accent-cyan)] rounded-full border border-[var(--color-accent-cyan)]/20 font-medium">⚡ Real-time Visualization</span>
                             <span className="px-3 py-1 bg-[var(--color-accent-pink)]/10 text-[var(--color-accent-pink)] rounded-full border border-[var(--color-accent-pink)]/20 font-medium">💻 Full Code Examples</span>
                         </div>
@@ -63,21 +73,89 @@ export function Dashboard({ onSelectProblem }) {
                 </div>
             </div>
 
-            {/* Category Filter */}
-            <div className="max-w-7xl mx-auto px-6 mb-12 overflow-x-auto pb-4 scrollbar-hide">
-                <div className="flex gap-2 justify-center min-w-max">
-                    {categories.map(cat => (
+            {/* Filters Section */}
+            <div className="max-w-7xl mx-auto px-6 mb-10">
+                {/* Search Bar */}
+                <div className="mb-6 relative max-w-2xl mx-auto">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)]" size={20} />
+                    <input
+                        type="text"
+                        placeholder="Search algorithms... (e.g., 'bubble sort', 'binary tree')"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 rounded-xl bg-[var(--color-bg-secondary)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder-[var(--color-text-tertiary)] focus:outline-none focus:border-[var(--color-accent-primary)] focus:ring-2 focus:ring-[var(--color-accent-primary)]/20 transition-all"
+                    />
+                </div>
+
+                {/* Syllabus / Difficulty Filter */}
+                <div className="flex flex-col md:flex-row gap-4 justify-center items-center mb-6">
+                    {/* Syllabus Toggle */}
+                    <div className="inline-flex rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-1">
                         <button
-                            key={cat}
-                            onClick={() => setSelectedCategory(cat)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === cat
-                                    ? isDark ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-primary)]' : 'bg-[var(--color-accent-primary)] text-white'
-                                    : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] border border-[var(--color-border)]'
-                                }`}
+                            onClick={() => setShowOnlySyllabus(false)}
+                            className={`px-5 py-2 rounded-md text-sm font-medium transition-all ${
+                                !showOnlySyllabus
+                                    ? isDark ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-primary)]' : 'bg-[var(--color-accent-primary)] text-white shadow-sm'
+                                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                            }`}
                         >
-                            {cat}
+                            All ({PROBLEMS.length})
                         </button>
-                    ))}
+                        <button
+                            onClick={() => setShowOnlySyllabus(true)}
+                            className={`px-5 py-2 rounded-md text-sm font-medium transition-all ${
+                                showOnlySyllabus
+                                    ? isDark ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-primary)]' : 'bg-[var(--color-accent-primary)] text-white shadow-sm'
+                                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                            }`}
+                        >
+                            <span className="flex items-center gap-2">
+                                <Star size={14} />
+                                Syllabus ({PROBLEMS.filter(p => p.inSyllabus).length})
+                            </span>
+                        </button>
+                    </div>
+
+                    {/* Difficulty Filter */}
+                    <div className="inline-flex rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-1">
+                        {difficulties.map(diff => (
+                            <button
+                                key={diff}
+                                onClick={() => setSelectedDifficulty(diff)}
+                                className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                                    selectedDifficulty === diff
+                                        ? isDark ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-primary)]' : 'bg-[var(--color-accent-primary)] text-white shadow-sm'
+                                        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                                }`}
+                            >
+                                {diff}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Category Filter */}
+                <div className="overflow-x-auto pb-4 scrollbar-hide">
+                    <div className="flex gap-2 justify-center min-w-max px-2">
+                        {categories.map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setSelectedCategory(cat)}
+                                className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
+                                    selectedCategory === cat
+                                        ? isDark ? 'bg-[var(--color-text-primary)] text-[var(--color-bg-primary)]' : 'bg-[var(--color-accent-primary)] text-white shadow-md'
+                                        : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] border border-[var(--color-border)]'
+                                }`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Results Count */}
+                <div className="text-center mt-4 text-sm text-[var(--color-text-secondary)]">
+                    Showing <span className="font-semibold text-[var(--color-accent-primary)]">{filteredProblems.length}</span> algorithm{filteredProblems.length !== 1 ? 's' : ''}
                 </div>
             </div>
 

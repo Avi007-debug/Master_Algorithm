@@ -3,6 +3,9 @@ import { Card, Button } from './ui/common';
 import { VisualizerEngine } from './VisualizerEngine';
 import { Play, Pause, SkipBack, SkipForward, RefreshCw, ArrowLeft, Loader2, AlertCircle, Settings, Clock, Boxes, Code, ChevronDown, ChevronUp, Gauge, BookOpen } from 'lucide-react';
 import { GuidedTutorial } from './GuidedTutorial';
+import { ThemeSelector } from './ThemeSelector';
+import { BookmarkManager } from './BookmarkManager';
+import { PROBLEMS } from '../data/problems';
 
 export function InterviewMode({ problem, onBack }) {
     const [logs, setLogs] = useState([]);
@@ -11,6 +14,17 @@ export function InterviewMode({ problem, onBack }) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [speed, setSpeed] = useState(1); // 1x speed by default
+    const [breakpoints, setBreakpoints] = useState(new Set());
+    const [showCommonMistakes, setShowCommonMistakes] = useState(false);
+
+    // Speed presets
+    const SPEED_PRESETS = {
+        'Ultra Slow': 0.1,
+        'Slow': 0.5,
+        'Normal': 1,
+        'Fast': 2,
+        'Lightning': 5
+    };
     const [showFullCode, setShowFullCode] = useState(false);
     const [showTutorial, setShowTutorial] = useState(false);
     const [theme, setTheme] = useState(() => {
@@ -55,7 +69,12 @@ export function InterviewMode({ problem, onBack }) {
             const delay = 1000 / speed; // Speed multiplier affects delay
             timerRef.current = setInterval(() => {
                 setCurrentStep(prev => {
-                    if (prev < logs.length - 1) return prev + 1;
+                    const nextStep = prev + 1;
+                    // Check if next step is a breakpoint
+                    if (breakpoints.has(nextStep)) {
+                        setIsPlaying(false);
+                    }
+                    if (nextStep < logs.length) return nextStep;
                     setIsPlaying(false);
                     return prev;
                 });
@@ -64,7 +83,7 @@ export function InterviewMode({ problem, onBack }) {
             clearInterval(timerRef.current);
         }
         return () => clearInterval(timerRef.current);
-    }, [isPlaying, logs.length, isLoading, error, speed]);
+    }, [isPlaying, logs.length, isLoading, error, speed, breakpoints]);
 
     const handleRun = async (values = inputValues) => {
         setIsLoading(true);
@@ -205,14 +224,24 @@ export function InterviewMode({ problem, onBack }) {
             {/* Left Sidebar: Problem Info & Inputs */}
             <aside className="w-1/4 h-full border-r border-[var(--color-border)] flex flex-col bg-[var(--color-bg-secondary)]" role="complementary" aria-label="Algorithm information and controls">
                 <div className="p-6 pb-4 border-b border-[var(--color-border)]">
-                    <Button 
-                        variant="ghost" 
-                        onClick={onBack} 
-                        className="mb-4 -ml-2 text-sm text-[var(--color-text-secondary)] pl-0 gap-1 hover:bg-transparent hover:text-[var(--color-accent-primary)]"
-                        aria-label="Return to dashboard"
-                    >
-                        <ArrowLeft size={16} /> Back to Dashboard
-                    </Button>
+                    <div className="flex items-center justify-between mb-4">
+                        <Button 
+                            variant="ghost" 
+                            onClick={onBack} 
+                            className="text-sm text-[var(--color-text-secondary)] pl-0 gap-1 hover:bg-transparent hover:text-[var(--color-accent-primary)]"
+                            aria-label="Return to dashboard"
+                        >
+                            <ArrowLeft size={16} /> Back
+                        </Button>
+                        <div className="flex items-center gap-2">
+                            <BookmarkManager 
+                                currentAlgorithm={problem}
+                                allProblems={PROBLEMS}
+                                onSelectProblem={() => {}}
+                            />
+                            <ThemeSelector />
+                        </div>
+                    </div>
                     <h1 className={`text-2xl font-bold ${isDark ? 'bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500' : 'text-[var(--color-accent-primary)]'} mb-2`}>
                         {problem.title}
                     </h1>
@@ -527,6 +556,36 @@ export function InterviewMode({ problem, onBack }) {
                         </div>
                     )}
                     
+                    {/* Common Mistakes - New Section */}
+                    {problem.commonMistakes && problem.commonMistakes.length > 0 && (
+                        <div className={`bg-gradient-to-br p-5 rounded-xl border-2 space-y-3 ${isDark ? 'from-red-950/20 to-rose-950/20 border-red-700/50' : 'from-red-50 to-rose-50 border-red-300/50'}`}>
+                            <h3 className={`text-sm font-bold tracking-wide flex items-center gap-2 ${isDark ? 'text-red-300' : 'text-red-800'}`}>
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
+                                </svg>
+                                Common Mistakes to Avoid
+                            </h3>
+                            <div className="space-y-3">
+                                {problem.commonMistakes.map((mistake, idx) => (
+                                    <div key={idx} className={`flex items-start gap-3 text-xs leading-relaxed p-3 rounded-lg ${isDark ? 'bg-red-950/30' : 'bg-red-100/50'}`}>
+                                        <div className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${isDark ? 'bg-red-500/30 text-red-400' : 'bg-red-500/20 text-red-700'}`}>
+                                            <span className="text-[10px] font-bold">✗</span>
+                                        </div>
+                                        <span className={`flex-1 pt-0.5 ${isDark ? 'text-gray-300' : 'text-[var(--color-text-primary)]'}`}>{mistake}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className={`pt-2 border-t ${isDark ? 'border-red-700/30' : 'border-red-300/30'}`}>
+                                <p className={`text-xs font-medium flex items-center gap-1 ${isDark ? 'text-red-300' : 'text-red-700'}`}>
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
+                                    </svg>
+                                    Test your code thoroughly to catch these bugs early!
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                    
                     {/* Quick Terms Glossary */}
                     <div className="bg-[var(--color-bg-primary)] p-5 rounded-xl border border-[var(--color-border)] space-y-3">
                         <h3 className="text-sm font-bold tracking-wide text-[var(--color-text-primary)] flex items-center gap-2">
@@ -668,27 +727,47 @@ export function InterviewMode({ problem, onBack }) {
                     </div>
                     
                     {/* Speed Control */}
-                    <div className={`flex flex-col gap-2 glass-panel px-6 py-3 rounded-2xl transition-opacity duration-300 ${isLoading || error || logs.length === 0 ? 'opacity-50 pointer-events-none' : 'opacity-100'}`} role="region" aria-label="Speed control">
-                        <div className="flex items-center gap-3">
-                            <Gauge size={16} className="text-[var(--color-accent-primary)]" aria-hidden="true" />
-                            <label htmlFor="speed-slider" className="text-xs text-[var(--color-text-secondary)] font-medium min-w-[60px]">
-                                Speed: {speed}x
-                            </label>
-                            <input
-                                id="speed-slider"
-                                type="range"
-                                min="0.25"
-                                max="3"
-                                step="0.25"
-                                value={speed}
-                                onChange={(e) => setSpeed(parseFloat(e.target.value))}
-                                className="w-32 h-2 bg-[var(--color-bg-tertiary)] rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)]"
-                                style={{
-                                    background: `linear-gradient(to right, var(--color-accent-primary) 0%, var(--color-accent-primary) ${((speed - 0.25) / 2.75) * 100}%, var(--color-bg-tertiary) ${((speed - 0.25) / 2.75) * 100}%, var(--color-bg-tertiary) 100%)`
-                                }}
-                                aria-valuemin="0.25"
-                                aria-valuemax="3"
-                                aria-valuenow={speed}
+                    <div className={`flex flex-col gap-3 glass-panel px-6 py-4 rounded-2xl transition-opacity duration-300 ${isLoading || error || logs.length === 0 ? 'opacity-50 pointer-events-none' : 'opacity-100'}`} role="region" aria-label="Speed control">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <Gauge size={16} className="text-[var(--color-accent-primary)]" aria-hidden="true" />
+                                <label htmlFor="speed-slider" className="text-xs text-[var(--color-text-secondary)] font-medium">
+                                    Speed: {speed}x
+                                </label>
+                            </div>
+                            <div className="flex gap-1">
+                                {Object.entries(SPEED_PRESETS).map(([label, value]) => (
+                                    <button
+                                        key={label}
+                                        onClick={() => setSpeed(value)}
+                                        className={`px-2 py-1 text-[10px] rounded transition-colors ${
+                                            speed === value
+                                                ? 'bg-[var(--color-accent-primary)] text-white'
+                                                : 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)]/80'
+                                        }`}
+                                        title={label}
+                                        aria-label={`Set speed to ${label}`}
+                                    >
+                                        {label === 'Ultra Slow' ? '🐌' : label === 'Slow' ? '🚶' : label === 'Normal' ? '🏃' : label === 'Fast' ? '🏎️' : '⚡'}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <input
+                            id="speed-slider"
+                            type="range"
+                            min="0.1"
+                            max="5"
+                            step="0.1"
+                            value={speed}
+                            onChange={(e) => setSpeed(parseFloat(e.target.value))}
+                            className="w-full h-2 bg-[var(--color-bg-tertiary)] rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)]"
+                            style={{
+                                background: `linear-gradient(to right, var(--color-accent-primary) 0%, var(--color-accent-primary) ${((speed - 0.1) / 4.9) * 100}%, var(--color-bg-tertiary) ${((speed - 0.1) / 4.9) * 100}%, var(--color-bg-tertiary) 100%)`
+                            }}
+                            aria-valuemin="0.1"
+                            aria-valuemax="5"
+                            aria-valuenow={speed}
                                 aria-valuetext={`${speed} times speed`}
                             />
                         </div>

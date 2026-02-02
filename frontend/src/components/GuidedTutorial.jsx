@@ -112,6 +112,330 @@ const TUTORIALS = {
                 checkpoint: "Do you appreciate how fast logarithmic time is?"
             }
         ]
+    },
+    infix_to_postfix: {
+        title: "Infix to Postfix Conversion Tutorial",
+        steps: [
+            {
+                title: "Welcome to Expression Conversion!",
+                content: "This algorithm converts human-readable infix notation (A+B*C) to computer-friendly postfix notation (ABC*+) using a stack.",
+                highlight: "description",
+                checkpoint: "Do you understand the difference between infix and postfix?"
+            },
+            {
+                title: "Operator Precedence",
+                content: "Operators have different priorities: ^ (power) > * / (multiply/divide) > + - (add/subtract). The stack helps us maintain this order!",
+                highlight: "visualization",
+                checkpoint: "Can you rank operators by precedence?"
+            },
+            {
+                title: "Watch the Conversion",
+                content: "Click 'Visualize' and observe how operands (A,B,C) go directly to output, while operators are managed by the stack based on precedence.",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see how the stack handles operators?"
+            },
+            {
+                title: "Parentheses Power",
+                content: "Opening '(' gets pushed to stack. Closing ')' triggers popping all operators until we find the matching '('. This respects calculation order!",
+                highlight: "visualization",
+                checkpoint: "Can you see how parentheses control evaluation order?"
+            },
+            {
+                title: "Why Postfix?",
+                content: "Postfix notation is easier for computers to evaluate - no precedence rules or parentheses needed! Just scan left to right.",
+                highlight: "complexity",
+                checkpoint: "Do you see why compilers prefer postfix?"
+            }
+        ]
+    },
+    circular_queue: {
+        title: "Circular Queue Tutorial",
+        steps: [
+            {
+                title: "Welcome to Circular Queue!",
+                content: "Unlike linear queues, circular queues reuse empty spaces by wrapping around. Perfect for efficient space utilization!",
+                highlight: "description",
+                checkpoint: "Do you understand the wraparound concept?"
+            },
+            {
+                title: "The Circular Nature",
+                content: "When rear reaches the end of the array, it wraps back to index 0 if there's space. Front and rear chase each other in a circle!",
+                highlight: "visualization",
+                checkpoint: "Can you visualize the circular behavior?"
+            },
+            {
+                title: "Watch Enqueue & Dequeue",
+                content: "Click 'Visualize' and see how elements are added at rear and removed from front. Notice the wraparound when rear reaches the end!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the wraparound happen?"
+            },
+            {
+                title: "Full vs Empty",
+                content: "We use a count variable to distinguish between full and empty states. Without it, front==rear could mean either!",
+                highlight: "visualization",
+                checkpoint: "Can you explain why we need the count variable?"
+            },
+            {
+                title: "Real-World Usage",
+                content: "Circular queues are used in OS task scheduling, buffering in keyboards, and anywhere efficient reuse of fixed-size buffers is needed!",
+                highlight: "complexity",
+                checkpoint: "Can you think of other applications?"
+            }
+        ]
+    },
+    avl_tree: {
+        title: "AVL Tree (Self-Balancing) Tutorial",
+        steps: [
+            {
+                title: "Welcome to AVL Trees!",
+                content: "AVL trees are BSTs that automatically balance themselves after every insertion/deletion. This guarantees O(log n) search time!",
+                highlight: "description",
+                checkpoint: "Do you understand why balance matters?"
+            },
+            {
+                title: "The Balance Factor",
+                content: "For each node, Balance Factor = height(left) - height(right). AVL trees keep this between -1, 0, and +1. If it goes outside this range, we rotate!",
+                highlight: "visualization",
+                checkpoint: "Can you calculate balance factors in your head?"
+            },
+            {
+                title: "Watch Self-Balancing",
+                content: "Click 'Visualize' and insert 10, 20, 30. See how the tree detects imbalance and automatically performs a rotation to stay balanced!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the rotation happen?"
+            },
+            {
+                title: "The Four Rotation Cases",
+                content: "LL (Left-Left): Right rotate. RR (Right-Right): Left rotate. LR (Left-Right): Left then right. RL (Right-Left): Right then left.",
+                highlight: "visualization",
+                checkpoint: "Can you identify which case applies when?"
+            },
+            {
+                title: "Guaranteed Performance",
+                content: "Unlike regular BSTs that can degrade to O(n), AVL trees ALWAYS guarantee O(log n) for search, insert, and delete. The cost is more complex insertion logic.",
+                highlight: "complexity",
+                checkpoint: "Do you see the trade-off between simplicity and guaranteed performance?"
+            }
+        ]
+    },
+    heap_sort: {
+        title: "Heap Sort Tutorial",
+        steps: [
+            {
+                title: "Welcome to Heap Sort!",
+                content: "Heap Sort uses a binary heap data structure to sort. It's in-place and always O(n log n) - no worst case like Quick Sort!",
+                highlight: "description",
+                checkpoint: "Do you know what a binary heap is?"
+            },
+            {
+                title: "Building the Max Heap",
+                content: "First, we rearrange the array into a max heap where each parent >= its children. This takes O(n) time using heapify from bottom up.",
+                highlight: "visualization",
+                checkpoint: "Can you visualize the heap structure?"
+            },
+            {
+                title: "Watch the Heapify Process",
+                content: "Click 'Visualize' and watch how the array transforms into a max heap. The largest element bubbles up to the root (index 0)!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see how the max element reaches the top?"
+            },
+            {
+                title: "Extract and Sort",
+                content: "Repeatedly: swap root (max) with last element, reduce heap size by 1, then heapify. Each extraction puts one more element in its final sorted position!",
+                highlight: "visualization",
+                checkpoint: "Can you see how the sorted portion grows from right to left?"
+            },
+            {
+                title: "Why Use Heap Sort?",
+                content: "Heap Sort guarantees O(n log n) in all cases, uses O(1) space, and is great when you need predictable performance without extra memory.",
+                highlight: "complexity",
+                checkpoint: "When would you choose Heap Sort over Quick Sort?"
+            }
+        ]
+    },
+    bst_insert: {
+        title: "BST Insert Tutorial",
+        steps: [
+            {
+                title: "Welcome to BST Insertion!",
+                content: "Binary Search Trees maintain the property: left child < parent < right child. This makes searching fast - O(log n) in balanced trees!",
+                highlight: "description",
+                checkpoint: "Do you understand the BST property?"
+            },
+            {
+                title: "The Recursive Journey",
+                content: "To insert: start at root. If value < current, go left. If value > current, go right. When you reach NULL, create the new node!",
+                highlight: "visualization",
+                checkpoint: "Can you trace the path for inserting a value?"
+            },
+            {
+                title: "Watch Insertion",
+                content: "Click 'Visualize' and insert values like 50, 30, 70, 20. See how each value finds its place by comparing with existing nodes!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you observe the comparison decisions?"
+            },
+            {
+                title: "Maintaining Order",
+                content: "After insertion, an inorder traversal (left-root-right) always gives values in sorted order. This is the magic of BSTs!",
+                highlight: "visualization",
+                checkpoint: "Can you perform inorder traversal mentally?"
+            },
+            {
+                title: "Performance Considerations",
+                content: "Best case: O(log n) for balanced tree. Worst case: O(n) for skewed tree (inserting sorted data). This is why AVL/Red-Black trees exist!",
+                highlight: "complexity",
+                checkpoint: "Can you explain when BST degrades to O(n)?"
+            }
+        ]
+    },
+    bst_delete: {
+        title: "BST Delete Tutorial",
+        steps: [
+            {
+                title: "Welcome to BST Deletion!",
+                content: "Deleting from a BST is trickier than insertion because we need to maintain the BST property after removal. There are 3 cases to handle!",
+                highlight: "description",
+                checkpoint: "Are you ready to learn the 3 deletion cases?"
+            },
+            {
+                title: "Case 1: Leaf Node",
+                content: "If the node has no children (it's a leaf), simply remove it. This is the easiest case - no restructuring needed!",
+                highlight: "visualization",
+                checkpoint: "Can you identify leaf nodes?"
+            },
+            {
+                title: "Case 2: One Child",
+                content: "If the node has one child, bypass it by connecting its parent directly to its child. The child takes the deleted node's place!",
+                highlight: "visualization",
+                checkpoint: "Do you see how we bypass the node?"
+            },
+            {
+                title: "Case 3: Two Children",
+                content: "The complex case! Find the inorder successor (smallest in right subtree), copy its value to the node being deleted, then delete the successor.",
+                highlight: "visualization",
+                checkpoint: "Can you find the inorder successor?"
+            },
+            {
+                title: "Watch All Cases",
+                content: "Click 'Visualize' and try deleting different nodes. Observe which case applies and how the tree restructures!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Can you predict which case applies before deletion?"
+            }
+        ]
+    },
+    towers_of_hanoi: {
+        title: "Towers of Hanoi Tutorial",
+        steps: [
+            {
+                title: "Welcome to Towers of Hanoi!",
+                content: "This classic recursive puzzle involves moving disks from one peg to another, with the rule that no disk can be placed on a smaller disk.",
+                highlight: "description",
+                checkpoint: "Do you understand the disk size constraint?"
+            },
+            {
+                title: "The Recursive Insight",
+                content: "To move n disks from A to C: 1) Move n-1 disks from A to B, 2) Move disk n from A to C, 3) Move n-1 disks from B to C. Base case: 1 disk is easy!",
+                highlight: "visualization",
+                checkpoint: "Can you see how the problem breaks down?"
+            },
+            {
+                title: "Watch the Magic",
+                content: "Click 'Visualize' with 3 disks. Count the moves - it should be 2^n - 1. For 3 disks = 7 moves. For 64 disks = 18 quintillion years!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you count 7 moves for 3 disks?"
+            },
+            {
+                title: "Auxiliary Peg Strategy",
+                content: "The middle peg (B) acts as temporary storage. We can't go directly A→C because we need somewhere to put the smaller disks first!",
+                highlight: "visualization",
+                checkpoint: "Do you see why we need the auxiliary peg?"
+            },
+            {
+                title: "Exponential Growth",
+                content: "Time complexity is O(2^n). Each additional disk doubles the number of moves! This demonstrates how fast exponential functions grow.",
+                highlight: "complexity",
+                checkpoint: "Can you calculate moves for 4 disks?"
+            }
+        ]
+    },
+    dfs_graph: {
+        title: "Depth-First Search Tutorial",
+        steps: [
+            {
+                title: "Welcome to DFS!",
+                content: "DFS explores a graph by going as deep as possible along each branch before backtracking. Think of it like exploring a maze by always taking the first unexplored path.",
+                highlight: "description",
+                checkpoint: "Can you visualize the 'go deep' strategy?"
+            },
+            {
+                title: "Stack-Based Exploration",
+                content: "DFS uses a stack (or recursion, which uses the call stack). Push starting node, pop and visit, push unvisited neighbors, repeat!",
+                highlight: "visualization",
+                checkpoint: "Do you see how LIFO (stack) creates depth-first behavior?"
+            },
+            {
+                title: "Watch DFS Traverse",
+                content: "Click 'Visualize' and watch DFS explore the graph. Notice how it commits to one path completely before backtracking to explore others!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the deep exploration before backtracking?"
+            },
+            {
+                title: "Visited Tracking",
+                content: "We mark nodes as visited to avoid infinite loops in cyclic graphs. Without this, we'd get stuck in cycles forever!",
+                highlight: "visualization",
+                checkpoint: "Can you explain why visited tracking is crucial?"
+            },
+            {
+                title: "DFS Applications",
+                content: "DFS is used for: finding connected components, topological sorting, cycle detection, pathfinding in mazes, and solving puzzles. O(V+E) time complexity!",
+                highlight: "complexity",
+                checkpoint: "Can you think of a problem where DFS is ideal?"
+            }
+        ]
+    },
+    open_hashing: {
+        title: "Open Hashing (Chaining) Tutorial",
+        steps: [
+            {
+                title: "Welcome to Hash Tables!",
+                content: "Hash tables provide O(1) average-case lookup by mapping keys to array indices using a hash function. Open hashing handles collisions with linked lists!",
+                highlight: "description",
+                checkpoint: "Do you understand the hash function concept?"
+            },
+            {
+                title: "The Hash Function",
+                content: "A hash function takes a key and produces an index: hash(key) = key % table_size. Same key always gives same index, but different keys might collide!",
+                highlight: "visualization",
+                checkpoint: "Can you calculate hash(23) for table size 10?"
+            },
+            {
+                title: "Collision Resolution",
+                content: "When two keys hash to the same index, open hashing chains them in a linked list at that index. Each bucket can store multiple values!",
+                highlight: "visualization",
+                checkpoint: "Can you visualize the chains growing?"
+            },
+            {
+                title: "Watch Insertions",
+                content: "Click 'Visualize' and insert values. Watch how some go to empty buckets while others chain with existing values. Observe collision handling!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see collisions being resolved with chains?"
+            },
+            {
+                title: "Performance Analysis",
+                content: "Average case: O(1). Worst case: O(n) if all keys hash to same bucket. Load factor (n/table_size) should stay below 1 for good performance!",
+                highlight: "complexity",
+                checkpoint: "Do you see why load factor matters?"
+            }
+        ]
     }
 };
 

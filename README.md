@@ -62,8 +62,9 @@ ALGO-VISUALIZATION/
 ## ✨ Features
 
 ### 🎨 Visualization & UI
-- **50+ Algorithms**: Sorting, searching, trees, graphs, DP, backtracking
+- **60+ Algorithms**: Sorting, searching, trees, graphs, DP, backtracking
 - **Step-by-Step Visualization**: Watch algorithms execute with visual feedback
+- **📚 Current Syllabus Filter**: Show only algorithms from your DS course syllabus
 - **Rich Themed UI**: Beautiful dark mode and lavender-tinted light mode
 - **Smooth Animations**: Framer Motion-powered transitions
 - **Speed Control**: Adjust playback speed from 0.25x to 3x
@@ -94,6 +95,7 @@ ALGO-VISUALIZATION/
 - **Multiple Categories**: Arrays, Two Pointers, Sliding Window, Trees, Graphs, etc.
 - **Difficulty Levels**: Easy, Medium, Hard classifications
 - **Complexity Info**: Time and space complexity for each algorithm
+- **📚 Syllabus Alignment**: 20 algorithms match standard DS course curriculum
 - **Interview Mode**: Curated problem sets by topic
 
 ---
@@ -224,7 +226,17 @@ See [SETUP.md](SETUP.md) → Troubleshooting section.
 
 ---
 
-## 📄 License
+## � Documentation
+
+- **[SETUP.md](SETUP.md)** - Complete setup & installation guide
+- **[FILE_GUIDE.md](FILE_GUIDE.md)** - Explains every file in the project
+- **[FEATURES.md](FEATURES.md)** - Comprehensive feature documentation
+- **[FUTURE_IMPROVEMENTS.md](FUTURE_IMPROVEMENTS.md)** - Roadmap & planned features
+- **[IMPROVEMENTS.md](IMPROVEMENTS.md)** - Changelog of completed enhancements
+
+---
+
+## �📄 License
 
 See [LICENSE](LICENSE) file.
 

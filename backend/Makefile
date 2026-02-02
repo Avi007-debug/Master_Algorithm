@@ -7,9 +7,14 @@ BUILD_DIR = build
 TEST_DIR = test
 
 # List of algorithms to build
-ALGORITHMS = two_sum three_sum valid-parentheses reverse_linked_list binary_search binary_tree_level_order longest_substring bfs_graph fibonacci_dp n_queens bubble_sort bst_search selection_sort insertion_sort merge_sort quick_sort counting_sort radix_sort stack_ll queue_ll deque_ll factorial recursion_fib doubly_linked_list randomized_quick_sort
-# We will add more to this list as we implement them: 
-# kadane binary_search valid_parentheses ...
+ALGORITHMS = two_sum three_sum valid-parentheses reverse_linked_list binary_search binary_tree_level_order longest_substring bfs_graph fibonacci_dp n_queens bubble_sort bst_search selection_sort insertion_sort merge_sort quick_sort counting_sort radix_sort stack_ll queue_ll deque_ll factorial recursion_fib doubly_linked_list randomized_quick_sort towers_of_hanoi tree_inorder tree_preorder tree_postorder dfs_graph circular_queue \
+	infix_to_postfix infix_to_prefix postfix_evaluation message_queue singly_linked_list_complete \
+	circular_sll circular_dll polynomial_multiplication long_integer_addition \
+	bst_insert bst_delete expression_tree \
+	heap_construction heap_sort priority_queue \
+	avl_tree trie threaded_binary_tree b_plus_tree splay_tree \
+	adjacency_matrix adjacency_list \
+	open_hashing closed_hashing_linear closed_hashing_quadratic closed_hashing_double
 
 # Default target
 all: $(ALGORITHMS)
