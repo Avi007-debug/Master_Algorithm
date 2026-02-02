@@ -159,5 +159,6 @@ int main() {
     deleteNode(&head, 10);
     display(head);
     
+    log_finish();
     return 0;
 }

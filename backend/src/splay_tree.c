@@ -241,5 +241,6 @@ int main() {
     root = splay(root, 20);
     display(root);
     
+    log_finish();
     return 0;
 }

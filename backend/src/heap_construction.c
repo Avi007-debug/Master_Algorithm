@@ -208,5 +208,6 @@ int main() {
     log_message(msg);
     displayHeap(maxHeap, heapSize, "After extraction");
     
+    log_finish();
     return 0;
 }

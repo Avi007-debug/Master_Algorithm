@@ -208,5 +208,6 @@ int main() {
     search(root, 12);
     search(root, 15);
     
+    log_finish();
     return 0;
 }

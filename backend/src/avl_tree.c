@@ -51,7 +51,6 @@ Node* rightRotate(Node* y) {
     sprintf(msg, "New root after rotation: %d", x->data);
     log_message(msg);
     log_step_end();
-    log_message("RIGHT_ROTATE");
     
     return x;
 }
@@ -77,7 +76,6 @@ Node* leftRotate(Node* x) {
     sprintf(msg, "New root after rotation: %d", y->data);
     log_message(msg);
     log_step_end();
-    log_message("LEFT_ROTATE");
     
     return y;
 }
@@ -92,7 +90,6 @@ Node* insert(Node* node, int data) {
         sprintf(msg, "Inserting new node: %d", data);
         log_message(msg);
         log_step_end();
-    log_message("AVL_INSERT");
         return createNode(data);
     }
     
@@ -111,7 +108,6 @@ Node* insert(Node* node, int data) {
         sprintf(msg, "%d already exists", data);
         log_message(msg);
         log_step_end();
-    log_message("AVL_INSERT");
         return node;
     }
     
@@ -129,7 +125,6 @@ Node* insert(Node* node, int data) {
         sprintf(msg, "LL Case detected at node %d", node->data);
         log_message(msg);
         log_step_end();
-    log_message("AVL_INSERT");
         return rightRotate(node);
     }
     
@@ -138,7 +133,6 @@ Node* insert(Node* node, int data) {
         sprintf(msg, "RR Case detected at node %d", node->data);
         log_message(msg);
         log_step_end();
-    log_message("AVL_INSERT");
         return leftRotate(node);
     }
     
@@ -148,7 +142,6 @@ Node* insert(Node* node, int data) {
         log_message(msg);
         node->left = leftRotate(node->left);
         log_step_end();
-    log_message("AVL_INSERT");
         return rightRotate(node);
     }
     
@@ -158,14 +151,12 @@ Node* insert(Node* node, int data) {
         log_message(msg);
         node->right = rightRotate(node->right);
         log_step_end();
-    log_message("AVL_INSERT");
         return leftRotate(node);
     }
     
     sprintf(msg, "Node %d is balanced", node->data);
     log_message(msg);
     log_step_end();
-    log_message("AVL_INSERT");
     return node;
 }
 
@@ -186,7 +177,6 @@ void displayTree(Node* root) {
     log_message("AVL Tree (Inorder):");
     inorderTraversal(root);
     log_step_end();
-    log_message("DISPLAY_AVL");
 }
 
 int main() {
@@ -215,5 +205,6 @@ int main() {
     log_step_end();
     displayTree(root);
     
+    log_finish();
     return 0;
 }

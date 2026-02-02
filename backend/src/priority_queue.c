@@ -194,5 +194,6 @@ int main() {
     
     display(&pq);
     
+    log_finish();
     return 0;
 }

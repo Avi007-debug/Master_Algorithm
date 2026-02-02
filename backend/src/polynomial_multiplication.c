@@ -208,5 +208,6 @@ int main() {
     log_message("\n--- Final Result ---");
     displayPolynomial(result, "P1 * P2");
     
+    log_finish();
     return 0;
 }

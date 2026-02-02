@@ -134,5 +134,6 @@ int main() {
     log_message("Space Complexity: O(V²) where V = number of vertices");
     log_step_end();
     
+    log_finish();
     return 0;
 }

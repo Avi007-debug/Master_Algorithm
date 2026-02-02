@@ -181,5 +181,6 @@ int main() {
     deleteNode(&head, 40);
     displayForward(head);
     
+    log_finish();
     return 0;
 }

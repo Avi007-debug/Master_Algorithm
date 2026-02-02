@@ -111,21 +111,9 @@ export function InterviewMode({ problem, onBack }) {
                 });
             }
 
-            const response = await fetch(`http://localhost:3001/run/${problem.id}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ inputs: apiInputs })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error || `Failed to execute: ${response.statusText}`);
-            }
-
-            const data = await response.json();
+            const data = await API.runAlgorithm(problem.id, apiInputs);
+            
             if (!Array.isArray(data) || data.length === 0) {
-                // If it's empty, maybe just finished? Or error?
-                // For visualization we generally expect steps.
                 console.warn("No steps returned");
             }
             setLogs(data);

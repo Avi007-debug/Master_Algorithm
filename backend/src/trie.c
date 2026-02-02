@@ -67,6 +67,7 @@ int search(TrieNode* root, const char* word) {
             log_message(msg);
             log_step_end();
     log_message("TRIE_SEARCH");
+            log_finish();
             return 0;
         }
         
@@ -100,6 +101,7 @@ int startsWith(TrieNode* root, const char* prefix) {
             log_message("Prefix not found");
             log_step_end();
     log_message("TRIE_STARTS_WITH");
+            log_finish();
             return 0;
         }
         
@@ -144,5 +146,6 @@ int main() {
     startsWith(root, "wor");
     startsWith(root, "xyz");
     
+    log_finish();
     return 0;
 }

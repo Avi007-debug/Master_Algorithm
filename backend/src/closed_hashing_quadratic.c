@@ -163,5 +163,6 @@ int main() {
     log_message("Quadratic: h(k,i) = (h(k) + i²) mod m - reduces clustering");
     log_step_end();
     
+    log_finish();
     return 0;
 }

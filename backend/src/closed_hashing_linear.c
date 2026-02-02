@@ -200,5 +200,6 @@ int main() {
     insert(&ht, 55, 600);
     display(&ht);
     
+    log_finish();
     return 0;
 }

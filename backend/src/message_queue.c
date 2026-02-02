@@ -132,5 +132,6 @@ int main() {
     
     displayQueue(&mq);
     
+    log_finish();
     return 0;
 }

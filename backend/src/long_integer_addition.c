@@ -158,5 +158,6 @@ int main(int argc, char* argv[]) {
     log_message("\n--- Result ---");
     displayNumber(result, "Sum");
     
+    log_finish();
     return 0;
 }

@@ -44,7 +44,6 @@ Node* deleteNode(Node* root, int data) {
         sprintf(msg, "Value %d not found", data);
         log_message(msg);
         log_step_end();
-    log_message("DELETE_BST");
         return root;
     }
     
@@ -68,7 +67,6 @@ Node* deleteNode(Node* root, int data) {
             log_message("Case: Leaf node - simply deleting");
             free(root);
             log_step_end();
-    log_message("DELETE_BST");
             return NULL;
         }
         // Case 2: One child (right)
@@ -77,7 +75,6 @@ Node* deleteNode(Node* root, int data) {
             Node* temp = root->right;
             free(root);
             log_step_end();
-    log_message("DELETE_BST");
             return temp;
         }
         // Case 2: One child (left)
@@ -86,7 +83,6 @@ Node* deleteNode(Node* root, int data) {
             Node* temp = root->left;
             free(root);
             log_step_end();
-    log_message("DELETE_BST");
             return temp;
         }
         // Case 3: Two children
@@ -105,7 +101,6 @@ Node* deleteNode(Node* root, int data) {
     }
     
     log_step_end();
-    log_message("DELETE_BST");
     return root;
 }
 
@@ -129,7 +124,6 @@ void displayTree(Node* root) {
         inorderTraversal(root);
     }
     log_step_end();
-    log_message("DISPLAY_TREE");
 }
 
 int main() {
@@ -162,5 +156,6 @@ int main() {
     root = deleteNode(root, 50);
     displayTree(root);
     
+    log_finish();
     return 0;
 }

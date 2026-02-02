@@ -149,5 +149,6 @@ int main() {
     log_step_end();
     inorderTraversal(root);
     
+    log_finish();
     return 0;
 }

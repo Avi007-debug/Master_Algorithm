@@ -175,5 +175,6 @@ int main() {
     log_message("Double:    h(k,i) = (h1(k) + i*h2(k)) - Minimal clustering!");
     log_step_end();
     
+    log_finish();
     return 0;
 }

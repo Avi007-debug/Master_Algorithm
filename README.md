@@ -3,28 +3,55 @@
 Interactive platform for visualizing data structures and algorithms with step-by-step execution. Perfect for interview preparation and learning CS fundamentals.
 
 ![Status](https://img.shields.io/badge/status-active-success.svg)
+![Deployment](https://img.shields.io/badge/deployment-ready-brightgreen.svg)
+![Algorithms](https://img.shields.io/badge/algorithms-36%2F57_working-yellow.svg)
 ![Node](https://img.shields.io/badge/node-16%2B-blue.svg)
+![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
 
 ---
 
 ## 🚀 Quick Start
 
-```powershell
+### Development (Localhost)
+
+```bash
 # Install dependencies first
-cd frontend
+cd backend
+npm install
+make all              # Compile C programs
+
+cd ../frontend  
 npm install
 
-cd ../backend  
-npm install
-
-# Then start (use 2 terminals)
+# Start servers (use 2 terminals)
 # Terminal 1 - Backend
 cd backend
-npm start
+npm start             # http://localhost:3001
 
 # Terminal 2 - Frontend
 cd frontend
-npm run dev        # http://localhost:5173
+npm run dev           # http://localhost:5173
+```
+
+### Production Deployment
+
+See **[DEPLOYMENT.md](DEPLOYMENT.md)** for comprehensive deployment guides:
+- VPS deployment (DigitalOcean, AWS, Linode)
+- Platform-as-a-Service (Vercel, Netlify, Railway)
+- Docker deployment
+- Environment configuration
+- SSL/HTTPS setup
+- Monitoring and maintenance
+
+**Quick Deploy with Docker:**
+```bash
+# Copy and configure environment
+cp .env.docker .env
+
+# Build and run
+docker-compose up -d
+
+# Access at http://localhost
 ```
 
 **⚠️ First time?** Run `npm install` in both directories before starting!

@@ -150,5 +150,6 @@ int main() {
     log_message("List:   O(degree) edge lookup");
     log_step_end();
     
+    log_finish();
     return 0;
 }

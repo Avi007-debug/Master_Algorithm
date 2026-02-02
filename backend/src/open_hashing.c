@@ -235,5 +235,6 @@ int main() {
     
     analyzeLoadFactor(&ht);
     
+    log_finish();
     return 0;
 }

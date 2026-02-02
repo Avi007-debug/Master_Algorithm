@@ -94,7 +94,8 @@ Node* buildFromPostfix(char* postfix) {
 }
 
 int evaluate(Node* root) {
-    if (root == NULL) return 0;
+    if (root == NULL) log_finish();
+ return 0;
     
     if (!root->isOperator) {
         return root->value - '0';
@@ -119,7 +120,8 @@ int evaluate(Node* root) {
             }
             return result;
         }
-        default: return 0;
+        default: log_finish();
+ return 0;
     }
 }
 
@@ -207,5 +209,6 @@ int main(int argc, char* argv[]) {
     log_message("EVALUATE_TREE");
     }
     
+    log_finish();
     return 0;
 }

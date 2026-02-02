@@ -3,16 +3,33 @@ const cors = require('cors');
 const { exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Configuration
-const EXECUTION_TIMEOUT = 5000; // 5 seconds max execution time
-const MAX_INPUT_LENGTH = 1000; // Maximum characters per input
-const MAX_INPUTS = 100; // Maximum number of inputs
+const EXECUTION_TIMEOUT = parseInt(process.env.EXECUTION_TIMEOUT) || 5000;
+const MAX_INPUT_LENGTH = parseInt(process.env.MAX_INPUT_LENGTH) || 1000;
+const MAX_INPUTS = parseInt(process.env.MAX_INPUTS) || 100;
 
-app.use(cors());
+// CORS configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:5173', 'http://localhost:3000'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 
 // Path to the build directory where C executables are located
@@ -138,6 +155,36 @@ app.get('/run/:algorithm', (req, res) => {
     });
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'healthy', 
+        environment: NODE_ENV,
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Get list of available algorithms
+app.get('/api/algorithms', (req, res) => {
+    fs.readdir(BUILD_DIR, (err, files) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to read algorithms directory' });
+        }
+        
+        // Filter out non-executable files and .o files
+        const algorithms = files.filter(file => {
+            const filePath = path.join(BUILD_DIR, file);
+            return fs.statSync(filePath).isFile() && 
+                   !file.endsWith('.o') && 
+                   fs.accessSync(filePath, fs.constants.X_OK) === undefined;
+        });
+        
+        res.json({ algorithms });
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Backend API running on http://localhost:${PORT}`);
+    console.log(`Environment: ${NODE_ENV}`);
+    console.log(`Allowed origins: ${allowedOrigins.join(', ')}`);
 });

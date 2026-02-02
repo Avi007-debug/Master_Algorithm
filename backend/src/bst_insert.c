@@ -99,5 +99,6 @@ int main() {
     log_step_end();
     displayTree(root);
     
+    log_finish();
     return 0;
 }
