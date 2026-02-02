@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../include/logger.h"
+
+#define MAX_NODES 100
 
 typedef struct Node {
     int data;
@@ -8,6 +11,11 @@ typedef struct Node {
     struct Node* left;
     struct Node* right;
 } Node;
+
+// Forward declarations
+void logTreeState(Node* root, const char* message);
+void serializeTree(Node* root, int* arr, int index, int maxSize);
+int calculateTreeSize(Node* root, int index);
 
 int max(int a, int b) {
     return (a > b) ? a : b;
@@ -31,51 +39,41 @@ Node* createNode(int data) {
 }
 
 Node* rightRotate(Node* y) {
-    log_step_start();
-    log_message("RIGHT_ROTATE");
     char msg[256];
-    sprintf(msg, "Right rotating at node %d", y->data);
-    log_message(msg);
+    sprintf(msg, "RIGHT ROTATION at node %d (balance factor > 1)", y->data);
+    logTreeState(y, msg);
     
     Node* x = y->left;
     Node* T2 = x->right;
     
-    // Perform rotation
     x->right = y;
     y->left = T2;
     
-    // Update heights
     y->height = max(height(y->left), height(y->right)) + 1;
     x->height = max(height(x->left), height(x->right)) + 1;
     
-    sprintf(msg, "New root after rotation: %d", x->data);
-    log_message(msg);
-    log_step_end();
+    sprintf(msg, "✓ Rotation complete - New root: %d", x->data);
+    logTreeState(x, msg);
     
     return x;
 }
 
 Node* leftRotate(Node* x) {
-    log_step_start();
-    log_message("LEFT_ROTATE");
     char msg[256];
-    sprintf(msg, "Left rotating at node %d", x->data);
-    log_message(msg);
+    sprintf(msg, "LEFT ROTATION at node %d (balance factor < -1)", x->data);
+    logTreeState(x, msg);
     
     Node* y = x->right;
     Node* T2 = y->left;
     
-    // Perform rotation
     y->left = x;
     x->right = T2;
     
-    // Update heights
     x->height = max(height(x->left), height(x->right)) + 1;
     y->height = max(height(y->left), height(y->right)) + 1;
     
-    sprintf(msg, "New root after rotation: %d", y->data);
-    log_message(msg);
-    log_step_end();
+    sprintf(msg, "✓ Rotation complete - New root: %d", y->data);
+    logTreeState(y, msg);
     
     return y;
 }
@@ -147,50 +145,91 @@ Node* insert(Node* node, int data) {
     return node;
 }
 
+void serializeTree(Node* root, int* arr, int index, int maxSize) {
+    if (index >= maxSize) return;
+    if (root == NULL) {
+        arr[index] = -999;
+        return;
+    }
+    arr[index] = root->data;
+    serializeTree(root->left, arr, 2*index + 1, maxSize);
+    serializeTree(root->right, arr, 2*index + 2, maxSize);
+}
+
+int calculateTreeSize(Node* root, int index) {
+    if (root == NULL) return index;
+    int maxIdx = index;
+    int leftMax = calculateTreeSize(root->left, 2*index + 1);
+    int rightMax = calculateTreeSize(root->right, 2*index + 2);
+    if (leftMax > maxIdx) maxIdx = leftMax;
+    if (rightMax > maxIdx) maxIdx = rightMax;
+    return maxIdx;
+}
+
+void logTreeState(Node* root, const char* message) {
+    int tree_array[MAX_NODES];
+    for(int i = 0; i < MAX_NODES; i++) tree_array[i] = -999;
+    
+    serializeTree(root, tree_array, 0, MAX_NODES);
+    int size = root ? calculateTreeSize(root, 0) + 1 : 0;
+    if (size > MAX_NODES) size = MAX_NODES;
+    
+    log_step_start();
+    if (size > 0) {
+        log_array("TreeStructure", tree_array, size);
+    }
+    log_message(message);
+    log_step_end();
+}
+
 void inorderTraversal(Node* root) {
     if (root != NULL) {
         inorderTraversal(root->left);
-        char msg[256];
-        sprintf(msg, "Node: %d (height: %d, balance: %d)", 
-                   root->data, root->height, getBalance(root));
-        // log_message(msg);
         inorderTraversal(root->right);
     }
 }
 
-void displayTree(Node* root) {
-    log_step_start();
-    log_message("DISPLAY_AVL");
-    log_message("AVL Tree (Inorder):");
-    inorderTraversal(root);
-    log_step_end();
-}
-
-int main() {
+int main(int argc, char* argv[]) {
     log_init();
     
-    log_step_start();
-    log_message("=== AVL TREE (SELF-BALANCING) ===\n");
-    log_step_end();
+    // Parse input
+    int values[MAX_NODES];
+    int n = 0;
+    
+    if (argc > 1) {
+        if (argc > 2) {
+            for (int i = 1; i < argc && n < MAX_NODES; i++) {
+                values[n++] = atoi(argv[i]);
+            }
+        } else {
+            char* token = strtok(argv[1], ", ");
+            while (token && n < MAX_NODES) {
+                values[n++] = atoi(token);
+                token = strtok(NULL, ", ");
+            }
+        }
+    } else {
+        int defaults[] = {10, 20, 30, 40, 50, 25};
+        n = 6;
+        for(int i = 0; i < n; i++) values[i] = defaults[i];
+    }
+    
+    logTreeState(NULL, "Starting with empty AVL tree");
     
     Node* root = NULL;
     
-    int values[] = {10, 20, 30, 40, 50, 25};
-    int n = sizeof(values) / sizeof(values[0]);
-    
     for (int i = 0; i < n; i++) {
         char msg[256];
-        log_step_start();
-        sprintf(msg, "\n--- Inserting %d ---", values[i]);
-        log_message(msg);
-        log_step_end();
+        sprintf(msg, "Inserting %d into AVL tree", values[i]);
+        logTreeState(root, msg);
+        
         root = insert(root, values[i]);
+        
+        sprintf(msg, "✓ Inserted %d - Tree remains balanced", values[i]);
+        logTreeState(root, msg);
     }
     
-    log_step_start();
-    log_message("\n--- Final AVL Tree ---");
-    log_step_end();
-    displayTree(root);
+    logTreeState(root, "Final AVL tree - All nodes balanced!");
     
     log_finish();
     return 0;

@@ -5,6 +5,7 @@
 #include "../include/logger.h"
 
 #define MAX 100
+#define MAX_NODES 100
 
 typedef struct Node {
     char value;
