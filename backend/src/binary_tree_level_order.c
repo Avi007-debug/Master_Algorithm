@@ -120,10 +120,20 @@ int main(int argc, char* argv[]) {
     char* node_strs[MAX_NODES];
     
     if (argc > 1) {
-        // Assuming args strictly passed as separate params: "exe 3 9 20 null null 15 7"
-        count = argc - 1;
-        for(int i=0; i<count; i++) {
-            node_strs[i] = argv[i+1];
+        // Handle both comma-separated string and multiple arguments
+        if (argc > 2) {
+            // Multiple separate arguments: "exe 3 9 20 null null 15 7"
+            count = argc - 1;
+            for(int i=0; i<count; i++) {
+                node_strs[i] = argv[i+1];
+            }
+        } else {
+            // Single comma-separated string: "exe 3,9,20,null,null,15,7"
+            char* token = strtok(argv[1], ", ");
+            while (token != NULL && count < MAX_NODES) {
+                node_strs[count++] = token;
+                token = strtok(NULL, ", ");
+            }
         }
     } else {
         // Default: [3,9,20,null,null,15,7]

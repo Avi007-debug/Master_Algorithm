@@ -5,11 +5,11 @@ gcc -Wall -Wextra -Iinclude src/reverse_linked_list.c build/logger.o -o build/re
 gcc -Wall -Wextra -Iinclude src/binary_search.c build/logger.o -o build/binary_search
 gcc -Wall -Wextra -Iinclude src/binary_tree_level_order.c build/logger.o -o build/binary_tree_level_order
 src/binary_tree_level_order.c: In function 'main':
-src/binary_tree_level_order.c:190:9: warning: unused variable 'queue_display' [-Wunused-variable]
-  190 |     int queue_display[MAX_NODES];
+src/binary_tree_level_order.c:200:9: warning: unused variable 'queue_display' [-Wunused-variable]
+  200 |     int queue_display[MAX_NODES];
       |         ^~~~~~~~~~~~~
-src/binary_tree_level_order.c:154:9: warning: variable 'tree_values' set but not used [-Wunused-but-set-variable]
-  154 |     int tree_values[MAX_NODES];
+src/binary_tree_level_order.c:164:9: warning: variable 'tree_values' set but not used [-Wunused-but-set-variable]
+  164 |     int tree_values[MAX_NODES];
       |         ^~~~~~~~~~~
 gcc -Wall -Wextra -Iinclude src/longest_substring.c build/logger.o -o build/longest_substring
 src/longest_substring.c: In function 'main':
@@ -48,6 +48,10 @@ gcc -Wall -Wextra -Iinclude src/recursion_fib.c build/logger.o -o build/recursio
 gcc -Wall -Wextra -Iinclude src/doubly_linked_list.c build/logger.o -o build/doubly_linked_list
 gcc -Wall -Wextra -Iinclude src/randomized_quick_sort.c build/logger.o -o build/randomized_quick_sort
 gcc -Wall -Wextra -Iinclude src/towers_of_hanoi.c build/logger.o -o build/towers_of_hanoi
+src/towers_of_hanoi.c: In function 'moveDisk':
+src/towers_of_hanoi.c:71:39: warning: unused parameter 'diskNum' [-Wunused-parameter]
+   71 | void moveDisk(char from, char to, int diskNum) {
+      |                                   ~~~~^~~~~~~
 gcc -Wall -Wextra -Iinclude src/tree_inorder.c build/logger.o -o build/tree_inorder
 src/tree_inorder.c: In function 'main':
 src/tree_inorder.c:57:5: warning: multi-line comment [-Wcomment]
@@ -110,11 +114,11 @@ gcc -Wall -Wextra -Iinclude src/infix_to_postfix.c build/logger.o -o build/infix
 gcc -Wall -Wextra -Iinclude src/infix_to_prefix.c build/logger.o -o build/infix_to_prefix
 gcc -Wall -Wextra -Iinclude src/postfix_evaluation.c build/logger.o -o build/postfix_evaluation
 src/postfix_evaluation.c: In function 'evaluatePostfix':
-src/postfix_evaluation.c:112:30: warning: '%s' directive writing up to 999 bytes into a region of size 249 [-Wformat-overflow=]
-  112 |         sprintf(msg, "Stack: %s", stackStr);
+src/postfix_evaluation.c:110:30: warning: '%s' directive writing up to 999 bytes into a region of size 249 [-Wformat-overflow=]
+  110 |         sprintf(msg, "Stack: %s", stackStr);
       |                              ^~   ~~~~~~~~
-src/postfix_evaluation.c:112:9: note: 'sprintf' output between 8 and 1007 bytes into a destination of size 256
-  112 |         sprintf(msg, "Stack: %s", stackStr);
+src/postfix_evaluation.c:110:9: note: 'sprintf' output between 8 and 1007 bytes into a destination of size 256
+  110 |         sprintf(msg, "Stack: %s", stackStr);
       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 gcc -Wall -Wextra -Iinclude src/message_queue.c build/logger.o -o build/message_queue
 src/message_queue.c: In function 'dequeue':
@@ -134,63 +138,57 @@ src/message_queue.c:84:9: note: 'sprintf' output between 5 and 269 bytes into a 
 gcc -Wall -Wextra -Iinclude src/singly_linked_list_complete.c build/logger.o -o build/singly_linked_list_complete
 gcc -Wall -Wextra -Iinclude src/circular_sll.c build/logger.o -o build/circular_sll
 gcc -Wall -Wextra -Iinclude src/circular_dll.c build/logger.o -o build/circular_dll
-src/circular_dll.c: In function 'insertAtEnd':
-src/circular_dll.c:28:9: error: too many arguments to function 'log_message'; expected 1, have 2
-   28 |         log_message("Created first node: %d (bidirectional self-loop)", data);
-      |         ^~~~~~~~~~~                                                     ~~~~
-In file included from src/circular_dll.c:3:
-src/../include/logger.h:31:6: note: declared here
-   31 | void log_message(const char* message);
-      |      ^~~~~~~~~~~
-src/circular_dll.c:37:9: error: too many arguments to function 'log_message'; expected 1, have 2
-   37 |         log_message("Inserted %d at end with bidirectional links", data);
-      |         ^~~~~~~~~~~                                                ~~~~
-src/../include/logger.h:31:6: note: declared here
-   31 | void log_message(const char* message);
-      |      ^~~~~~~~~~~
-src/circular_dll.c: In function 'deleteNode':
-src/circular_dll.c:64:17: error: too many arguments to function 'log_message'; expected 1, have 2
-   64 |                 log_message("Deleted only node: %d", value);
-      |                 ^~~~~~~~~~~                          ~~~~~
-src/../include/logger.h:31:6: note: declared here
-   31 | void log_message(const char* message);
-      |      ^~~~~~~~~~~
-src/circular_dll.c:75:17: error: too many arguments to function 'log_message'; expected 1, have 2
-   75 |                 log_message("Deleted node: %d (updated bidirectional links)", value);
-      |                 ^~~~~~~~~~~                                                   ~~~~~
-src/../include/logger.h:31:6: note: declared here
-   31 | void log_message(const char* message);
-      |      ^~~~~~~~~~~
-src/circular_dll.c:86:5: error: too many arguments to function 'log_message'; expected 1, have 2
-   86 |     log_message("Value %d not found", value);
-      |     ^~~~~~~~~~~                       ~~~~~
-src/../include/logger.h:31:6: note: declared here
-   31 | void log_message(const char* message);
-      |      ^~~~~~~~~~~
-src/circular_dll.c: In function 'displayForward':
-src/circular_dll.c:107:9: error: too many arguments to function 'log_message'; expected 1, have 3
-  107 |         log_message("[%d] -> %d", count++, temp->data);
-      |         ^~~~~~~~~~~               ~~~~~~~
-src/../include/logger.h:31:6: note: declared here
-   31 | void log_message(const char* message);
-      |      ^~~~~~~~~~~
-src/circular_dll.c:111:5: error: too many arguments to function 'log_message'; expected 1, have 2
-  111 |     log_message("... (back to head: %d)", head->data);
-      |     ^~~~~~~~~~~                           ~~~~~~~~~~
-src/../include/logger.h:31:6: note: declared here
-   31 | void log_message(const char* message);
-      |      ^~~~~~~~~~~
-src/circular_dll.c: In function 'displayBackward':
-src/circular_dll.c:132:9: error: too many arguments to function 'log_message'; expected 1, have 3
-  132 |         log_message("[%d] <- %d", count++, temp->data);
-      |         ^~~~~~~~~~~               ~~~~~~~
-src/../include/logger.h:31:6: note: declared here
-   31 | void log_message(const char* message);
-      |      ^~~~~~~~~~~
-src/circular_dll.c:136:5: error: too many arguments to function 'log_message'; expected 1, have 2
-  136 |     log_message("... (back to last: %d)", head->prev->data);
-      |     ^~~~~~~~~~~                           ~~~~~~~~~~~~~~~~
-src/../include/logger.h:31:6: note: declared here
-   31 | void log_message(const char* message);
-      |      ^~~~~~~~~~~
-make: *** [Makefile:38: circular_dll] Error 1
+gcc -Wall -Wextra -Iinclude src/polynomial_multiplication.c build/logger.o -o build/polynomial_multiplication
+gcc -Wall -Wextra -Iinclude src/long_integer_addition.c build/logger.o -o build/long_integer_addition
+gcc -Wall -Wextra -Iinclude src/bst_insert.c build/logger.o -o build/bst_insert
+gcc -Wall -Wextra -Iinclude src/bst_delete.c build/logger.o -o build/bst_delete
+gcc -Wall -Wextra -Iinclude src/expression_tree.c build/logger.o -o build/expression_tree
+gcc -Wall -Wextra -Iinclude src/heap_construction.c build/logger.o -o build/heap_construction
+gcc -Wall -Wextra -Iinclude src/heap_sort.c build/logger.o -o build/heap_sort
+src/heap_sort.c: In function 'main':
+src/heap_sort.c:108:14: warning: unused parameter 'argc' [-Wunused-parameter]
+  108 | int main(int argc, char* argv[]) {
+      |          ~~~~^~~~
+src/heap_sort.c:108:26: warning: unused parameter 'argv' [-Wunused-parameter]
+  108 | int main(int argc, char* argv[]) {
+      |                    ~~~~~~^~~~~~
+src/heap_sort.c: In function 'heapSort':
+src/heap_sort.c:75:37: warning: '%s' directive writing up to 255 bytes into a region of size 243 [-Wformat-overflow=]
+   75 |         sprintf(msg2, "Array state: %s", currentStr);
+      |                                     ^~   ~~~~~~~~~~
+src/heap_sort.c:75:9: note: 'sprintf' output between 14 and 269 bytes into a destination of size 256
+   75 |         sprintf(msg2, "Array state: %s", currentStr);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+gcc -Wall -Wextra -Iinclude src/priority_queue.c build/logger.o -o build/priority_queue
+gcc -Wall -Wextra -Iinclude src/avl_tree.c build/logger.o -o build/avl_tree
+gcc -Wall -Wextra -Iinclude src/trie.c build/logger.o -o build/trie
+gcc -Wall -Wextra -Iinclude src/threaded_binary_tree.c build/logger.o -o build/threaded_binary_tree
+gcc -Wall -Wextra -Iinclude src/b_plus_tree.c build/logger.o -o build/b_plus_tree
+src/b_plus_tree.c: In function 'displayNode':
+src/b_plus_tree.c:157:34: warning: '%s' directive writing up to 255 bytes into a region of size 240 [-Wformat-overflow=]
+  157 |     sprintf(msg, "Level %d (%s): %s", level, node->isLeaf ? "leaf" : "internal", keys);
+      |                                  ^~                                              ~~~~
+src/b_plus_tree.c:157:5: note: 'sprintf' output 17 or more bytes (assuming 272) into a destination of size 256
+  157 |     sprintf(msg, "Level %d (%s): %s", level, node->isLeaf ? "leaf" : "internal", keys);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+gcc -Wall -Wextra -Iinclude src/splay_tree.c build/logger.o -o build/splay_tree
+gcc -Wall -Wextra -Iinclude src/adjacency_matrix.c build/logger.o -o build/adjacency_matrix
+src/adjacency_matrix.c: In function 'displayAdjacencyMatrix':
+src/adjacency_matrix.c:17:27: warning: ' ' directive writing 1 byte into a region of size between 0 and 8 [-Wformat-overflow=]
+   17 |         sprintf(temp, "%2d ", i);
+      |                           ^
+src/adjacency_matrix.c:17:9: note: 'sprintf' output between 4 and 12 bytes into a destination of size 10
+   17 |         sprintf(temp, "%2d ", i);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~
+gcc -Wall -Wextra -Iinclude src/adjacency_list.c build/logger.o -o build/adjacency_list
+src/adjacency_list.c: In function 'displayAdjacencyList':
+src/adjacency_list.c:74:23: warning: '%s' directive writing up to 511 bytes into a region of size 256 [-Wformat-overflow=]
+   74 |         sprintf(msg, "%s", listStr);
+      |                       ^~   ~~~~~~~
+src/adjacency_list.c:74:9: note: 'sprintf' output between 1 and 512 bytes into a destination of size 256
+   74 |         sprintf(msg, "%s", listStr);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+gcc -Wall -Wextra -Iinclude src/open_hashing.c build/logger.o -o build/open_hashing
+gcc -Wall -Wextra -Iinclude src/closed_hashing_linear.c build/logger.o -o build/closed_hashing_linear
+gcc -Wall -Wextra -Iinclude src/closed_hashing_quadratic.c build/logger.o -o build/closed_hashing_quadratic
+gcc -Wall -Wextra -Iinclude src/closed_hashing_double.c build/logger.o -o build/closed_hashing_double
