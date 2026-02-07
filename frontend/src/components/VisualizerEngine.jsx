@@ -25,51 +25,53 @@ export function VisualizerEngine({ step }) {
             {nodes && nodes.length > 0 && (
                 <div className="flex flex-col gap-2 items-center w-full">
                     <h3 className="text-sm font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">Recursion Tree</h3>
-                    <div className="relative w-full h-[300px] glass-panel rounded-xl overflow-auto p-4 flex justify-center">
-                        <svg width="100%" height="100%" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
-                            <defs>
-                                <marker id="recursion-arrow" markerWidth="10" markerHeight="7" refX="25" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-border)" opacity="0.6" />
-                                </marker>
-                            </defs>
-                            {/* Simple Level-based layout for recursion tree */}
-                            {(() => {
-                                const levelMap = {};
-                                const nodeCoords = {};
+                    <div className="relative w-full glass-panel rounded-xl overflow-x-auto overflow-y-hidden custom-scrollbar" style={{ maxHeight: '350px' }}>
+                        <div className="inline-block min-w-full">
+                            <svg width="100%" height="300" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid meet" className="block" style={{ minWidth: '800px' }}>
+                                <defs>
+                                    <marker id="recursion-arrow" markerWidth="10" markerHeight="7" refX="25" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-border)" opacity="0.6" />
+                                    </marker>
+                                </defs>
+                                {/* Simple Level-based layout for recursion tree */}
+                                {(() => {
+                                    const levelMap = {};
+                                    const nodeCoords = {};
 
-                                // Build adjacency list to calculate depths
-                                const adj = {};
-                                nodes.forEach(n => adj[n.id] = []);
-                                edges.forEach(e => {
-                                    if (adj[e.from]) {
-                                        adj[e.from].push(e.to);
-                                    } else {
-                                        adj[e.from] = [e.to];
-                                    }
-                                });
-
-                                // Find roots (nodes with no incoming edges)
-                                const isChild = new Set(edges.map(e => e.to));
-                                const roots = nodes.filter(n => !isChild.has(n.id));
-
-                                // Simple DFS to assign levels
-                                const assignLevels = (id, level) => {
-                                    if (!levelMap[level]) levelMap[level] = [];
-                                    if (!levelMap[level].includes(id)) levelMap[level].push(id);
-                                    adj[id].forEach(childId => assignLevels(childId, level + 1));
-                                };
-                                roots.forEach(r => assignLevels(r.id, 0));
-
-                                // Calculate coordinates
-                                const levels = Object.keys(levelMap).length;
-                                Object.entries(levelMap).forEach(([lvl, nodeIds]) => {
-                                    const levelInt = parseInt(lvl);
-                                    const y = 50 + levelInt * 60;
-                                    nodeIds.forEach((id, i) => {
-                                        const x = 400 + (i - (nodeIds.length - 1) / 2) * 100;
-                                        nodeCoords[id] = { x, y };
+                                    // Build adjacency list to calculate depths
+                                    const adj = {};
+                                    nodes.forEach(n => adj[n.id] = []);
+                                    edges.forEach(e => {
+                                        if (adj[e.from]) {
+                                            adj[e.from].push(e.to);
+                                        } else {
+                                            adj[e.from] = [e.to];
+                                        }
                                     });
-                                });
+
+                                    // Find roots (nodes with no incoming edges)
+                                    const isChild = new Set(edges.map(e => e.to));
+                                    const roots = nodes.filter(n => !isChild.has(n.id));
+
+                                    // Simple DFS to assign levels
+                                    const assignLevels = (id, level) => {
+                                        if (!levelMap[level]) levelMap[level] = [];
+                                        if (!levelMap[level].includes(id)) levelMap[level].push(id);
+                                        adj[id].forEach(childId => assignLevels(childId, level + 1));
+                                    };
+                                    roots.forEach(r => assignLevels(r.id, 0));
+
+                                    // Calculate coordinates with better spacing
+                                    const levels = Object.keys(levelMap).length;
+                                    Object.entries(levelMap).forEach(([lvl, nodeIds]) => {
+                                        const levelInt = parseInt(lvl);
+                                        const y = 50 + levelInt * 60;
+                                        const spacing = Math.min(120, 1000 / Math.max(nodeIds.length, 1));
+                                        nodeIds.forEach((id, i) => {
+                                            const x = 600 + (i - (nodeIds.length - 1) / 2) * spacing;
+                                            nodeCoords[id] = { x, y };
+                                        });
+                                    });
 
                                 return (
                                     <>
@@ -116,22 +118,28 @@ export function VisualizerEngine({ step }) {
                                     </>
                                 );
                             })()}
-                        </svg>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             )}
 
             {/* Arrays Section */}
             <div className="flex flex-col gap-8">
-                {Object.entries(arrays || {}).map(([name, data]) => {
+                {Object.entries(arrays || {}).map(([name, data], idx) => {
                     // --- Visualization Type Detection ---
                     const isSortArray = name.includes("Sort Array") || name === "Array";
                     const isGraphMatrix = name === "AdjacencyMatrix";
                     const isTreeStructure = name === "TreeStructure";
-                    const isLinkedList = arrays['NextPtrs'] && ((arrays['Values'] && name === 'Values') || (arrays['Nodes'] && name === 'Nodes'));
+                    // Only render as linked list if this is the primary data array (prioritize 'Values' over 'Nodes')
+                    const isLinkedList = arrays['NextPtrs'] && 
+                        ((arrays['Values'] && name === 'Values') || 
+                         (!arrays['Values'] && arrays['Nodes'] && name === 'Nodes'));
 
-                    // If it's the 'NextPtrs' array itself, we might skip rendering it separately if we render the combined view under 'Values' or 'Nodes'
-                    if (name === 'NextPtrs' && (arrays['Values'] || arrays['Nodes'])) return null;
+                    // Skip rendering NextPtrs, PrevPtrs separately - they're shown as part of linked list
+                    if ((name === 'NextPtrs' || name === 'PrevPtrs') && (arrays['Values'] || arrays['Nodes'])) return null;
+                    // Skip 'Nodes' if 'Values' exists (prevent duplicate linked list rendering)
+                    if (name === 'Nodes' && arrays['Values'] && arrays['NextPtrs']) return null;
 
                     // --- Linked List Renderer ---
                     if (isLinkedList) {
@@ -148,18 +156,19 @@ export function VisualizerEngine({ step }) {
                         const gap = 80;
                         const startX = 50;
                         const y = 100;
-                        const canvasWidth = data.length * gap + 100;
+                        const canvasWidth = Math.max(800, data.length * gap + 100);
 
                         return (
-                            <div key="linked-list" className="flex flex-col gap-2 items-center w-full">
+                            <div key={`linked-list-${idx}`} className="flex flex-col gap-2 items-center w-full">
                                 <h3 className="text-sm font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">Linked List</h3>
-                                <div className="relative w-full h-[200px] glass-panel rounded-xl flex items-center justify-center overflow-auto">
-                                    <svg width={canvasWidth} height="200">
-                                        <defs>
-                                            <marker id="arrowhead-ll" markerWidth="8" markerHeight="6" refX="24" refY="3" orient="auto">
-                                                <polygon points="0 0, 8 3, 0 6" fill="var(--color-text-secondary)" />
-                                            </marker>
-                                        </defs>
+                                <div className="relative w-full glass-panel rounded-xl overflow-x-auto overflow-y-hidden custom-scrollbar" style={{ maxHeight: '250px' }}>
+                                    <div className="inline-block min-w-full" style={{ width: `${canvasWidth}px` }}>
+                                        <svg width={canvasWidth} height="200" className="block">
+                                            <defs>
+                                                <marker id="arrowhead-ll" markerWidth="8" markerHeight="6" refX="24" refY="3" orient="auto">
+                                                    <polygon points="0 0, 8 3, 0 6" fill="var(--color-text-secondary)" />
+                                                </marker>
+                                            </defs>
 
                                         {/* Edges (NextPtrs) */}
                                         {data.map((_, idx) => {
@@ -206,29 +215,6 @@ export function VisualizerEngine({ step }) {
                                             );
                                         })}
 
-                                        {/* Edges (PrevPtrs - for DLL) */}
-                                        {arrays['PrevPtrs'] && data.map((_, idx) => {
-                                            const prevIdx = arrays['PrevPtrs'][idx];
-                                            if (prevIdx === undefined || prevIdx === -1) return null;
-
-                                            const x1 = startX + idx * gap;
-                                            const y1 = y;
-                                            const x2 = startX + prevIdx * gap; // Should be to the left usually
-                                            const y2 = y;
-
-                                            return (
-                                                <path
-                                                    key={`edge-prev-${idx}`}
-                                                    d={`M ${x1} ${y1} Q ${(x1 + x2) / 2} ${y1 + 40} ${x2} ${y2}`}
-                                                    stroke="var(--color-accent-secondary)" // Different color for Prev?
-                                                    strokeWidth="2"
-                                                    strokeDasharray="4" // Dashed line for prev? Or solid. Solid is fine.
-                                                    fill="none"
-                                                    markerEnd="url(#arrowhead-ll)"
-                                                />
-                                            );
-                                        })}
-
                                         {/* Nodes */}
                                         {data.map((val, idx) => {
                                             const x = startX + idx * gap;
@@ -239,7 +225,7 @@ export function VisualizerEngine({ step }) {
                                             const isHighlighted = relevantHighlights.length > 0;
 
                                             return (
-                                                <g key={idx}>
+                                                <g key={`ll-node-${idx}`}>
                                                     <circle
                                                         cx={x} cy={y} r={nodeRadius}
                                                         fill={isHighlighted ? "var(--color-accent-primary)" : "var(--color-bg-tertiary)"}
@@ -267,7 +253,8 @@ export function VisualizerEngine({ step }) {
                                                 </g>
                                             );
                                         })}
-                                    </svg>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         );
@@ -281,7 +268,7 @@ export function VisualizerEngine({ step }) {
                         const center = 150;
 
                         return (
-                            <div key={name} className="flex flex-col gap-2 items-center w-full">
+                            <div key={`graph-${idx}`} className="flex flex-col gap-2 items-center w-full">
                                 <h3 className="text-sm font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">{name.replace(/([A-Z])/g, ' $1').trim()}</h3>
                                 <div className="relative w-[300px] h-[300px] glass-panel rounded-xl flex items-center justify-center">
                                     <svg width="300" height="300" viewBox="0 0 300 300">
@@ -324,7 +311,7 @@ export function VisualizerEngine({ step }) {
                                             const isHighlighted = relevantHighlights.length > 0;
 
                                             return (
-                                                <g key={i}>
+                                                <g key={`graph-node-${i}`}>
                                                     <circle
                                                         cx={x} cy={y} r="20"
                                                         fill={isHighlighted ? "var(--color-accent-primary)" : (isVisited ? "var(--color-accent-secondary)" : "var(--color-bg-tertiary)")}
@@ -360,16 +347,15 @@ export function VisualizerEngine({ step }) {
                         const maxIndex = data.length - 1;
                         const maxDepth = Math.floor(Math.log2(maxIndex + 1));
 
-                        // Dynamic Sizing
-                        const verticalSpacing = 80;
-                        const nodeRadius = 22;
-                        const minSpacingX = 60; // Minimum horizontal space per node
+                        // Compact sizing for better fit
+                        const verticalSpacing = 70;
+                        const nodeRadius = 20;
+                        const baseSpacing = 50; // Base horizontal spacing
 
-                        // Width: Needs to fit the widest level (2^maxDepth nodes)
-                        // But we can be smarter: the bottom level determines the width.
+                        // Smart width calculation - more compact
                         const maxNodesAtBottom = Math.pow(2, maxDepth);
-                        const canvasWidth = Math.max(800, maxNodesAtBottom * minSpacingX);
-                        const canvasHeight = Math.max(400, (maxDepth + 1) * verticalSpacing + 100);
+                        const canvasWidth = Math.max(600, maxNodesAtBottom * baseSpacing);
+                        const canvasHeight = Math.max(350, (maxDepth + 1) * verticalSpacing + 80);
 
                         // Helper to get coordinates
                         const getCoords = (idx) => {
@@ -378,24 +364,23 @@ export function VisualizerEngine({ step }) {
                             const totalInLevel = Math.pow(2, depth);
 
                             // Distribute nodes evenly across the full canvas width for that level
-                            // x = (section_width / 2) + (section_width * pos)
                             const sectionWidth = canvasWidth / totalInLevel;
                             const x = sectionWidth * posInLevel + sectionWidth / 2;
 
-                            const y = depth * verticalSpacing + 50;
+                            const y = depth * verticalSpacing + 40;
                             return { x, y };
                         };
 
                         return (
-                            <div key={name} className="flex flex-col gap-2 items-center w-full">
-                                <h3 className="text-sm font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider">Binary Tree</h3>
-                                <div className="relative w-full overflow-auto glass-panel rounded-xl flex justify-center custom-scrollbar">
-                                    <svg width={canvasWidth} height={canvasHeight} style={{ minWidth: "100%" }}>
-                                        <defs>
-                                            <marker id="arrowhead-tree" markerWidth="6" markerHeight="4" refX="18" refY="2" orient="auto">
-                                                <polygon points="0 0, 6 2, 0 4" fill="var(--color-border)" />
-                                            </marker>
-                                        </defs>
+                            <div key={`tree-${idx}`} className="flex flex-col gap-2 items-center w-full">
+                                <div className="relative w-full overflow-auto glass-panel rounded-xl custom-scrollbar" style={{ maxHeight: '500px', maxWidth: '100%' }}>
+                                    <div className="inline-block min-w-full p-4" style={{ width: `${canvasWidth}px` }}>
+                                        <svg width={canvasWidth} height={canvasHeight} className="block">
+                                            <defs>
+                                                <marker id="arrowhead-tree" markerWidth="6" markerHeight="4" refX="18" refY="2" orient="auto">
+                                                    <polygon points="0 0, 6 2, 0 4" fill="var(--color-border)" />
+                                                </marker>
+                                            </defs>
 
                                         {/* Edges */}
                                         {data.map((val, idx) => {
@@ -431,7 +416,7 @@ export function VisualizerEngine({ step }) {
                                             const isHighlighted = relevantHighlights.length > 0;
 
                                             return (
-                                                <g key={idx}>
+                                                <g key={`tree-node-${idx}`}>
                                                     <circle
                                                         cx={x} cy={y} r={nodeRadius}
                                                         fill={isHighlighted ? "var(--color-accent-primary)" : "var(--color-bg-tertiary)"}
@@ -455,7 +440,8 @@ export function VisualizerEngine({ step }) {
                                                 </g>
                                             );
                                         })}
-                                    </svg>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         );
@@ -465,7 +451,7 @@ export function VisualizerEngine({ step }) {
                     const maxValue = isSortArray ? Math.max(...data, 1) : 0;
 
                     return (
-                        <div key={name} className="flex flex-col gap-2">
+                        <div key={`array-${idx}`} className="flex flex-col gap-2">
                             <h3 className="text-sm font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider ml-1">{name}</h3>
                             <div className={`flex flex-wrap gap-2 p-4 glass-panel rounded-xl min-h-[100px] items-end justify-center relative ${isSortArray ? 'h-[300px]' : ''}`}>
                                 {data.map((val, idx) => {
@@ -480,7 +466,7 @@ export function VisualizerEngine({ step }) {
                                     const hPercent = isSortArray ? Math.max(10, (val / maxValue) * 100) : 100;
 
                                     return (
-                                        <div key={idx} className="relative group flex flex-col items-center justify-end h-full">
+                                        <div key={`array-item-${idx}`} className="relative group flex flex-col items-center justify-end h-full">
                                             {/* Index Label */}
                                             <div className={`absolute ${isSortArray ? '-bottom-6' : '-top-6'} text-xs text-[var(--color-text-tertiary)]`}>
                                                 {idx}
