@@ -7,7 +7,7 @@ int first_step = 1;
 #define MAX_ARRAYS 5
 #define MAX_VARS 10
 #define MAX_HIGHLIGHTS 10
-#define MAX_ARRAY_SIZE 100
+#define MAX_ARRAY_SIZE 500
 #define MAX_NODES 50
 #define MAX_EDGES 50
 

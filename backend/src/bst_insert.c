@@ -3,7 +3,7 @@
 #include <string.h>
 #include "../include/logger.h"
 
-#define MAX_NODES 100
+#define MAX_NODES 500
 
 typedef struct Node {
     int data;
@@ -100,6 +100,23 @@ int main(int argc, char* argv[]) {
         int defaults[] = {50, 30, 70, 20, 40, 60, 80};
         n = 7;
         for(int i = 0; i < n; i++) values[i] = defaults[i];
+    }
+    
+    // Validate input size
+    if (n == 0) {
+        log_step_start();
+        log_message("❌ Error: No values provided for insertion");
+        log_step_end();
+        log_finish();
+        return 1;
+    }
+    
+    if (n > 20) {
+        log_step_start();
+        log_message("❌ Error: Too many values! Maximum 20 values allowed for clear visualization");
+        log_step_end();
+        log_finish();
+        return 1;
     }
     
     logTreeState(NULL, "Starting with empty BST");

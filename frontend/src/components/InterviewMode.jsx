@@ -632,7 +632,7 @@ export function InterviewMode({ problem, onBack }) {
                 </header>
 
                 {/* Canvas */}
-                <div className={`flex-1 p-8 flex flex-col items-center justify-center bg-gradient-to-br from-[var(--color-bg-secondary)] via-[var(--color-bg-primary)] to-[var(--color-bg-secondary)] relative overflow-hidden`}>
+                <div className={`flex-1 p-8 pb-6 flex flex-col items-center justify-center bg-gradient-to-br from-[var(--color-bg-secondary)] via-[var(--color-bg-primary)] to-[var(--color-bg-secondary)] relative overflow-auto min-h-0`}>
                     {/* Background decoration */}
                     <div className={`absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] ${isDark ? 'opacity-[0.03]' : 'opacity-[0.02]'} pointer-events-none`}></div>
 
@@ -672,7 +672,7 @@ export function InterviewMode({ problem, onBack }) {
                 </div>
 
                 {/* Playback Controls */}
-                <footer className="h-24 border-t border-[var(--color-border)] bg-[var(--color-bg-secondary)]/50 backdrop-blur-md flex items-center justify-center gap-8 relative z-20">
+                <footer className="flex-shrink-0 h-24 border-t border-[var(--color-border)] bg-[var(--color-bg-secondary)]/50 backdrop-blur-md flex items-center justify-center gap-8 relative z-20">
                     <div className={`flex items-center gap-6 glass-panel px-8 py-3 rounded-2xl transition-opacity duration-300 ${isLoading || error || logs.length === 0 ? 'opacity-50 pointer-events-none' : 'opacity-100'}`} role="toolbar" aria-label="Playback controls">
                         <Button 
                             variant="ghost" 

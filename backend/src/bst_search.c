@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "../include/logger.h"
 
+#define MAX_NODES 500
+
 // Binary Search Tree Search
 // Visualization: Tree Structure
 // We use "TreeStructure" for the nodes.

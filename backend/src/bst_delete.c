@@ -3,7 +3,7 @@
 #include <string.h>
 #include "../include/logger.h"
 
-#define MAX_NODES 100
+#define MAX_NODES 500
 
 typedef struct Node {
     int data;
@@ -164,6 +164,23 @@ int main(int argc, char* argv[]) {
         int delDefaults[] = {20, 30, 50};
         delCount = 3;
         for(int i = 0; i < delCount; i++) deleteVals[i] = delDefaults[i];
+    }
+    
+    // Validate input size
+    if (n > 20) {
+        log_step_start();
+        log_message("❌ Error: Too many values! Maximum 20 values allowed for clear visualization");
+        log_step_end();
+        log_finish();
+        return 1;
+    }
+    
+    if (delCount > 10) {
+        log_step_start();
+        log_message("❌ Error: Too many deletions! Maximum 10 deletions allowed");
+        log_step_end();
+        log_finish();
+        return 1;
     }
     
     logTreeState(NULL, "Building BST...");
