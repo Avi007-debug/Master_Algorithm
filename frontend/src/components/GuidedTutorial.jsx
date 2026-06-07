@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './ui/common';
-import { BookOpen, CheckCircle, Circle, ArrowRight, ArrowLeft, X } from 'lucide-react';
+import { BookOpen, CheckCircle, Circle, ArrowRight, ArrowLeft, X, Maximize2, Minimize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Tutorial steps for each algorithm
@@ -843,6 +843,7 @@ export function GuidedTutorial({ algorithm, onClose, onAction }) {
     const [currentStep, setCurrentStep] = useState(0);
     const [completedSteps, setCompletedSteps] = useState(new Set());
     const [showCheckpoint, setShowCheckpoint] = useState(false);
+    const [isMaximized, setIsMaximized] = useState(false);
     const [theme, setTheme] = useState(() => {
         if (typeof window !== 'undefined') {
             return document.documentElement.getAttribute('data-theme') || 'dark';
@@ -911,7 +912,11 @@ export function GuidedTutorial({ algorithm, onClose, onAction }) {
                     initial={{ scale: 0.9, y: 20 }}
                     animate={{ scale: 1, y: 0 }}
                     exit={{ scale: 0.9, y: 20 }}
-                    className={`max-w-2xl w-full mx-4 rounded-2xl shadow-2xl ${
+                    className={`w-full transition-all duration-300 rounded-2xl shadow-2xl flex flex-col ${
+                        isMaximized 
+                            ? 'max-w-[95vw] h-[90vh] mx-4' 
+                            : 'max-w-2xl mx-4'
+                    } ${
                         isDark ? 'bg-[var(--color-bg-secondary)]' : 'bg-white'
                     } border border-[var(--color-border)]`}
                 >
@@ -923,13 +928,23 @@ export function GuidedTutorial({ algorithm, onClose, onAction }) {
                                 {tutorial.title}
                             </h2>
                         </div>
-                        <button
-                            onClick={onClose}
-                            className="p-2 hover:bg-[var(--color-bg-tertiary)] rounded-lg transition-colors"
-                            aria-label="Close tutorial"
-                        >
-                            <X size={20} className="text-[var(--color-text-secondary)]" />
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setIsMaximized(!isMaximized)}
+                                className="p-2 hover:bg-[var(--color-bg-tertiary)] rounded-lg transition-colors"
+                                title={isMaximized ? "Restore size" : "Maximize window"}
+                                aria-label={isMaximized ? "Restore size" : "Maximize window"}
+                            >
+                                {isMaximized ? <Minimize2 size={20} className="text-[var(--color-text-secondary)]" /> : <Maximize2 size={20} className="text-[var(--color-text-secondary)]" />}
+                            </button>
+                            <button
+                                onClick={onClose}
+                                className="p-2 hover:bg-[var(--color-bg-tertiary)] rounded-lg transition-colors"
+                                aria-label="Close tutorial"
+                            >
+                                <X size={20} className="text-[var(--color-text-secondary)]" />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Progress Bar */}
@@ -950,7 +965,7 @@ export function GuidedTutorial({ algorithm, onClose, onAction }) {
                     </div>
 
                     {/* Content */}
-                    <div className="p-6">
+                    <div className="p-6 flex-1 overflow-y-auto">
                         <motion.div
                             key={currentStep}
                             initial={{ opacity: 0, x: 20 }}
