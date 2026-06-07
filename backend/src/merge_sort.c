@@ -41,6 +41,12 @@ void merge(int arr[], int l, int m, int r, int n_total) {
         log_message(msg);
         log_step_end();
 
+                /* DAA Analysis: Basic Operation (Comparison)
+         * The comparison "L[i] <= R[j]" is the basic operation of Merge Sort.
+         * The recursion follows the relation T(n) = 2T(n/2) + f(n), where f(n) = O(n) is the merge step.
+         * By Master Theorem, the time complexity is Θ(n log n) in all cases (best, average, worst).
+         * Space complexity is O(n) due to auxiliary temporary arrays L and R.
+         */
         if (L[i] <= R[j]) {
             arr[k] = L[i];
             i++;

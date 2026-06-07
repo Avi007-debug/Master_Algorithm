@@ -31,6 +31,12 @@ int partition(int arr[], int low, int high, int n) {
         log_message(msg);
         log_step_end();
 
+                /* DAA Analysis: Basic Operation (Comparison)
+         * The comparison "arr[j] < pivot" is the basic operation of Quick Sort.
+         * Best Case (Balanced Partitions): T(n) = 2T(n/2) + cn, yielding O(n log n).
+         * Worst Case (Skewed Partitions): T(n) = T(n-1) + cn, yielding O(n²) when array is already sorted.
+         * Average Case complexity is Θ(n log n) with a small hidden constant.
+         */
         if (arr[j] < pivot) {
             i++;    // increment index of smaller element
             swap(&arr[i], &arr[j]);

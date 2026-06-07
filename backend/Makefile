@@ -14,7 +14,12 @@ ALGORITHMS = two_sum three_sum valid-parentheses reverse_linked_list binary_sear
 	heap_construction heap_sort priority_queue \
 	avl_tree trie threaded_binary_tree b_plus_tree splay_tree \
 	adjacency_matrix adjacency_list \
-	open_hashing closed_hashing_linear closed_hashing_quadratic closed_hashing_double
+	open_hashing closed_hashing_linear closed_hashing_quadratic closed_hashing_double \
+	long_integer_multiplication strassen_matrix_multiplication topological_sort presorting heapify problem_reduction \
+	naive_string_matching horspool_algorithm boyer_moore_algorithm binomial_coefficient warshall_algorithm floyd_algorithm \
+	knapsack_01 memoization prim_algorithm dijkstra_algorithm huffman_coding fractional_knapsack \
+	sum_of_subsets tsp assignment_problem decision_trees_sorting comparison_trees lower_bound_sorting \
+	non_deterministic_algorithms class_p class_np np_complete np_hard polynomial_time_reduction
 
 # Default target
 all: $(ALGORITHMS)

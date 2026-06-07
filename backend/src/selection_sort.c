@@ -41,6 +41,12 @@ void selectionSort(int arr[], int n) {
             log_message(msg);
             log_step_end();
 
+                        /* DAA Analysis: Basic Operation (Comparison)
+             * The comparison "arr[j] < arr[min_idx]" is the basic operation of Selection Sort.
+             * The inner loop runs n - i - 1 times for each outer step. The total operations count is:
+             * C(n) = ∑(i=0 to n-2) (n - i - 1) = n * (n - 1) / 2 comparisons.
+             * This count is invariant of the input structure (always O(n²) in all cases: best, worst, average).
+             */
             if (arr[j] < arr[min_idx]) {
                 min_idx = j;
                 

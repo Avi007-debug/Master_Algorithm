@@ -23,6 +23,14 @@ void DFS(int graph[MAX_VERTICES][MAX_VERTICES], int visited[MAX_VERTICES],
     
     // Explore all adjacent vertices
     for (int i = 0; i < n; i++) {
+                /* DAA Analysis: Basic Operation (Vertex check and Edge exploration)
+         * The check "graph[vertex][i] == 1 && !visited[i]" is the basic operation.
+         * For a graph with V vertices and E edges:
+         * - DFS function is called recursively exactly once for each reachable vertex.
+         * - For each vertex, we iterate V times to check neighbors.
+         * Total time complexity is Θ(V²) when using an adjacency matrix, or Θ(V + E) when using an adjacency list.
+         * Space complexity is O(V) due to the recursion stack depth.
+         */
         if (graph[vertex][i] == 1 && !visited[i]) {
             log_step_start();
             log_array("Visited", visited, n);

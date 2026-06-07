@@ -54,6 +54,11 @@ int main(int argc, char* argv[]) {
             log_message(msg);
             log_step_end();
 
+                        /* DAA Analysis: Basic Operation (Comparison)
+             * The comparison "nums[j] > nums[j+1]" is the basic operation of Bubble Sort.
+             * It is executed (n - 1) + (n - 2) + ... + 1 = n * (n - 1) / 2 times in the worst and average cases.
+             * This yields a quadratic frequency count of O(n²), making the algorithm inefficient for large inputs.
+             */
             if (nums[j] > nums[j+1]) {
                 swap(&nums[j], &nums[j+1]);
 

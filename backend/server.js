@@ -74,7 +74,10 @@ app.post('/run/:algorithm', (req, res) => {
         return res.status(400).json({ error: validation.error });
     }
 
-    const executablePath = path.join(BUILD_DIR, algorithm);
+    let executablePath = path.join(BUILD_DIR, algorithm);
+    if (process.platform === 'win32') {
+        executablePath += '.exe';
+    }
 
     // Check if executable exists
     if (!fs.existsSync(executablePath)) {
@@ -88,7 +91,7 @@ app.post('/run/:algorithm', (req, res) => {
     const args = safeInputs.map(arg => `"${arg}"`).join(' ');
 
     // Execute the C program with timeout
-    const child = exec(`${executablePath} ${args}`, {
+    const child = exec(`"${executablePath}" ${args}`, {
         timeout: EXECUTION_TIMEOUT,
         maxBuffer: 1024 * 1024 // 1MB buffer
     }, (error, stdout, stderr) => {
@@ -126,7 +129,10 @@ app.get('/run/:algorithm', (req, res) => {
     }
 
 
-    const executablePath = path.join(BUILD_DIR, algorithm);
+    let executablePath = path.join(BUILD_DIR, algorithm);
+    if (process.platform === 'win32') {
+        executablePath += '.exe';
+    }
 
     // Check if executable exists
     if (!fs.existsSync(executablePath)) {
@@ -134,7 +140,7 @@ app.get('/run/:algorithm', (req, res) => {
     }
 
     // Execute the C program
-    exec(executablePath, (error, stdout, stderr) => {
+    exec(`"${executablePath}"`, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing ${algorithm}:`, error);
             return res.status(500).json({ error: "Execution failed", details: stderr });

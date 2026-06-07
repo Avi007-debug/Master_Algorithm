@@ -43,6 +43,12 @@ void solve(int row) {
         log_message(msg);
         log_step_end();
 
+                /* DAA Analysis: Basic Operation (Safety Checks and Placements)
+         * The safety check "isSafe(row, col)" is the basic operation.
+         * N-Queens is solved using Backtracking. The state space tree has size O(N!).
+         * In the worst case, we search a substantial portion of all permutations.
+         * The recursion stack depth is O(N) (one frame per row).
+         */
         if (isSafe(row, col)) {
             solve(row + 1);
             if(solutions > 0) return; // Stop after first solution for simplicity in visualization limit? 

@@ -26,6 +26,13 @@ void insertionSort(int arr[], int n) {
 
         /* Move elements of arr[0..i-1], that are greater than key,
            to one position ahead of their current position */
+                /* DAA Analysis: Basic Operation (Comparison)
+         * The comparison "arr[j] > key" is the basic operation of Insertion Sort.
+         * Worst case: reverse-sorted input, where comparisons run from 1 to i for each i:
+         * C_worst(n) = ∑(i=1 to n-1) i = n * (n - 1) / 2 = O(n²) comparisons.
+         * Best case: already sorted input, where outer key is compared only once per element:
+         * C_best(n) = n - 1 comparisons = O(n) linear complexity.
+         */
         while (j >= 0 && arr[j] > key) {
             log_step_start();
             log_array("Sort Array", arr, n);

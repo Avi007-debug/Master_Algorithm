@@ -76,6 +76,13 @@ int main(int argc, char* argv[]) {
         log_step_end();
 
         for(int i=0; i<NODES; i++) {
+                        /* DAA Analysis: Basic Operation (Vertex check and Edge exploration)
+             * The check "graph[curr][i] == 1 && !visited[i]" is the basic operation.
+             * For a graph with V vertices and E edges:
+             * - Each vertex is enqueued/dequeued exactly once.
+             * - Each entry in the adjacency matrix is scanned once per vertex.
+             * Total time complexity is Θ(V²) when using an adjacency matrix, or Θ(V + E) when using an adjacency list.
+             */
             if(graph[curr][i] == 1 && !visited[i]) {
                 visited[i] = 1;
                 enqueue(i);
