@@ -413,6 +413,30 @@ export function Dashboard({ onSelectProblem }) {
                                     </div>
                                 )}
 
+                                {/* Real-World Applications */}
+                                {problem.applications && (
+                                    <div className="mb-4">
+                                        <div className="flex items-center gap-1.5 mb-2">
+                                            <span className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-[var(--color-accent-pink)]' : 'text-pink-600'}`}>🌐 Real-World Uses</span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {problem.applications.split(',').slice(0, 2).map((app, i) => (
+                                                <span
+                                                    key={i}
+                                                    className={`text-[10px] px-2 py-0.5 rounded-full border font-medium leading-relaxed ${
+                                                        isDark
+                                                            ? 'bg-pink-500/5 text-pink-300/80 border-pink-500/15'
+                                                            : 'bg-pink-50 text-pink-700 border-pink-200'
+                                                    }`}
+                                                    title={app.trim()}
+                                                >
+                                                    {app.trim().length > 38 ? app.trim().slice(0, 38) + '…' : app.trim()}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className={`grid grid-cols-2 gap-2 mt-auto text-xs text-[var(--color-text-secondary)] font-mono ${isDark ? 'border-t border-[var(--color-border)]' : 'border-t border-[var(--color-border)]'} pt-4`}>
                                     <div className="flex items-center gap-1.5">
                                         <Clock size={14} />

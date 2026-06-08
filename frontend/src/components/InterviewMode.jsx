@@ -20,15 +20,17 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
 
     // Speed presets
     const SPEED_PRESETS = {
-        'Ultra Slow': 0.1,
-        'Slow': 0.5,
-        'Normal': 1,
-        'Fast': 2,
-        'Lightning': 5
+        '0.25x': 0.25,
+        '0.5x': 0.5,
+        '1x': 1,
+        '1.5x': 1.5,
+        '2x': 2,
+        '3x': 3
     };
     const [showFullCode, setShowFullCode] = useState(false);
     const [codeLanguage, setCodeLanguage] = useState('c'); // 'c', 'java', 'pseudo'
     const [showTutorial, setShowTutorial] = useState(false);
+    const [resolvedFullCode, setResolvedFullCode] = useState('');
     const [theme, setTheme] = useState(() => {
         if (typeof window !== 'undefined') {
             return document.documentElement.getAttribute('data-theme') || 'dark';
@@ -49,6 +51,41 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
         return () => observer.disconnect();
     }, []);
 
+    useEffect(() => {
+        let cancelled = false;
+
+        setShowFullCode(false);
+        setCodeLanguage('c');
+
+        const fullCode = problem?.fullCode || '';
+        const needsSourceFetch = /^\/\/ See .+implementation: .+\.c$/i.test(fullCode.trim());
+
+        if (!needsSourceFetch) {
+            setResolvedFullCode(fullCode);
+            return () => {
+                cancelled = true;
+            };
+        }
+
+        setResolvedFullCode('');
+
+        API.getAlgorithmSource(problem.id)
+            .then((source) => {
+                if (!cancelled) {
+                    setResolvedFullCode(source);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setResolvedFullCode(fullCode);
+                }
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [problem.id, problem.fullCode]);
+
     const isDark = theme === 'dark';
 
     // Initialize inputs from default values
@@ -65,6 +102,11 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
             handleRun({});
         }
     }, [problem.id]);
+
+    const speedOptions = Object.entries(SPEED_PRESETS);
+    const sourceCode = resolvedFullCode || problem.fullCode || '// Complete implementation unavailable.';
+    const speedMin = 0.25;
+    const speedMax = 3;
 
     useEffect(() => {
         if (isPlaying && !isLoading && !error && logs.length > 0) {
@@ -373,7 +415,7 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                                 <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-border)] font-mono text-xs overflow-auto leading-relaxed max-h-48">
                                     <pre className="whitespace-pre text-[var(--color-text-primary)]">{problem.codeSnippet || "// C Code coming soon..."}</pre>
                                 </div>
-                                {problem.fullCode && (
+                                {sourceCode && (
                                     <div className="space-y-2">
                                         <button
                                             onClick={() => setShowFullCode(!showFullCode)}
@@ -385,7 +427,7 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                                         </button>
                                         {showFullCode && (
                                             <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-accent-primary)]/30 font-mono text-xs overflow-auto leading-relaxed max-h-96">
-                                                <pre className="whitespace-pre text-[var(--color-text-primary)]">{problem.fullCode}</pre>
+                                                <pre className="whitespace-pre text-[var(--color-text-primary)]">{sourceCode}</pre>
                                             </div>
                                         )}
                                     </div>
@@ -924,12 +966,12 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                                     Speed: {speed}x
                                 </label>
                             </div>
-                            <div className="flex gap-1">
-                                {Object.entries(SPEED_PRESETS).map(([label, value]) => (
+                            <div className="flex flex-wrap justify-end gap-1">
+                                {speedOptions.map(([label, value]) => (
                                     <button
                                         key={label}
                                         onClick={() => setSpeed(value)}
-                                        className={`px-2 py-1 text-[10px] rounded transition-colors ${
+                                        className={`min-w-14 px-2 py-1 text-[10px] rounded transition-colors ${
                                             speed === value
                                                 ? 'bg-[var(--color-accent-primary)] text-white'
                                                 : 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)]/80'
@@ -937,7 +979,7 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                                         title={label}
                                         aria-label={`Set speed to ${label}`}
                                     >
-                                        {label === 'Ultra Slow' ? '≡ƒÉî' : label === 'Slow' ? '≡ƒÜ╢' : label === 'Normal' ? '≡ƒÅâ' : label === 'Fast' ? '≡ƒÅÄ∩╕Å' : 'ΓÜí'}
+                                        {label}
                                     </button>
                                 ))}
                             </div>
@@ -945,17 +987,17 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                         <input
                             id="speed-slider"
                             type="range"
-                            min="0.1"
-                            max="5"
-                            step="0.1"
+                            min={speedMin}
+                            max={speedMax}
+                            step="0.25"
                             value={speed}
                             onChange={(e) => setSpeed(parseFloat(e.target.value))}
                             className="w-full h-2 bg-[var(--color-bg-tertiary)] rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-primary)]"
                             style={{
-                                background: `linear-gradient(to right, var(--color-accent-primary) 0%, var(--color-accent-primary) ${((speed - 0.1) / 4.9) * 100}%, var(--color-bg-tertiary) ${((speed - 0.1) / 4.9) * 100}%, var(--color-bg-tertiary) 100%)`
+                                background: `linear-gradient(to right, var(--color-accent-primary) 0%, var(--color-accent-primary) ${((speed - speedMin) / (speedMax - speedMin)) * 100}%, var(--color-bg-tertiary) ${((speed - speedMin) / (speedMax - speedMin)) * 100}%, var(--color-bg-tertiary) 100%)`
                             }}
-                            aria-valuemin="0.1"
-                            aria-valuemax="5"
+                            aria-valuemin={speedMin}
+                            aria-valuemax={speedMax}
                             aria-valuenow={speed}
                             aria-valuetext={`${speed} times speed`}
                         />
@@ -963,8 +1005,8 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
 
                     {/* Keyboard Shortcuts Hint */}
                     <div className="absolute bottom-2 right-4 text-[10px] text-[var(--color-text-tertiary)] flex gap-3">
-                        <span title="Press Space or Enter to play/pause">Γî¿∩╕Å Space/Enter: Play/Pause</span>
-                        <span title="Use arrow keys to navigate">ΓåÉΓåÆ: Step</span>
+                        <span title="Press Space or Enter to play/pause">Space/Enter: Play/Pause</span>
+                        <span title="Use arrow keys to navigate">Arrow keys: Step</span>
                         <span title="Press Ctrl/Cmd + T for tutorial">Ctrl+T: Tutorial</span>
                     </div>
                 </footer>

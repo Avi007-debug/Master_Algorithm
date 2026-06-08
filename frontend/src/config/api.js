@@ -9,6 +9,7 @@ export const API = {
   endpoints: {
     runAlgorithm: (algorithm) => `${API_BASE_URL}/run/${algorithm}`,
     getAlgorithms: () => `${API_BASE_URL}/api/algorithms`,
+    getAlgorithmSource: (algorithm) => `${API_BASE_URL}/api/source/${algorithm}`,
     health: () => `${API_BASE_URL}/health`,
   },
   
@@ -33,6 +34,15 @@ export const API = {
       throw new Error('Failed to fetch algorithms');
     }
     return response.json();
+  },
+
+  async getAlgorithmSource(algorithm) {
+    const response = await fetch(this.endpoints.getAlgorithmSource(algorithm));
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '');
+      throw new Error(errorText || `Failed to fetch source: ${response.statusText}`);
+    }
+    return response.text();
   },
   
   async checkHealth() {

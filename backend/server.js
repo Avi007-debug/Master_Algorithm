@@ -34,6 +34,24 @@ app.use(express.json({ limit: '10mb' }));
 
 // Path to the build directory where C executables are located
 const BUILD_DIR = path.join(__dirname, 'build');
+const SOURCE_DIR = path.join(__dirname, 'src');
+
+function resolveSourceFile(algorithm) {
+    const candidates = Array.from(new Set([
+        `${algorithm}.c`,
+        `${algorithm.replace(/-/g, '_')}.c`,
+        `${algorithm.replace(/_/g, '-')}.c`
+    ]));
+
+    for (const candidate of candidates) {
+        const filePath = path.join(SOURCE_DIR, candidate);
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+            return filePath;
+        }
+    }
+
+    return null;
+}
 
 // Input validation helper
 function validateInputs(inputs) {
@@ -186,6 +204,27 @@ app.get('/api/algorithms', (req, res) => {
         });
         
         res.json({ algorithms });
+    });
+});
+
+app.get('/api/source/:algorithm', (req, res) => {
+    const algorithm = req.params.algorithm;
+
+    if (!/^[a-z0-9_-]+$/i.test(algorithm)) {
+        return res.status(400).json({ error: 'Invalid algorithm name' });
+    }
+
+    const sourcePath = resolveSourceFile(algorithm);
+    if (!sourcePath) {
+        return res.status(404).json({ error: `Source for '${algorithm}' not found.` });
+    }
+
+    fs.readFile(sourcePath, 'utf8', (error, source) => {
+        if (error) {
+            return res.status(500).json({ error: 'Failed to read algorithm source' });
+        }
+
+        res.type('text/plain').send(source);
     });
 });
 

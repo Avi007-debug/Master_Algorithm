@@ -94,6 +94,7 @@ int main() {
             { name: "nums", label: "Array to Sort", type: "array", defaultValue: "29, 10, 14, 37, 14, 5, 12, 20" }
         ],
         runCommand: 'bubble_sort',
+        applications: "Network packet ordering, educational teaching of sorting concepts, detecting nearly-sorted data, simple embedded systems with tiny datasets, poker card hand sorting in simple card games.",
         commonMistakes: [
             "Forgetting to use n-i-1 in the inner loop (causes out of bounds access)",
             "Not implementing the swap function correctly (using = instead of swapping)",
@@ -185,6 +186,7 @@ int main() {
             { name: "nums", label: "Array to Sort", type: "array", defaultValue: "64, 25, 12, 22, 11" }
         ],
         runCommand: 'selection_sort',
+        applications: "Memory-constrained embedded systems (minimizes write operations), playlist ordering in media players, sorting small datasets in microcontrollers, arranging priority queues when swaps are costly.",
         commonMistakes: [
             "Forgetting to check if min_idx != i before swapping (unnecessary swaps)",
             "Not updating min_idx correctly in the inner loop",
@@ -272,6 +274,7 @@ int main() {
             { name: "nums", label: "Array to Sort", type: "array", defaultValue: "12, 11, 13, 5, 6" }
         ],
         runCommand: 'insertion_sort',
+        applications: "Online card sorting (adding one card at a time), real-time data insertion in sorted databases, sorting small arrays in hybrid sorting (Timsort uses it for small runs), maintaining sorted order in phone contact lists as entries are added.",
         commonMistakes: [
             "Forgetting to store arr[i] in key variable before shifting",
             "Not checking j >= 0 in while condition (array out of bounds)",
@@ -403,6 +406,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "External sorting of large files that don't fit in RAM (databases, log files), sorting linked lists (preferred over quicksort), inversion count in arrays, merge operations in distributed systems like MapReduce, Git merge operations.",
         inputs: [
             { name: "nums", label: "Array to Sort", type: "array", defaultValue: "12, 11, 13, 5, 6, 7" }
         ],
@@ -509,6 +513,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "General-purpose sorting in C standard library (qsort), Java Arrays.sort for primitives, database query optimizers (ORDER BY), virtual memory management in OS, commercial sorting benchmarks.",
         inputs: [
             { name: "nums", label: "Array to Sort", type: "array", defaultValue: "10, 7, 8, 9, 1, 5" }
         ],
@@ -600,6 +605,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Cryptographic applications requiring unpredictability, anti-adversarial sorting defenses, security-sensitive data processing, probabilistically balanced data partitioning in distributed systems.",
         inputs: [
             { name: "nums", label: "Array to Sort", type: "array", defaultValue: "10, 7, 8, 9, 1, 5" }
         ],
@@ -691,6 +697,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Sorting student grades (0-100 scale), pixel value sorting in image processing, radix sort subroutine, sorting election votes, character frequency analysis in text compression.",
         inputs: [
             { name: "nums", label: "Array to Sort", type: "array", defaultValue: "4, 2, 2, 8, 3, 3, 1" }
         ],
@@ -790,6 +797,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Sorting phone numbers and postal codes, MAC address sorting in networking, suffix array construction for text indexing, GPU-based parallel sorting, genomic data sorting by base-pair sequences.",
         inputs: [
             { name: "nums", label: "Array to Sort", type: "array", defaultValue: "170, 45, 75, 90, 802, 24, 2, 66" }
         ],
@@ -877,6 +885,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Dictionary word lookup, searching records in sorted databases (SQL BETWEEN queries), library catalog search, game cheats detection in leaderboards, finding insertion points in sorted arrays.",
         inputs: [
             { name: "target", label: "Target Value", type: "number", defaultValue: "8" },
             { name: "nums", label: "Sorted Array", type: "array", defaultValue: "2, 5, 8, 12, 16, 23, 38, 56, 72, 91" }
@@ -956,6 +965,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Financial fraud detection (finding suspicious transaction pairs), cryptocurrency arbitrage detection, chemistry molecular bond pairing analysis, recommendation systems finding complementary item pairs.",
         inputs: [
             { name: "target", label: "Target Sum", type: "number", defaultValue: "9" },
             { name: "nums", label: "Input Array (comma separated)", type: "array", defaultValue: "2, 7, 11, 15" }
@@ -1084,6 +1094,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Finding balanced chemical reactions with three reactants, portfolio rebalancing with three assets, 3D triangle validation in computational geometry, social network friend triangle detection.",
         inputs: [
             { name: "nums", label: "Input Array", type: "array", defaultValue: "-1, 0, 1, 2, -1, -4" }
         ],
@@ -1206,6 +1217,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Syntax validation in compilers and IDEs (Java, Python, C++), HTML/XML tag matching in web browsers, LaTeX document structure validation, mathematical expression evaluators, linter tools in code editors.",
         inputs: [
             { name: "s", label: "Input String", type: "text", defaultValue: "()[]{}" }
         ],
@@ -1318,6 +1330,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Undo/redo functionality in text editors, browser history back navigation, reversing audio/video streams, palindrome checking in linked lists, stack implementation using linked list reversal.",
         inputs: [
             { name: "values", label: "List Values (comma separated)", type: "array", defaultValue: "1, 2, 3, 4, 5" }
         ],
@@ -1423,6 +1436,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Database index lookup (B-tree variant), auto-complete in search engines, symbol table in compilers, phone directory lookup, IP routing tables in network routers.",
         inputs: [
             { name: "target", label: "Search Target", type: "number", defaultValue: "5" },
             { name: "tree", label: "BST (level-order)", type: "array", defaultValue: "4, 2, 6, 1, 3, 5, 7" }
@@ -1571,6 +1585,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Web crawler crawling pages level-by-level, social network friend suggestion (degree of separation), shortest path in unweighted graphs, XML/JSON tree parsing, printing organization hierarchy charts.",
         inputs: [
             { name: "nodes", label: "Tree Nodes (Level Order as Array, null for empty)", type: "array", defaultValue: "3, 9, 20, null, null, 15, 7" }
         ],
@@ -1671,6 +1686,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Password strength analysis, DNA sequence analysis for unique subsequences, network packet analysis for unique protocol sequences, plagiarism detection in documents, subtitle uniqueness checking.",
         inputs: [
             { name: "s", label: "Input String", type: "text", defaultValue: "abcabcbb" }
         ],
@@ -1786,6 +1802,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Shortest path in GPS/map navigation (unweighted roads), social network friend recommendation (degrees of separation), web crawlers indexing websites, peer-to-peer network broadcasting, COVID-19 contact tracing.",
         inputs: [
             { name: "start_node", label: "Start Node (0-4)", type: "number", defaultValue: "0" }
         ],
@@ -1888,6 +1905,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Nature pattern modeling (flower petals, spiral shells), financial market prediction models, stock market technical analysis (Fibonacci retracement levels), algorithm efficiency benchmarking, recursive algorithm memoization demonstration.",
         inputs: [
             { name: "n", label: "Nth Number", type: "number", defaultValue: "7" }
         ],
@@ -2020,6 +2038,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Constraint satisfaction problems in AI, scheduling problems with mutual exclusion, VLSI chip design (component placement), network topology design, parallel test execution without resource conflicts.",
         inputs: [
             { name: "n", label: "Grid Size (N)", type: "number", defaultValue: "4" }
         ],
@@ -2103,6 +2122,7 @@ int main() {
     printf("Popped: %d\\n", pop());
     return 0;
 }`,
+        applications: "Function call management in OS (call stack), undo/redo in text editors like VS Code, expression parsing in compilers, backtracking in maze solvers, browser forward/back navigation, Java Virtual Machine stack frame management.",
         inputs: [
             { name: "nums", label: "Push Elements", type: "array", defaultValue: "1, 2, 3, 4" }
         ],
@@ -2180,6 +2200,7 @@ int main() {
     printf("Dequeued: %d\\n", dequeue());
     return 0;
 }`,
+        applications: "CPU process scheduling (FIFO scheduling), printer job spooling, keyboard input buffering, network packet buffering in routers, customer service ticketing systems, BFS graph traversal.",
         inputs: [
             { name: "nums", label: "Enqueue Elements", type: "array", defaultValue: "1, 2, 3, 4" }
         ],
@@ -2270,6 +2291,7 @@ int main() {
     display();
     return 0;
 }`,
+        applications: "Browser history (forward/back navigation), music playlists with prev/next controls, LRU cache implementation, text editor undo/redo with multiple history levels, image viewer previous/next navigation.",
         inputs: [
             { name: "nums", label: "List Elements", type: "array", defaultValue: "10, 20, 30, 40" }
         ],
@@ -2363,6 +2385,7 @@ int main() {
     printf("Deleted from front: %d\n", deleteFront());
     return 0;
 }`,
+        applications: "Sliding window maximum/minimum (used in stock price analysis), A* pathfinding algorithm (priority queue), palindrome detection, task scheduling with bidirectional priorities, undo/redo with multi-level stack history.",
         inputs: [
             { name: "nums", label: "Elements", type: "array", defaultValue: "5, 10, 15, 20" }
         ],
@@ -2429,6 +2452,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Combinatorics calculations (permutations, combinations), probability theory (binomial distribution), cryptography (modular arithmetic), number theory proofs, statistics (permutation counting).",
         inputs: [
             { name: "n", label: "N", type: "number", defaultValue: "5" }
         ],
@@ -2498,6 +2522,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Demonstrating exponential time complexity, studying memoization need, financial growth models (compound interest), biological cell division modeling, algorithm recursion teaching.",
         inputs: [
             { name: "n", label: "N", type: "number", defaultValue: "6" }
         ],
@@ -2571,6 +2596,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Demonstrating recursion and divide-and-conquer strategy, backup storage migration (hierarchical disk-to-disk transfers), Bayan (disk reorganization software), explaining call stack to students, parallel computing work distribution.",
         inputs: [
             { name: "n", label: "Number of Disks", type: "number", defaultValue: "3" }
         ],
@@ -2653,6 +2679,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Extracting sorted data from BST (O(n)), expression tree evaluation (infix order), syntax tree serialization in compilers, database tree index traversal, generating sorted output from balanced BST.",
         inputs: [
             { name: "tree", label: "Tree (level-order)", type: "array", defaultValue: "4, 2, 6, 1, 3, 5, 7" }
         ],
@@ -2735,6 +2762,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Tree copying/cloning, generating prefix notation for expression trees, prefix serialization of file system directory trees, network packet header processing, XML/HTML document tree copying.",
         inputs: [
             { name: "tree", label: "Tree (level-order)", type: "array", defaultValue: "4, 2, 6, 1, 3, 5, 7" }
         ],
@@ -2817,6 +2845,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Safe tree deletion (children before parents), postfix expression generation from expression trees, directory size calculation (leaf nodes first), dependency-safe package uninstallation, garbage collection in memory management.",
         inputs: [
             { name: "tree", label: "Tree (level-order)", type: "array", defaultValue: "4, 2, 6, 1, 3, 5, 7" }
         ],
@@ -2902,6 +2931,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "Topological sorting in build systems (Make, Gradle), cycle detection in dependency graphs, maze solving, connected component finding, finding strongly connected components (Tarjan's algorithm), web crawling.",
         inputs: [
             { name: "start", label: "Start Vertex", type: "number", defaultValue: "0" }
         ],
@@ -3007,6 +3037,7 @@ int main() {
     
     return 0;
 }`,
+        applications: "OS keyboard input buffer, audio/video streaming buffers, network I/O packet buffering, IoT sensor data collection, multi-player game server event queues, printer spooler with fixed buffer.",
         inputs: [
             { name: "operations", label: "Operations (E10,E20,D,E30)", type: "string", defaultValue: "E10,E20,E30,D,D,E40,E50" }
         ],
@@ -3062,6 +3093,7 @@ for(int i = 0; infix[i]; i++) {
         push(&s, infix[i]);
     }
 }`,
+        applications: "Compiler expression parsing (intermediate code generation), scientific calculators, spreadsheet formula evaluation, programming language interpreters, database query expression trees.",
         inputs: [
             { name: "expression", label: "Infix Expression", type: "string", defaultValue: "A+B*C-D/E" }
         ],
@@ -3116,6 +3148,7 @@ infixToPostfix(infix, postfix);
 // Step 4: Reverse to get prefix
 reverseString(postfix);
 strcpy(prefix, postfix);`,
+        applications: "LISP programming language (uses prefix notation natively), functional programming interpreters, tree-based expression evaluation from left, XML/HTML parser optimization, functional calculator implementations.",
         inputs: [
             { name: "expression", label: "Infix Expression", type: "string", defaultValue: "A+B*C-D/E" }
         ],
@@ -3167,6 +3200,7 @@ for(int i=0; postfix[i]; i++) {
     }
 }
 return pop(&s);`,
+        applications: "Scientific calculator firmware, spreadsheet formula evaluation, Reverse Polish Notation (RPN) calculators (HP calculators use this), compiler backend code generation, stack machine virtual machines (JVM bytecode).",
         inputs: [
             { name: "expression", label: "Postfix Expression", type: "string", defaultValue: "53+82-*" }
         ],
@@ -3218,6 +3252,7 @@ void dequeue(MessageQueue* q) {
     q->front = (q->front + 1) % MAX;
     q->size--;
 }`,
+        applications: "WhatsApp/Telegram message delivery systems, RabbitMQ and Apache Kafka messaging platforms, email server queuing, IoT device command queues, microservice event-driven architecture.",
         inputs: [
             { name: "operations", label: "Operations (auto)", type: "string", defaultValue: "auto" }
         ],
@@ -3269,6 +3304,7 @@ void insertAtPosition(Node** head, int data, int pos) {
         temp->next = newNode;
     }
 }`,
+        applications: "Dynamic memory allocation (OS heap management), implementing stacks/queues, file system directory listings, adjacency list for sparse graph representation, undo/redo operation chains.",
         inputs: [
             { name: "operations", label: "Operations (auto)", type: "string", defaultValue: "auto" }
         ],
@@ -3318,6 +3354,7 @@ void insertAtPosition(Node** head, int data, int pos) {
         newNode->next = *head; // Complete circle
     }
 }`,
+        applications: "Round-robin CPU process scheduling, multiplayer turn-based game logic, token ring network protocol, circular buffer in audio streaming, josephus problem modeling.",
         inputs: [
             { name: "values", label: "Values (comma-separated)", type: "string", defaultValue: "10,20,30,40" }
         ],
@@ -3366,6 +3403,7 @@ void insertAtPosition(Node** head, int data, int pos) {
         (*head)->prev = newNode;
     }
 }`,
+        applications: "Advanced LRU cache with O(1) insert/delete, navigation systems with bidirectional circular maps, multi-player game circular turn management, operating system task scheduler with wrap-around.",
         inputs: [
             { name: "values", label: "Values (comma-separated)", type: "string", defaultValue: "10,20,30,40" }
         ],
@@ -3420,6 +3458,7 @@ Node* multiply(Node* p1, Node* p2) {
     }
     return result;
 }`,
+        applications: "Computer algebra systems (Mathematica, Maple), signal processing (convolution), digital signal processing filters, physics simulation (multipole expansions), numerical analysis algorithms.",
         inputs: [
             { name: "poly1", label: "Polynomial 1 (auto)", type: "string", defaultValue: "3x^2+5x+2" },
             { name: "poly2", label: "Polynomial 2 (auto)", type: "string", defaultValue: "4x+1" }
@@ -3468,6 +3507,7 @@ Node* add(Node* num1, Node* num2) {
     }
     return result;
 }`,
+        applications: "Arbitrary precision arithmetic libraries (Python's int, Java's BigInteger), blockchain mining reward calculations, RSA public key cryptography (large prime multiplication), scientific computing with very large numbers.",
         inputs: [
             { name: "num1", label: "Number 1", type: "string", defaultValue: "123456789" },
             { name: "num2", label: "Number 2", type: "string", defaultValue: "987654321" }
@@ -3516,6 +3556,7 @@ Node* add(Node* num1, Node* num2) {
     
     return root;
 }`,
+        applications: "Symbol table in compilers (variable/function name lookup), ordered set/map in C++ STL, IP routing table construction, spell-checker dictionaries, database indexing (clustered index).",
         inputs: [
             { name: "values", label: "Values to insert", type: "string", defaultValue: "50,30,70,20,40,60,80" }
         ],
@@ -3572,6 +3613,7 @@ Node* add(Node* num1, Node* num2) {
     }
     return root;
 }`,
+        applications: "File system node removal (file/directory deletion), removing records from sorted database index, game entity despawning, removing expired cache entries, contact book deletion with maintaining order.",
         inputs: [
             { name: "delete_key", label: "Key to delete", type: "number", defaultValue: "50" }
         ],
@@ -3626,6 +3668,7 @@ int evaluate(Node* root) {
     int R = evaluate(root->right);
     return apply(root->value, L, R);
 }`,
+        applications: "Compiler intermediate code generation, mathematical expression optimization (CAS), spreadsheet formula parsing, abstract syntax tree (AST) in programming languages, symbolic differentiation engines.",
         inputs: [
             { name: "postfix", label: "Postfix Expression", type: "string", defaultValue: "ab+cd-*" }
         ],
@@ -3681,6 +3724,7 @@ void buildHeap(int arr[], int n) {
         heapify(arr, n, i);
     }
 }`,
+        applications: "Operating system job scheduling (priority-based scheduling), Dijkstra's shortest path algorithm, Prim's MST algorithm, median finding in streams, K-way merge of sorted lists.",
         inputs: [
             { name: "array", label: "Array to heapify", type: "string", defaultValue: "4,10,3,5,1,15,20" }
         ],
@@ -3725,6 +3769,7 @@ void buildHeap(int arr[], int n) {
         heapify(arr, i, 0);
     }
 }`,
+        applications: "Real-time stock market data analysis, external memory sorting (where memory is limited), network bandwidth allocation, priority-based interrupt handling in embedded systems.",
         inputs: [
             { name: "array", label: "Array to sort", type: "string", defaultValue: "12,11,13,5,6,7" }
         ],
@@ -3779,6 +3824,7 @@ void insert(PQ* pq, int data, int priority) {
         } else break;
     }
 }`,
+        applications: "Dijkstra's shortest path algorithm (extracts minimum distance node), A* pathfinding in robotics and games, Huffman encoding (extracts minimum frequency), hospital emergency room triage systems, OS process scheduling.",
         inputs: [
             { name: "operations", label: "Operations (auto)", type: "string", defaultValue: "auto" }
         ],
@@ -3849,6 +3895,7 @@ Node* insert(Node* root, int key) {
     }
     return root;
 }`,
+        applications: "Database index structures (PostgreSQL uses B-tree variant based on AVL principles), memory allocators, in-memory sorted dictionaries, financial transaction records with guaranteed O(log n) lookup.",
         inputs: [
             { name: "values", label: "Values to insert", type: "string", defaultValue: "10,20,30,40,50,25" }
         ],
@@ -3908,6 +3955,7 @@ int search(TrieNode* root, char* word) {
     }
     return curr->isEndOfWord;
 }`,
+        applications: "Google search autocomplete, IDE code autocompletion (IntelliSense), spell checkers in Microsoft Word, IP routing table longest-prefix matching, DNA sequence databases for genomic searches.",
         inputs: [
             { name: "words", label: "Words (auto)", type: "string", defaultValue: "hello,world,help,heap" }
         ],
@@ -3960,6 +4008,7 @@ void inorder(Node* root) {
         }
     }
 }`,
+        applications: "Stack-free inorder traversal in memory-constrained systems, embedded database traversal, iterative tree processing in real-time systems, SCADA systems with limited stack space.",
         inputs: [
             { name: "values", label: "Values (auto)", type: "string", defaultValue: "20,10,30,5,15,25,35" }
         ],
@@ -4013,6 +4062,7 @@ void insert(BPlusNode** root, int key) {
         insertNonFull(*root, key);
     }
 }`,
+        applications: "MySQL/PostgreSQL database primary indexes (InnoDB B+ tree), file system indexing (NTFS, ext4 journals), key-value stores in NoSQL databases, range queries in data warehouses, SAP HANA columnar storage indexes.",
         inputs: [
             { name: "values", label: "Values (auto)", type: "string", defaultValue: "10,20,5,6,12,30" }
         ],
@@ -4069,6 +4119,7 @@ void insert(BPlusNode** root, int key) {
         // Similar for right subtree (Zig-Zag, Zig-Zig)
     }
 }`,
+        applications: "Cache-efficient symbol tables in compilers (recently accessed symbols accessed faster), Windows kernel virtual memory manager, GCC's memory management, network routing table with temporal locality.",
         inputs: [
             { name: "values", label: "Values (auto)", type: "string", defaultValue: "10,20,30,40,50" }
         ],
@@ -4122,6 +4173,7 @@ for(int i=0; i<V; i++) {
     }
     printf("\\n");
 }`,
+        applications: "Dense network representations (airline route maps, road intersections), Floyd-Warshall all-pairs shortest path, network connectivity matrix for social networks, electrical circuit conductance matrices.",
         inputs: [
             { name: "vertices", label: "Vertices (auto)", type: "number", defaultValue: "5" }
         ],
@@ -4183,6 +4235,7 @@ void display() {
         printf("\\n");
     }
 }`,
+        applications: "Sparse graph representation (internet topology, social networks with billions of nodes), BFS/DFS traversal, Dijkstra's SSSP algorithm, dependency graph for package managers (npm, pip).",
         inputs: [
             { name: "vertices", label: "Vertices (auto)", type: "number", defaultValue: "5" }
         ],
@@ -4244,6 +4297,7 @@ int search(int key) {
     }
     return -1;
 }`,
+        applications: "Database hash indexes for exact-match queries, Java HashMap/HashSet internal implementation, Python dictionary, symbol table in interpreters, caching systems (DNS cache, ARP cache).",
         inputs: [
             { name: "keys", label: "Keys (auto)", type: "string", defaultValue: "15,25,35,5,45" }
         ],
@@ -4300,6 +4354,7 @@ int search(int key) {
     }
     return -1;
 }`,
+        applications: "In-memory hash tables with fixed-size memory (embedded systems), CPU cache associativity simulation, hardware hash tables in network switches, memory-efficient lookup tables in game development.",
         inputs: [
             { name: "keys", label: "Keys (auto)", type: "string", defaultValue: "15,25,35,5,45" }
         ],
@@ -4346,6 +4401,7 @@ int search(int key) {
 // Quadratic probing sequence:
 // h(k), h(k)+1², h(k)+2², h(k)+3², ...
 // Example: 5 -> 5, 6, 9, 14, 21, ...`,
+        applications: "PostgreSQL hash index probing, in-memory key-value stores with bounded size (Redis), compiler symbol table with fixed allocation, operating system page table with secondary hash probing.",
         inputs: [
             { name: "keys", label: "Keys (auto)", type: "string", defaultValue: "15,25,35,5,45" }
         ],
@@ -4400,6 +4456,7 @@ void insert(int key) {
 
 // Probing sequence uses both hashes
 // Better distribution than linear/quadratic`,
+        applications: "Cryptographic hash functions (SHA-256 uses double hashing concept), distributed hash tables (DHT in BitTorrent), fingerprint matching systems, blockchain transaction ID lookup, secure hash collision mitigation.",
         inputs: [
             { name: "keys", label: "Keys (auto)", type: "string", defaultValue: "15,25,35,5,45,12" }
         ],
