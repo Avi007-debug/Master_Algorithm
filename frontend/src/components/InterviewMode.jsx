@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, Button } from './ui/common';
 import { VisualizerEngine } from './VisualizerEngine';
 import { Play, Pause, SkipBack, SkipForward, RefreshCw, ArrowLeft, Loader2, AlertCircle, Settings, Clock, Boxes, Code, ChevronDown, ChevronUp, Gauge, BookOpen, Award, Info, HelpCircle } from 'lucide-react';
@@ -28,7 +28,7 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
         '3x': 3
     };
     const [showFullCode, setShowFullCode] = useState(false);
-    const [codeLanguage, setCodeLanguage] = useState('c'); // 'c', 'java', 'pseudo'
+    const [codeLanguage, setCodeLanguage] = useState('c'); // 'c', 'pseudo'
     const [showTutorial, setShowTutorial] = useState(false);
     const [resolvedFullCode, setResolvedFullCode] = useState('');
     const [theme, setTheme] = useState(() => {
@@ -39,6 +39,38 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
     });
     const timerRef = useRef(null);
     const mainContentRef = useRef(null);
+
+    // Sidebar resize state and handlers
+    const [sidebarWidth, setSidebarWidth] = useState(380);
+    const isResizingRef = useRef(false);
+
+    const handleMouseDown = (e) => {
+        e.preventDefault();
+        isResizingRef.current = true;
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isResizingRef.current) return;
+        const newWidth = e.pageX;
+        if (newWidth > 280 && newWidth < 600) {
+            setSidebarWidth(newWidth);
+        }
+    };
+
+    const handleMouseUp = () => {
+        isResizingRef.current = false;
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    useEffect(() => {
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, []);
 
     // Form State
     const [inputValues, setInputValues] = useState({});
@@ -254,7 +286,7 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
             )}
 
             {/* Left Sidebar: Problem Info & Inputs */}
-            <aside className="w-1/4 h-full border-r border-[var(--color-border)] flex flex-col bg-[var(--color-bg-secondary)]" role="complementary" aria-label="Algorithm information and controls">
+            <aside className="h-full flex flex-col bg-[var(--color-bg-secondary)] flex-shrink-0" style={{ width: `${sidebarWidth}px` }} role="complementary" aria-label="Algorithm information and controls">
                 <div className="p-6 pb-4 border-b border-[var(--color-border)]">
                     <div className="flex items-center justify-between mb-4">
                         <Button 
@@ -397,12 +429,6 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                                 C Code
                             </button>
                             <button
-                                onClick={() => { setCodeLanguage('java'); setShowFullCode(false); }}
-                                className={`px-4 py-2 font-semibold border-b-2 transition-colors ${codeLanguage === 'java' ? 'border-[var(--color-accent-primary)] text-[var(--color-accent-primary)]' : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}
-                            >
-                                Java Code
-                            </button>
-                            <button
                                 onClick={() => { setCodeLanguage('pseudo'); setShowFullCode(false); }}
                                 className={`px-4 py-2 font-semibold border-b-2 transition-colors ${codeLanguage === 'pseudo' ? 'border-[var(--color-accent-primary)] text-[var(--color-accent-primary)]' : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}
                             >
@@ -428,31 +454,6 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                                         {showFullCode && (
                                             <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-accent-primary)]/30 font-mono text-xs overflow-auto leading-relaxed max-h-96">
                                                 <pre className="whitespace-pre text-[var(--color-text-primary)]">{sourceCode}</pre>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {codeLanguage === 'java' && (
-                            <div className="space-y-3">
-                                <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-border)] font-mono text-xs overflow-auto leading-relaxed max-h-48">
-                                    <pre className="whitespace-pre text-[var(--color-text-primary)]">{problem.javaSnippet || "// Java Code coming soon..."}</pre>
-                                </div>
-                                {problem.javaCode && (
-                                    <div className="space-y-2">
-                                        <button
-                                            onClick={() => setShowFullCode(!showFullCode)}
-                                            className="flex items-center gap-2 text-xs font-bold text-[var(--color-text-primary)] hover:text-[var(--color-accent-primary)] transition-colors w-full"
-                                        >
-                                            <Code size={14} className="text-[var(--color-accent-secondary)]" />
-                                            Complete Java Implementation
-                                            {showFullCode ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                                        </button>
-                                        {showFullCode && (
-                                            <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-accent-primary)]/30 font-mono text-xs overflow-auto leading-relaxed max-h-96">
-                                                <pre className="whitespace-pre text-[var(--color-text-primary)]">{problem.javaCode}</pre>
                                             </div>
                                         )}
                                     </div>
@@ -849,7 +850,19 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                             </ul>
                         </details>
                     </div>
-                </div></aside>
+                </div>
+            </aside>
+
+            {/* Resizer Handle */}
+            <div
+                onMouseDown={handleMouseDown}
+                className="w-[3px] hover:w-[6px] active:w-[6px] h-full cursor-col-resize bg-[var(--color-border)] hover:bg-[var(--color-accent-primary)] active:bg-[var(--color-accent-primary)] transition-all select-none z-30 flex-shrink-0"
+                role="separator"
+                aria-valuenow={sidebarWidth}
+                aria-valuemin={280}
+                aria-valuemax={600}
+                aria-label="Resize sidebar"
+            />
 
             {/* Main Area: Visualization */}
             <main className="flex-1 h-full flex flex-col relative bg-[var(--color-bg-primary)]">

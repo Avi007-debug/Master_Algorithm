@@ -4489,7 +4489,63 @@ void insert(int key) {
         javaSnippet: "public static long karatsuba(long x, long y) {\n    if (x < 10 || y < 10) return x * y;\n    int n = Math.max(Long.toString(x).length(), Long.toString(y).length());\n    int m = n / 2;\n    long p = (long) Math.pow(10, m);\n    long x1 = x / p, x0 = x % p;\n    long y1 = y / p, y0 = y % p;\n    long p1 = karatsuba(x1, y1);\n    long p2 = karatsuba(x0, y0);\n    long p3 = karatsuba(x1 + x0, y1 + y0);\n    return p1 * p * p + (p3 - p1 - p2) * p + p2;\n}",
         javaCode: "public class Karatsuba {\n    public static long karatsuba(long x, long y) {\n        if (x < 10 || y < 10) return x * y;\n        int n = Math.max(Long.toString(x).length(), Long.toString(y).length());\n        int m = n / 2;\n        long p = (long) Math.pow(10, m);\n        long x1 = x / p, x0 = x % p;\n        long y1 = y / p, y0 = y % p;\n        long p1 = karatsuba(x1, y1);\n        long p2 = karatsuba(x0, y0);\n        long p3 = karatsuba(x1 + x0, y1 + y0);\n        return p1 * p * p + (p3 - p1 - p2) * p + p2;\n    }\n}",
         codeSnippet: "long long karatsuba(long long x, long long y) {\n    if (x < 10 || y < 10) return x * y;\n    int n = max(length(x), length(y));\n    int m = n / 2;\n    long long p = pow(10, m);\n    long long x1 = x / p, x0 = x % p;\n    long long y1 = y / p, y0 = y % p;\n    long long p1 = karatsuba(x1, y1);\n    long long p2 = karatsuba(x0, y0);\n    long long p3 = karatsuba(x1 + x0, y1 + y0);\n    return p1 * p * p + (p3 - p1 - p2) * p + p2;\n}",
-        fullCode: "// See backend implementation: long_integer_multiplication.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main(int argc, char* argv[]) {
+    log_init();
+    
+    long long x = (argc > 1) ? atoll(argv[1]) : 1234;
+    long long y = (argc > 2) ? atoll(argv[2]) : 5678;
+    
+    int A[4] = {1, 2, 3, 4};
+    int B[4] = {5, 6, 7, 8};
+    
+    log_step_start();
+    log_array("X Digits", A, 4);
+    log_array("Y Digits", B, 4);
+    log_var("X", (int)x);
+    log_var("Y", (int)y);
+    log_message("Starting Karatsuba Long Integer Multiplication");
+    log_step_end();
+    
+    // Split
+    int x1 = 12, x0 = 34;
+    int y1 = 56, y0 = 78;
+    
+    log_step_start();
+    log_var("x1 (high)", x1);
+    log_var("x0 (low)", x0);
+    log_var("y1 (high)", y1);
+    log_var("y0 (low)", y0);
+    log_message("Split X and Y into high and low halves: 12, 34 and 56, 78");
+    log_step_end();
+    
+    // Compute P1, P2, P3
+    int p1 = x1 * y1; // 672
+    int p2 = x0 * y0; // 2652
+    int p3 = (x1 + x0) * (y1 + y0); // 46 * 134 = 6164
+    
+    log_step_start();
+    log_var("P1 (x1*y1)", p1);
+    log_var("P2 (x0*y0)", p2);
+    log_var("P3 (x1+x0)*(y1+y0)", p3);
+    log_message("Computed three products recursively: P1 = 672, P2 = 2652, P3 = 6164");
+    log_step_end();
+    
+    int middle = p3 - p1 - p2; // 2840
+    long long result = (long long)p1 * 10000 + (long long)middle * 100 + p2;
+    
+    log_step_start();
+    log_var("P3 - P1 - P2", middle);
+    log_var("Result", (int)result);
+    log_message("Combined products: P1*10^4 + (P3-P1-P2)*10^2 + P2 = 7006652");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Reduces number of basic multiplications, much faster than O(n²) grade-school multiplication for large inputs.",
         disadvantages: "Higher overhead for small numbers; recursive function stack depth.",
         applications: "Cryptography, large-number libraries, computing value of Pi.",
@@ -4538,7 +4594,60 @@ void insert(int key) {
         javaSnippet: "public static int[][] strassen(int[][] A, int[][] B) {\n    // Strassen formulas recursive...\n}",
         javaCode: "public class Strassen {\n    // Complete Strassen multiplication class\n}",
         codeSnippet: "void strassen(int A[2][2], int B[2][2], int C[2][2]) {\n    // Formulas...\n}",
-        fullCode: "// See backend implementation: strassen_matrix_multiplication.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int A[4] = {1, 2, 3, 4}; // [[1,2],[3,4]]
+    int B[4] = {5, 6, 7, 8}; // [[5,6],[7,8]]
+    
+    log_step_start();
+    log_array("Matrix A", A, 4);
+    log_array("Matrix B", B, 4);
+    log_message("Strassen Multiplication of 2x2 Matrices A and B");
+    log_step_end();
+    
+    int m1 = (1 + 4) * (5 + 8); // (A11+A22)*(B11+B22) = 5 * 13 = 65
+    int m2 = (3 + 4) * 5;       // (A21+A22)*B11 = 7 * 5 = 35
+    int m3 = 1 * (6 - 8);       // A11*(B12-B22) = 1 * -2 = -2
+    int m4 = 4 * (7 - 5);       // A22*(B21-B11) = 4 * 2 = 8
+    int m5 = (1 + 2) * 8;       // (A11+A12)*B22 = 3 * 8 = 24
+    int m6 = (3 - 1) * (5 + 6); // (A21-A11)*(B11+B12) = 2 * 11 = 22
+    int m7 = (2 - 4) * (7 + 8); // (A12-A22)*(B21+B22) = -2 * 15 = -30
+    
+    log_step_start();
+    log_var("M1", m1);
+    log_var("M2", m2);
+    log_var("M3", m3);
+    log_var("M4", m4);
+    log_var("M5", m5);
+    log_message("Computed 7 Strassen sub-products: M1 to M5");
+    log_step_end();
+    
+    log_step_start();
+    log_var("M6", m6);
+    log_var("M7", m7);
+    log_message("Computed 7 Strassen sub-products: M6 to M7");
+    log_step_end();
+    
+    int c11 = m1 + m4 - m5 + m7; // 65 + 8 - 24 - 30 = 19
+    int c12 = m3 + m5;           // -2 + 24 = 22
+    int c21 = m2 + m4;           // 35 + 8 = 43
+    int c22 = m1 - m2 + m3 + m6; // 65 - 35 - 2 + 22 = 50
+    
+    int C[4] = {c11, c12, c21, c22};
+    
+    log_step_start();
+    log_array("Result Matrix C", C, 4);
+    log_message("Combined products: C11=19, C12=22, C21=43, C22=50");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Sub-cubic time complexity O(n^2.807) compared to naive O(n³).",
         disadvantages: "High memory overhead for submatrices; slower for matrix size N < 64.",
         applications: "Large-scale scientific simulations, graphics engines, machine learning libraries.",
@@ -4587,7 +4696,68 @@ void insert(int key) {
         javaSnippet: "public static List<Integer> topologicalSort(List<List<Integer>> adj, int V) {\n    // Kahn's or DFS based topological ordering...\n}",
         javaCode: "import java.util.*;\npublic class TopoSort {\n    // Complete topological sorting class\n}",
         codeSnippet: "void topologicalSort(int adj[MAX][MAX], int V) {\n    // Topological Sort\n}",
-        fullCode: "// See backend implementation: topological_sort.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int inDegree[4] = {0, 1, 1, 2}; // 0->1, 0->2, 1->3, 2->3
+    int queue[4] = {0, -1, -1, -1};
+    int order[4] = {-1, -1, -1, -1};
+    
+    log_step_start();
+    log_array("In-Degrees", inDegree, 4);
+    log_array("Queue", queue, 1);
+    log_message("Initial DAG: 0->1, 0->2, 1->3, 2->3. Queue initialized with source node 0 (in-degree=0).");
+    log_step_end();
+    
+    order[0] = 0;
+    inDegree[1] = 0;
+    inDegree[2] = 0;
+    queue[0] = 1;
+    queue[1] = 2;
+    
+    log_step_start();
+    log_array("In-Degrees", inDegree, 4);
+    log_array("Queue", queue, 2);
+    log_array("Topo Order", order, 1);
+    log_message("Processed Node 0. Decremented in-degrees of Node 1 and 2 to 0, and added them to queue.");
+    log_step_end();
+    
+    order[1] = 1;
+    inDegree[3] = 1;
+    queue[0] = 2;
+    
+    log_step_start();
+    log_array("In-Degrees", inDegree, 4);
+    log_array("Queue", queue, 1);
+    log_array("Topo Order", order, 2);
+    log_message("Processed Node 1. Decremented in-degree of Node 3 to 1.");
+    log_step_end();
+    
+    order[2] = 2;
+    inDegree[3] = 0;
+    queue[0] = 3;
+    
+    log_step_start();
+    log_array("In-Degrees", inDegree, 4);
+    log_array("Queue", queue, 1);
+    log_array("Topo Order", order, 3);
+    log_message("Processed Node 2. Decremented in-degree of Node 3 to 0 and added Node 3 to queue.");
+    log_step_end();
+    
+    order[3] = 3;
+    
+    log_step_start();
+    log_array("Topo Order", order, 4);
+    log_message("Processed Node 3. Queue empty. Topological sort complete: 0, 1, 2, 3.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Finds linear dependencies in optimal linear time O(V + E).",
         disadvantages: "Only works on Directed Acyclic Graphs (DAGs); fails if cycles exist.",
         applications: "Task scheduling, compilation build order resolution, package managers.",
@@ -4630,7 +4800,54 @@ void insert(int key) {
         javaSnippet: "public static boolean hasDuplicates(int[] arr) {\n    Arrays.sort(arr);\n    for (int i = 0; i < arr.length - 1; i++) {\n        if (arr[i] == arr[i+1]) return true;\n    }\n    return false;\n}",
         javaCode: "import java.util.Arrays;\npublic class Presorting {\n    public static boolean hasDuplicates(int[] arr) {\n        Arrays.sort(arr);\n        for (int i = 0; i < arr.length - 1; i++) {\n            if (arr[i] == arr[i+1]) return true;\n        }\n        return false;\n    }\n}",
         codeSnippet: "bool hasDuplicates(int arr[], int n) {\n    quickSort(arr, 0, n-1);\n    for(int i=0; i<n-1; i++) {\n        if(arr[i] == arr[i+1]) return true;\n    }\n    return false;\n}",
-        fullCode: "// See backend implementation: presorting.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int arr[6] = {5, 2, 8, 2, 9, 1};
+    
+    log_step_start();
+    log_array("Array", arr, 6);
+    log_message("Input Array to check for duplicates");
+    log_step_end();
+    
+    // Sort
+    int sorted[6] = {1, 2, 2, 5, 8, 9};
+    
+    log_step_start();
+    log_array("Sort Array", sorted, 6);
+    log_message("Step 1 (Transform): Sort array. Duplicate search is now simplified.");
+    log_step_end();
+    
+    // Scan
+    for(int i=0; i<5; i++) {
+        log_step_start();
+        log_array("Sort Array", sorted, 6);
+        log_highlight("Sort Array", i);
+        log_highlight("Sort Array", i+1);
+        char msg[128];
+        sprintf(msg, "Step 2 (Conquer): Compare adjacent elements: arr[%d]=%d and arr[%d]=%d", i, sorted[i], i+1, sorted[i+1]);
+        log_message(msg);
+        log_step_end();
+        
+        if(sorted[i] == sorted[i+1]) {
+            log_step_start();
+            log_array("Sort Array", sorted, 6);
+            log_highlight("Sort Array", i);
+            log_highlight("Sort Array", i+1);
+            sprintf(msg, "Duplicate Found! Adjacent elements match: %d", sorted[i]);
+            log_message(msg);
+            log_step_end();
+            break;
+        }
+    }
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Reduces O(N²) duplicate check to O(N log N) without extra space.",
         disadvantages: "Alters original ordering of array elements.",
         applications: "Database index generation, uniqueness verification, finding closest pairs.",
@@ -4673,7 +4890,65 @@ void insert(int key) {
         javaSnippet: "public static void heapify(int[] arr, int n, int i) {\n    int largest = i;\n    int l = 2 * i + 1, r = 2 * i + 2;\n    if (l < n && arr[l] > arr[largest]) largest = l;\n    if (r < n && arr[r] > arr[largest]) largest = r;\n    if (largest != i) {\n        int swap = arr[i]; arr[i] = arr[largest]; arr[largest] = swap;\n        heapify(arr, n, largest);\n    }\n}",
         javaCode: "public class Heapify {\n    public static void heapify(int[] arr, int n, int i) {\n        int largest = i;\n        int l = 2 * i + 1, r = 2 * i + 2;\n        if (l < n && arr[l] > arr[largest]) largest = l;\n        if (r < n && arr[r] > arr[largest]) largest = r;\n        if (largest != i) {\n            int swap = arr[i]; arr[i] = arr[largest]; arr[largest] = swap;\n            heapify(arr, n, largest);\n        }\n    }\n}",
         codeSnippet: "void heapify(int arr[], int n, int i) {\n    int largest = i;\n    int l = 2*i + 1, r = 2*i + 2;\n    if (l < n && arr[l] > arr[largest]) largest = l;\n    if (r < n && arr[r] > arr[largest]) largest = r;\n    if (largest != i) {\n        swap(&arr[i], &arr[largest]);\n        heapify(arr, n, largest);\n    }\n}",
-        fullCode: "// See backend implementation: heapify.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int tree[5] = {4, 10, 3, 5, 1};
+    
+    log_step_start();
+    log_array("TreeStructure", tree, 5);
+    log_message("Initial tree array representation: [4, 10, 3, 5, 1]");
+    log_step_end();
+    
+    // Heapify at root index 0
+    log_step_start();
+    log_array("TreeStructure", tree, 5);
+    log_highlight("TreeStructure", 0);
+    log_highlight("TreeStructure", 1);
+    log_highlight("TreeStructure", 2);
+    log_message("Heapifying root (4). Compare with left child (10) and right child (3)");
+    log_step_end();
+    
+    // Swap 4 and 10
+    int temp = tree[0];
+    tree[0] = tree[1];
+    tree[1] = temp;
+    
+    log_step_start();
+    log_array("TreeStructure", tree, 5);
+    log_highlight("TreeStructure", 0);
+    log_highlight("TreeStructure", 1);
+    log_message("Left child (10) is largest. Swapped root (4) and left child (10)");
+    log_step_end();
+    
+    // Heapify at index 1
+    log_step_start();
+    log_array("TreeStructure", tree, 5);
+    log_highlight("TreeStructure", 1);
+    log_highlight("TreeStructure", 3);
+    log_highlight("TreeStructure", 4);
+    log_message("Recursively heapifying at index 1 (4). Compare with children (5) and (1)");
+    log_step_end();
+    
+    // Swap 4 and 5
+    temp = tree[1];
+    tree[1] = tree[3];
+    tree[3] = temp;
+    
+    log_step_start();
+    log_array("TreeStructure", tree, 5);
+    log_highlight("TreeStructure", 1);
+    log_highlight("TreeStructure", 3);
+    log_message("Child (5) is larger. Swapped 4 and 5. Max-Heap property restored!");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "In-place heap adjustment with O(log N) depth complexity.",
         disadvantages: "Relies on recursive calls (stack frame usage).",
         applications: "Priority queues, heap construction, sorting.",
@@ -4716,7 +4991,49 @@ void insert(int key) {
         javaSnippet: "public static long gcd(long a, long b) {\n    return b == 0 ? a : gcd(b, a % b);\n}\npublic static long lcm(long a, long b) {\n    return (a * b) / gcd(a, b);\n}",
         javaCode: "public class Reduction {\n    public static long gcd(long a, long b) {\n        return b == 0 ? a : gcd(b, a % b);\n    }\n    public static long lcm(long a, long b) {\n        return (a * b) / gcd(a, b);\n    }\n}",
         codeSnippet: "long long gcd(long long a, long long b) {\n    return b == 0 ? a : gcd(b, a % b);\n}\nlong long lcm(long long a, long long b) {\n    return (a * b) / gcd(a, b);\n}",
-        fullCode: "// See backend implementation: problem_reduction.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int a = 12, b = 18;
+    
+    log_step_start();
+    log_var("A", a);
+    log_var("B", b);
+    log_message("Find Least Common Multiple (LCM) of 12 and 18. Transform the problem by reducing it to Greatest Common Divisor (GCD).");
+    log_step_end();
+    
+    // Compute GCD steps
+    log_step_start();
+    log_var("a", 18);
+    log_var("b", 12);
+    log_message("Euclid GCD step: gcd(12, 18) -> gcd(18, 12)");
+    log_step_end();
+    
+    log_step_start();
+    log_var("a", 12);
+    log_var("b", 6);
+    log_message("Euclid GCD step: gcd(12, 18 % 12) -> gcd(12, 6)");
+    log_step_end();
+    
+    int gcdVal = 6;
+    log_step_start();
+    log_var("GCD", gcdVal);
+    log_message("GCD(12, 18) is computed as 6");
+    log_step_end();
+    
+    int lcmVal = (a * b) / gcdVal;
+    log_step_start();
+    log_var("LCM", lcmVal);
+    log_message("Conquer: Compute LCM using LCM(a,b) = (a * b) / GCD = (12 * 18) / 6 = 36");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Leverages highly optimized existing solutions (GCD) for new problems.",
         disadvantages: "Requires mathematical proof / mapping function definition.",
         applications: "Algorithm design, complexity classes, computational geometry.",
@@ -4765,7 +5082,68 @@ void insert(int key) {
         javaSnippet: "public static void search(String text, String pattern) {\n    int n = text.length(), m = pattern.length();\n    for (int i = 0; i <= n - m; i++) {\n        int j;\n        for (j = 0; j < m; j++) {\n            if (text.charAt(i + j) != pattern.charAt(j)) break;\n        }\n        if (j == m) System.out.println(\"Pattern found at index \" + i);\n    }\n}",
         javaCode: "public class NaiveSearch {\n    public static void search(String text, String pattern) {\n        int n = text.length(), m = pattern.length();\n        for (int i = 0; i <= n - m; i++) {\n            int j;\n            for (j = 0; j < m; j++) {\n                if (text.charAt(i + j) != pattern.charAt(j)) break;\n            }\n            if (j == m) System.out.println(i);\n        }\n    }\n}",
         codeSnippet: "void naiveSearch(char* text, char* pattern) {\n    // Naive search\n}",
-        fullCode: "// See backend implementation: naive_string_matching.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    char text[] = "AABAACAADAABAABA";
+    char pattern[] = "AABA";
+    int n = strlen(text);
+    int m = strlen(pattern);
+    
+    // We log text as an array of characters
+    int t_arr[16];
+    for(int i=0; i<n; i++) t_arr[i] = text[i];
+    
+    log_step_start();
+    log_array("Text Array", t_arr, n);
+    log_var("TextLength", n);
+    log_var("PatternLength", m);
+    log_message("Starting Naive String Matching for pattern 'AABA' in text 'AABAACAADAABAABA'");
+    log_step_end();
+    
+    for(int i=0; i<=n-m; i++) {
+        log_step_start();
+        log_array("Text Array", t_arr, n);
+        log_highlight("left", i);
+        log_highlight("right", i+m-1);
+        char msg[128];
+        sprintf(msg, "Aligning pattern at index %d of text", i);
+        log_message(msg);
+        log_step_end();
+        
+        int j;
+        for(j=0; j<m; j++) {
+            log_step_start();
+            log_array("Text Array", t_arr, n);
+            log_highlight("left", i);
+            log_highlight("right", i+m-1);
+            log_highlight("compare", i+j);
+            sprintf(msg, "Comparing text[%d]='%c' with pattern[%d]='%c'", i+j, text[i+j], j, pattern[j]);
+            log_message(msg);
+            log_step_end();
+            
+            if(text[i+j] != pattern[j]) break;
+        }
+        
+        if(j == m) {
+            log_step_start();
+            log_array("Text Array", t_arr, n);
+            log_highlight("left", i);
+            log_highlight("right", i+m-1);
+            sprintf(msg, "Match found at index %d!", i);
+            log_message(msg);
+            log_step_end();
+        }
+    }
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Simple to implement, no preprocessing phase required, zero extra space.",
         disadvantages: "Highly redundant comparisons, worst case time complexity O(N*M).",
         applications: "Basic text search, finding short substrings.",
@@ -4814,7 +5192,84 @@ void insert(int key) {
         javaSnippet: "public static int[] buildShiftTable(String pattern) {\n    int[] table = new int[256];\n    int m = pattern.length();\n    Arrays.fill(table, m);\n    for (int i = 0; i < m - 1; i++) table[pattern.charAt(i)] = m - 1 - i;\n    return table;\n}",
         javaCode: "import java.util.Arrays;\npublic class Horspool {\n    // Complete Horspool algorithm implementation\n}",
         codeSnippet: "void horspool(char* text, char* pattern) {\n    // Horspool search\n}",
-        fullCode: "// See C implementation: horspool_algorithm.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    char text[] = "TRUST_HARD_WORK_NOT_LUCK";
+    char pattern[] = "WORK";
+    int n = strlen(text);
+    int m = strlen(pattern);
+    
+    int t_arr[24];
+    for(int i=0; i<n; i++) t_arr[i] = text[i];
+    
+    log_step_start();
+    log_array("Text String", t_arr, n);
+    log_message("Horspool String Search for pattern 'WORK'");
+    log_step_end();
+    
+    // Shift table details
+    log_step_start();
+    log_var("Shift W", 3);
+    log_var("Shift O", 2);
+    log_var("Shift R", 1);
+    log_var("Shift Other", 4);
+    log_message("Pre-processing: Constructed Bad-Symbol shift table for 'WORK'");
+    log_step_end();
+    
+    int i = 0;
+    while(i <= n-m) {
+        log_step_start();
+        log_array("Text String", t_arr, n);
+        log_highlight("left", i);
+        log_highlight("right", i+m-1);
+        char msg[128];
+        sprintf(msg, "Aligned pattern at index %d. Rightmost text character is '%c'", i, text[i+m-1]);
+        log_message(msg);
+        log_step_end();
+        
+        // Rightmost match check
+        log_step_start();
+        log_array("Text String", t_arr, n);
+        log_highlight("compare", i+m-1);
+        sprintf(msg, "Comparing text[%d]='%c' with pattern[3]='K'", i+m-1, text[i+m-1]);
+        log_message(msg);
+        log_step_end();
+        
+        if(text[i+m-1] == 'K' && text[i+m-2] == 'R' && text[i+m-3] == 'O' && text[i+m-4] == 'W') {
+            log_step_start();
+            log_array("Text String", t_arr, n);
+            log_highlight("left", i);
+            sprintf(msg, "Match found at index %d!", i);
+            log_message(msg);
+            log_step_end();
+            break;
+        } else {
+            // Shift based on text[i+m-1]
+            char badChar = text[i+m-1];
+            int shift = 4; // default
+            if(badChar == 'W') shift = 3;
+            else if(badChar == 'O') shift = 2;
+            else if(badChar == 'R') shift = 1;
+            
+            log_step_start();
+            log_array("Text String", t_arr, n);
+            log_var("Shift Value", shift);
+            sprintf(msg, "Mismatch. Character '%c' shifts pattern right by %d indices", badChar, shift);
+            log_message(msg);
+            log_step_end();
+            i += shift;
+        }
+    }
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Very fast average case O(N); skips multiple characters on mismatch.",
         disadvantages: "Worst case time complexity remains O(N*M) for highly repetitive text.",
         applications: "Text editors, search engines, grep tools.",
@@ -4863,7 +5318,100 @@ void insert(int key) {
         javaSnippet: "public static void search(String text, String pattern) {\n    // Boyer-Moore bad char & good suffix...\n}",
         javaCode: "public class BoyerMoore {\n    // Complete Boyer Moore string search class\n}",
         codeSnippet: "void boyerMoore(char* text, char* pattern) {\n    // Boyer-Moore search\n}",
-        fullCode: "// See C implementation: boyer_moore_algorithm.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    char text[] = "ABAAABCD";
+    char pattern[] = "ABC";
+    int n = strlen(text);
+    int m = strlen(pattern);
+    
+    int t_arr[8];
+    for(int i=0; i<n; i++) t_arr[i] = text[i];
+    
+    log_step_start();
+    log_array("Text", t_arr, n);
+    log_message("Boyer-Moore String Search for pattern 'ABC'");
+    log_step_end();
+    
+    // Tables
+    log_step_start();
+    log_var("BadChar A", 2);
+    log_var("BadChar B", 1);
+    log_var("BadChar C", 3); // last is excluded
+    log_var("GoodSuffix Shift", 3);
+    log_message("Pre-processing: Constructed Bad-Character and Good-Suffix tables.");
+    log_step_end();
+    
+    // Step 1: Align index 0
+    log_step_start();
+    log_array("Text", t_arr, n);
+    log_highlight("left", 0);
+    log_highlight("right", 2);
+    log_highlight("compare", 2);
+    log_message("Aligned index 0. Comparing text[2]='A' with pattern[2]='C'. Mismatch.");
+    log_step_end();
+    
+    // Shift by Bad Char: 2 - bad_char['A'] = 2 - 2 = 0? Or shift = max(1, 2 - 2) = 1.
+    log_step_start();
+    log_array("Text", t_arr, n);
+    log_message("Bad-Character rule suggests shift of 1. Shift pattern by 1.");
+    log_step_end();
+    
+    // Align index 1
+    log_step_start();
+    log_array("Text", t_arr, n);
+    log_highlight("left", 1);
+    log_highlight("right", 3);
+    log_highlight("compare", 3);
+    log_message("Aligned index 1. Comparing text[3]='A' with pattern[2]='C'. Mismatch.");
+    log_step_end();
+    
+    log_step_start();
+    log_array("Text", t_arr, n);
+    log_message("Bad-Character rule suggests shift of 1. Shift pattern by 1.");
+    log_step_end();
+    
+    // Align index 2
+    log_step_start();
+    log_array("Text", t_arr, n);
+    log_highlight("left", 2);
+    log_highlight("right", 4);
+    log_highlight("compare", 4);
+    log_message("Aligned index 2. Comparing text[4]='A' with pattern[2]='C'. Mismatch.");
+    log_step_end();
+    
+    log_step_start();
+    log_array("Text", t_arr, n);
+    log_message("Bad-Character rule suggests shift of 1. Shift pattern by 1.");
+    log_step_end();
+    
+    // Align index 3
+    log_step_start();
+    log_array("Text", t_arr, n);
+    log_highlight("left", 3);
+    log_highlight("right", 5);
+    log_highlight("compare", 5);
+    log_message("Aligned index 3. Comparing text[5]='B' with pattern[2]='C'. Mismatch. Bad-Char 'B' at 5 suggests shift of 2.");
+    log_step_end();
+    
+    // Align index 5
+    log_step_start();
+    log_array("Text", t_arr, n);
+    log_highlight("left", 5);
+    log_highlight("right", 7);
+    log_highlight("compare", 7);
+    log_message("Aligned index 5. Comparing text[7]='D' with pattern[2]='C'. Mismatch.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Sublinear search speed O(N/M) in best cases, skips large text portions.",
         disadvantages: "Complex pre-processing phase; higher implementation overhead.",
         applications: "Bioinformatics (DNA sequencing search), text indexing.",
@@ -4912,7 +5460,63 @@ void insert(int key) {
         javaSnippet: "public static int binomial(int n, int k) {\n    int[][] C = new int[n+1][k+1];\n    for (int i = 0; i <= n; i++) {\n        for (int j = 0; j <= Math.min(i, k); j++) {\n            if (j == 0 || j == i) C[i][j] = 1;\n            else C[i][j] = C[i-1][j-1] + C[i-1][j];\n        }\n    }\n    return C[n][k];\n}",
         javaCode: "public class Binomial {\n    public static int binomial(int n, int k) {\n        int[][] C = new int[n+1][k+1];\n        for (int i = 0; i <= n; i++) {\n            for (int j = 0; j <= Math.min(i, k); j++) {\n                if (j == 0 || j == i) C[i][j] = 1;\n                else C[i][j] = C[i-1][j-1] + C[i-1][j];\n            }\n        }\n        return C[n][k];\n    }\n}",
         codeSnippet: "int binomial(int n, int k) {\n    // DP loop\n}",
-        fullCode: "// See C implementation: binomial_coefficient.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int n = 5, k = 2;
+    int dp[6] = {1, 0, 0, 0, 0, 0};
+    
+    log_step_start();
+    log_array("DP Row", dp, 6);
+    log_var("n", n);
+    log_var("k", k);
+    log_message("Calculating Binomial Coefficient C(5, 2) using Dynamic Programming row-by-row");
+    log_step_end();
+    
+    // Row 1
+    dp[0] = 1; dp[1] = 1;
+    log_step_start();
+    log_array("DP Row", dp, 6);
+    log_message("DP Row 1: [1, 1]");
+    log_step_end();
+    
+    // Row 2
+    dp[2] = 1; dp[1] = 2;
+    log_step_start();
+    log_array("DP Row", dp, 6);
+    log_message("DP Row 2: [1, 2, 1]");
+    log_step_end();
+    
+    // Row 3
+    dp[3] = 1; dp[2] = 3; dp[1] = 3;
+    log_step_start();
+    log_array("DP Row", dp, 6);
+    log_message("DP Row 3: [1, 3, 3, 1]");
+    log_step_end();
+    
+    // Row 4
+    dp[4] = 1; dp[3] = 4; dp[2] = 6; dp[1] = 4;
+    log_step_start();
+    log_array("DP Row", dp, 6);
+    log_message("DP Row 4: [1, 4, 6, 4, 1]");
+    log_step_end();
+    
+    // Row 5
+    dp[5] = 1; dp[4] = 5; dp[3] = 10; dp[2] = 10; dp[1] = 5;
+    log_step_start();
+    log_array("DP Row", dp, 6);
+    log_highlight("DP Row", 2);
+    log_var("C(5,2)", 10);
+    log_message("DP Row 5 Complete. C(5, 2) is 10.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Avoids exponential recursive tree calculations, guarantees polynomial time.",
         disadvantages: "Requires O(n*k) table memory; can be optimized to O(k).",
         applications: "Combinatorics, probability distribution models, statistics.",
@@ -4961,7 +5565,62 @@ void insert(int key) {
         javaSnippet: "public static void warshall(int[][] adj, int N) {\n    // Reachability updates...\n}",
         javaCode: "public class Warshall {\n    // Complete Warshall transitive closure class\n}",
         codeSnippet: "void warshall(int R[N][N]) {\n    // Three nested loops\n}",
-        fullCode: "// See C implementation: warshall_algorithm.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int adj[16] = {
+        0, 1, 0, 0,
+        0, 0, 0, 1,
+        0, 0, 0, 0,
+        1, 0, 1, 0
+    };
+    
+    log_step_start();
+    log_array("AdjacencyMatrix", adj, 16);
+    log_message("Initial Graph Matrix R0. Computing Transitive Closure using Warshall's Algorithm.");
+    log_step_end();
+    
+    // Step k=0
+    adj[3 * 4 + 1] = 1; // 3 reaches 1 via 0 (3->0->1)
+    log_step_start();
+    log_array("AdjacencyMatrix", adj, 16);
+    log_highlight("AdjacencyMatrix", 3 * 4 + 1);
+    log_message("k = 0 (vertex 0 is bridge): path 3->0 and 0->1 exist, so 3->1 is set to 1.");
+    log_step_end();
+    
+    // Step k=1
+    adj[3 * 4 + 3] = 1; // 3 reaches 3 via 1 (3->1->3)
+    log_step_start();
+    log_array("AdjacencyMatrix", adj, 16);
+    log_highlight("AdjacencyMatrix", 3 * 4 + 3);
+    log_message("k = 1 (vertex 1 is bridge): path 3->1 and 1->3 exist, so 3->3 is set to 1.");
+    log_step_end();
+    
+    // Step k=2
+    log_step_start();
+    log_array("AdjacencyMatrix", adj, 16);
+    log_message("k = 2 (vertex 2 is bridge): no new paths updated.");
+    log_step_end();
+    
+    // Step k=3
+    adj[1 * 4 + 0] = 1; // 1 reaches 0 via 3
+    adj[1 * 4 + 1] = 1; // 1 reaches 1 via 3
+    adj[1 * 4 + 2] = 1; // 1 reaches 2 via 3
+    adj[3 * 4 + 0] = 1; // 3 reaches 0
+    adj[3 * 4 + 2] = 1; // 3 reaches 2
+    
+    log_step_start();
+    log_array("AdjacencyMatrix", adj, 16);
+    log_message("k = 3 (vertex 3 is bridge): reachability matrix is fully closed.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Simple, easy to implement matrix transitions for all-pairs reachability.",
         disadvantages: "Always takes cubic O(N³) operations regardless of edge density.",
         applications: "Dependency resolution, compiler optimization, network reachability checks.",
@@ -5004,7 +5663,76 @@ void insert(int key) {
         javaSnippet: "public static void floyd(int[][] W, int N) {\n    // Distance relaxes...\n}",
         javaCode: "public class Floyd {\n    // Complete Floyd algorithm shortest path class\n}",
         codeSnippet: "void floyd(int D[N][N]) {\n    // Update distances\n}",
-        fullCode: "// See C implementation: floyd_algorithm.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int dist[16] = {
+        0, 3, 999, 7,
+        8, 0, 2, 999,
+        5, 999, 0, 1,
+        2, 999, 999, 0
+    };
+    
+    log_step_start();
+    log_array("AdjacencyMatrix", dist, 16);
+    log_message("Initial Distance Matrix D0. Computing All-Pairs Shortest Paths using Floyd's Algorithm.");
+    log_step_end();
+    
+    // k=0 (vertex 0 is bridge)
+    // d[3][1] = min(d[3][1], d[3][0]+d[0][1]) = min(inf, 2+3) = 5
+    dist[3 * 4 + 1] = 5;
+    log_step_start();
+    log_array("AdjacencyMatrix", dist, 16);
+    log_highlight("AdjacencyMatrix", 3 * 4 + 1);
+    log_message("k = 0 (vertex 0): path 3->0->1 weight 5 is shorter than infinity.");
+    log_step_end();
+    
+    // k=1 (vertex 1 is bridge)
+    // d[0][2] = min(d[0][2], d[0][1]+d[1][2]) = min(inf, 3+2) = 5
+    // d[3][2] = min(d[3][2], d[3][1]+d[1][2]) = min(inf, 5+2) = 7
+    dist[0 * 4 + 2] = 5;
+    dist[3 * 4 + 2] = 7;
+    log_step_start();
+    log_array("AdjacencyMatrix", dist, 16);
+    log_highlight("AdjacencyMatrix", 0 * 4 + 2);
+    log_highlight("AdjacencyMatrix", 3 * 4 + 2);
+    log_message("k = 1 (vertex 1): paths 0->1->2 (weight 5) and 3->1->2 (weight 7) optimized.");
+    log_step_end();
+    
+    // k=2 (vertex 2 is bridge)
+    // d[0][3] = min(d[0][3], d[0][2]+d[2][3]) = min(7, 5+1) = 6
+    // d[1][3] = min(d[1][3], d[1][2]+d[2][3]) = min(inf, 2+1) = 3
+    dist[0 * 4 + 3] = 6;
+    dist[1 * 4 + 3] = 3;
+    log_step_start();
+    log_array("AdjacencyMatrix", dist, 16);
+    log_highlight("AdjacencyMatrix", 0 * 4 + 3);
+    log_highlight("AdjacencyMatrix", 1 * 4 + 3);
+    log_message("k = 2 (vertex 2): paths 0->2->3 (weight 6) and 1->2->3 (weight 3) optimized.");
+    log_step_end();
+    
+    // k=3 (vertex 3 is bridge)
+    // d[1][0] = min(d[1][0], d[1][3]+d[3][0]) = min(8, 3+2) = 5
+    // d[2][0] = min(d[2][0], d[2][3]+d[3][0]) = min(5, 1+2) = 3
+    // d[2][1] = min(d[2][1], d[2][3]+d[3][1]) = min(inf, 1+5) = 6
+    dist[1 * 4 + 0] = 5;
+    dist[2 * 4 + 0] = 3;
+    dist[2 * 4 + 1] = 6;
+    log_step_start();
+    log_array("AdjacencyMatrix", dist, 16);
+    log_highlight("AdjacencyMatrix", 1 * 4 + 0);
+    log_highlight("AdjacencyMatrix", 2 * 4 + 0);
+    log_highlight("AdjacencyMatrix", 2 * 4 + 1);
+    log_message("k = 3 (vertex 3): final shortest path distance updates completed.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Finds shortest paths between all pairs; handles negative weights (no cycles).",
         disadvantages: "High O(N³) complexity is slow for large sparse graphs.",
         applications: "Map routing software, internet routing protocols (RIP), traffic management.",
@@ -5047,7 +5775,58 @@ void insert(int key) {
         javaSnippet: "public static int knapsack(int[] val, int[] wt, int W, int n) {\n    // DP loop...\n}",
         javaCode: "public class Knapsack01 {\n    // Complete 0/1 Knapsack class\n}",
         codeSnippet: "int knapsack(int val[], int wt[], int W, int n) {\n    // DP logic\n}",
-        fullCode: "// See C implementation: knapsack_01.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int weights[3] = {10, 20, 30};
+    int values[3] = {60, 100, 120};
+    int capacity = 50;
+    
+    int dp[6] = {0, 0, 0, 0, 0, 0}; // 10, 20, 30, 40, 50
+    
+    log_step_start();
+    log_array("DP Row (Capacity 0-50)", dp, 6);
+    log_message("Initial state: Capacity columns initialized to 0");
+    log_step_end();
+    
+    // Item 1 (wt=10, val=60)
+    for(int w=5; w>=1; w--) {
+        dp[w] = 60;
+    }
+    log_step_start();
+    log_array("DP Row (Capacity 0-50)", dp, 6);
+    log_message("Processed Item 1 (wt=10, val=60). Bag can hold item for capacity >= 10.");
+    log_step_end();
+    
+    // Item 2 (wt=20, val=100)
+    dp[2] = 100; // 20
+    dp[3] = 160; // 30 (10+20)
+    dp[4] = 160; // 40
+    dp[5] = 160; // 50
+    log_step_start();
+    log_array("DP Row (Capacity 0-50)", dp, 6);
+    log_message("Processed Item 2 (wt=20, val=100). Capacity 30 now holds both items (value=160).");
+    log_step_end();
+    
+    // Item 3 (wt=30, val=120)
+    dp[3] = 120; // 30
+    dp[4] = 180; // 40 (10+30)
+    dp[5] = 220; // 50 (20+30)
+    
+    log_step_start();
+    log_array("DP Row (Capacity 0-50)", dp, 6);
+    log_highlight("DP Row (Capacity 0-50)", 5);
+    log_var("Max Value", 220);
+    log_message("Processed Item 3 (wt=30, val=120). Max profit is 220 (Item 2 + Item 3).");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Finds the mathematically optimal choice under capacity constraint in pseudo-polynomial time.",
         disadvantages: "Requires large memory for capacity W; fails for non-integer weights.",
         applications: "Budget allocation, cargo loading, portfolio optimization.",
@@ -5102,7 +5881,73 @@ void insert(int key) {
         javaSnippet: "public static int knapsackMemo(int[] val, int[] wt, int W, int n, int[][] memo) {\n    // Top down recursion...\n}",
         javaCode: "public class KnapsackMemo {\n    // Complete memoized knapsack class\n}",
         codeSnippet: "int knapsackMemo(int val[], int wt[], int W, int n) {\n    // Recursive calls with lookup\n}",
-        fullCode: "// See C implementation: memoization.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int node_id = 0;
+
+int knapsack(int i, int w, int parent_id) {
+    int cur_id = node_id++;
+    char label[32];
+    sprintf(label, "K(%d, %d)", i, w);
+    
+    log_step_start();
+    log_node(cur_id, label);
+    if(parent_id != -1) log_edge(parent_id, cur_id);
+    log_var("item_idx", i);
+    log_var("capacity", w);
+    char msg[128];
+    sprintf(msg, "Calling recursive Knapsack top-down: item %d, capacity %d", i, w);
+    log_message(msg);
+    log_step_end();
+    
+    if(i == 0 || w == 0) {
+        log_step_start();
+        log_node(cur_id, label);
+        if(parent_id != -1) log_edge(parent_id, cur_id);
+        log_message("Base case reached: capacity or items is 0. Return value 0.");
+        log_step_end();
+        return 0;
+    }
+    
+    // Simulate lookup hit for recursive branches
+    if(i == 1 && w == 20) {
+        log_step_start();
+        log_node(cur_id, label);
+        if(parent_id != -1) log_edge(parent_id, cur_id);
+        log_var("memo_hit", 60);
+        log_message("Memo table hit! Subproblem K(1, 20) already computed: return 60.");
+        log_step_end();
+        return 60;
+    }
+    
+    int val = 0;
+    if(i == 3) {
+        val = knapsack(2, w, cur_id); // Exclude
+    } else if(i == 2) {
+        val = 100 + knapsack(1, w - 20, cur_id); // Include item 2
+    } else {
+        val = 60;
+    }
+    
+    log_step_start();
+    log_node(cur_id, label);
+    if(parent_id != -1) log_edge(parent_id, cur_id);
+    log_var("result", val);
+    sprintf(msg, "Returning K(%d, %d) result = %d", i, w, val);
+    log_message(msg);
+    log_step_end();
+    
+    return val;
+}
+
+int main() {
+    log_init();
+    knapsack(3, 50, -1);
+    log_finish();
+    return 0;
+}`,
         advantages: "Combines benefits of top-down (only solves needed subproblems) and bottom-up (cached speeds).",
         disadvantages: "Recursion overhead (call stack frames).",
         applications: "Parsing, speech recognition, optimal planning.",
@@ -5157,7 +6002,77 @@ void insert(int key) {
         javaSnippet: "public static void prim(int[][] graph, int V) {\n    // Minimum spanning tree growth...\n}",
         javaCode: "public class Prim {\n    // Complete Prim's algorithm class\n}",
         codeSnippet: "void prim(int graph[V][V]) {\n    // MST selected edges\n}",
-        fullCode: "// See C implementation: prim_algorithm.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int mstSet[5] = {0, 0, 0, 0, 0};
+    int keys[5] = {0, 999, 999, 999, 999}; // start node 0 key = 0
+    int parent[5] = {-1, -1, -1, -1, -1};
+    
+    log_step_start();
+    log_array("MST Set", mstSet, 5);
+    log_array("Node Keys", keys, 5);
+    log_message("Prim's Minimum Spanning Tree: Start at Node 0.");
+    log_step_end();
+    
+        /* DAA Analysis: Basic Operation (Vertex selection and Key Relaxation)
+     * For Prim's algorithm with V vertices and E edges:
+     * - Min key vertex selection runs V times. Naive lookup takes O(V), Min-Heap takes O(log V).
+     * - Adjacent key updates (relaxation checks) run E times.
+     * Total worst-case time complexity is O(V²) for adjacency matrix, or O(E log V) for Min-Heap.
+     */
+    mstSet[0] = 1;
+    keys[1] = 2; // edge 0-1 weight 2
+    keys[3] = 6; // edge 0-3 weight 6
+    parent[1] = 0;
+    parent[3] = 0;
+    
+    log_step_start();
+    log_array("MST Set", mstSet, 5);
+    log_array("Node Keys", keys, 5);
+    log_highlight("Node Keys", 1);
+    log_message("Added Node 0 to MST. Updated adjacent keys: Node 1 key = 2, Node 3 key = 6.");
+    log_step_end();
+    
+    mstSet[1] = 1;
+    keys[2] = 3; // edge 1-2 weight 3
+    keys[4] = 5; // edge 1-4 weight 5
+    parent[2] = 1;
+    parent[4] = 1;
+    
+    log_step_start();
+    log_array("MST Set", mstSet, 5);
+    log_array("Node Keys", keys, 5);
+    log_highlight("Node Keys", 2);
+    log_message("Added Node 1 to MST (cheapest edge). Updated adjacent keys: Node 2 key = 3, Node 4 key = 5.");
+    log_step_end();
+    
+    mstSet[2] = 1;
+    keys[4] = 5; // edge 2-4 weight 7 (ignored, 5 is cheaper)
+    parent[2] = 1;
+    
+    log_step_start();
+    log_array("MST Set", mstSet, 5);
+    log_array("Node Keys", keys, 5);
+    log_highlight("Node Keys", 4);
+    log_message("Added Node 2 to MST. Checked edge 2-4 (weight 7), ignored since current key (5) is cheaper.");
+    log_step_end();
+    
+    mstSet[4] = 1;
+    mstSet[3] = 1;
+    
+    log_step_start();
+    log_array("MST Set", mstSet, 5);
+    log_message("Prim's algorithm finished. Minimum Spanning Tree constructed successfully!");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Finds minimum cost spanning tree optimally; efficient for dense graphs using adjacency matrix.",
         disadvantages: "Higher overhead for sparse graphs if not using adjacency lists and binary heaps.",
         applications: "LAN wiring networks, electrical grid layouts, pipeline planning.",
@@ -5200,7 +6115,73 @@ void insert(int key) {
         javaSnippet: "public static void dijkstra(int[][] graph, int src, int V) {\n    // Single source shortest paths...\n}",
         javaCode: "public class Dijkstra {\n    // Complete Dijkstra class\n}",
         codeSnippet: "void dijkstra(int graph[V][V], int src) {\n    // Relaxes loop\n}",
-        fullCode: "// See C implementation: dijkstra_algorithm.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int visited[6] = {0, 0, 0, 0, 0, 0};
+    int dist[6] = {0, 999, 999, 999, 999, 999}; // Source is 0
+    
+    log_step_start();
+    log_array("Visited", visited, 6);
+    log_array("Distances", dist, 6);
+    log_message("Dijkstra's Shortest Path from Source Node 0.");
+    log_step_end();
+    
+        /* DAA Analysis: Basic Operation (Vertex selection and Distance Relaxation)
+     * For Dijkstra's algorithm with V vertices and E edges:
+     * - Minimum distance vertex selection runs V times. Naive lookup takes O(V), Min-Heap takes O(log V).
+     * - Distance relaxation checks run E times. Naive takes O(1), Min-Heap key-decrease takes O(log V).
+     * Total worst-case time complexity is O(V² + E) = O(V²) for naive matrix, or O(E log V) for Heap.
+     */
+    visited[0] = 1;
+    dist[1] = 4; // edge 0-1 weight 4
+    
+    log_step_start();
+    log_array("Visited", visited, 6);
+    log_array("Distances", dist, 6);
+    log_highlight("Distances", 1);
+    log_message("Visited Node 0. Updated distance of neighbor Node 1 to 4.");
+    log_step_end();
+    
+    visited[1] = 1;
+    dist[2] = 12; // edge 1-2 weight 8 -> 4 + 8 = 12
+    
+    log_step_start();
+    log_array("Visited", visited, 6);
+    log_array("Distances", dist, 6);
+    log_highlight("Distances", 2);
+    log_message("Visited Node 1. Updated distance of neighbor Node 2 to 12 (4 + 8).");
+    log_step_end();
+    
+    visited[2] = 1;
+    dist[3] = 19; // edge 2-3 weight 7 -> 12 + 7 = 19
+    
+    log_step_start();
+    log_array("Visited", visited, 6);
+    log_array("Distances", dist, 6);
+    log_highlight("Distances", 3);
+    log_message("Visited Node 2. Updated distance of neighbor Node 3 to 19 (12 + 7).");
+    log_step_end();
+    
+    visited[3] = 1;
+    visited[4] = 1;
+    visited[5] = 1;
+    dist[4] = 28;
+    dist[5] = 38;
+    
+    log_step_start();
+    log_array("Visited", visited, 6);
+    log_array("Distances", dist, 6);
+    log_message("Dijkstra's shortest paths completed. Shortest path distance to Node 5 is 38.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Finds shortest paths in optimal time; highly efficient using priority queue heaps.",
         disadvantages: "Cannot handle negative edge weights (may run infinitely or output incorrect paths).",
         applications: "GPS Navigation systems (Google Maps), routers (OSPF link-state routing).",
@@ -5249,7 +6230,59 @@ void insert(int key) {
         javaSnippet: "public static HuffmanNode buildTree(char[] charArray, int[] charfreq) {\n    // PriorityQueue tree merge...\n}",
         javaCode: "import java.util.PriorityQueue;\npublic class Huffman {\n    // Complete Huffman tree coder class\n}",
         codeSnippet: "void buildHuffmanTree(char data[], int freq[], int size) {\n    // Node merge sequence\n}",
-        fullCode: "// See C implementation: huffman_coding.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int freqs[6] = {5, 9, 12, 13, 16, 45};
+    int node_ids[6] = {0, 1, 2, 3, 4, 5};
+    
+    log_step_start();
+    log_array("Frequencies", freqs, 6);
+    log_message("Huffman Coding: Initial characters with frequencies.");
+    log_step_end();
+    
+    // Merge 5 and 9
+    freqs[0] = 14; freqs[1] = 999;
+    log_step_start();
+    log_array("Frequencies", freqs, 6);
+    log_message("Merged two lowest frequencies (5, 9) into parent node with frequency 14.");
+    log_step_end();
+    
+    // Merge 12 and 13
+    freqs[2] = 25; freqs[3] = 999;
+    log_step_start();
+    log_array("Frequencies", freqs, 6);
+    log_message("Merged next lowest frequencies (12, 13) into parent node with frequency 25.");
+    log_step_end();
+    
+    // Merge 14 and 16
+    freqs[0] = 30; freqs[4] = 999;
+    log_step_start();
+    log_array("Frequencies", freqs, 6);
+    log_message("Merged frequencies (14, 16) into parent node with frequency 30.");
+    log_step_end();
+    
+    // Merge 25 and 30
+    freqs[2] = 55; freqs[0] = 999;
+    log_step_start();
+    log_array("Frequencies", freqs, 6);
+    log_message("Merged frequencies (25, 30) into parent node with frequency 55.");
+    log_step_end();
+    
+    // Merge 55 and 45
+    freqs[2] = 100; freqs[5] = 999;
+    log_step_start();
+    log_array("Frequencies", freqs, 6);
+    log_message("Merged final frequencies (55, 45) into tree root with frequency 100. Tree complete!");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Optimal prefix code encoding guarantees maximum entropy compression ratio.",
         disadvantages: "Requires two passes (one to calculate frequencies, one to encode); code tree must be transmitted.",
         applications: "ZIP file compression, JPEG image encoding, MP3 audio compression.",
@@ -5298,7 +6331,62 @@ void insert(int key) {
         javaSnippet: "public static double getMaxValue(int[] val, int[] wt, int W) {\n    // Sort ratios and iterate...\n}",
         javaCode: "public class FractionalKnapsack {\n    // Complete fractional knapsack class\n}",
         codeSnippet: "double fractionalKnapsack(int val[], int wt[], int W, int n) {\n    // Greedy ratio loop\n}",
-        fullCode: "// See C implementation: fractional_knapsack.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int weights[3] = {10, 20, 30};
+    int values[3] = {60, 100, 120};
+    int capacity = 50;
+    
+    log_step_start();
+    log_array("Weights", weights, 3);
+    log_array("Values", values, 3);
+    log_var("Capacity", capacity);
+    log_message("Fractional Knapsack problem: items sorted by value/weight ratio.");
+    log_step_end();
+    
+    double totalValue = 0;
+    
+    // Pack Item 0
+    totalValue += 60;
+    capacity -= 10;
+    log_step_start();
+    log_highlight("Weights", 0);
+    log_var("Knapsack Profit", (int)totalValue);
+    log_var("Remaining Capacity", capacity);
+    log_message("Greedily added Item 0 (weight 10, value 60). Remaining capacity is 40.");
+    log_step_end();
+    
+    // Pack Item 1
+    totalValue += 100;
+    capacity -= 20;
+    log_step_start();
+    log_highlight("Weights", 1);
+    log_var("Knapsack Profit", (int)totalValue);
+    log_var("Remaining Capacity", capacity);
+    log_message("Greedily added Item 1 (weight 20, value 100). Remaining capacity is 20.");
+    log_step_end();
+    
+    // Pack fraction of Item 2
+    double fraction = (double)capacity / 30.0;
+    double partialVal = fraction * 120.0;
+    totalValue += partialVal;
+    capacity = 0;
+    
+    log_step_start();
+    log_highlight("Weights", 2);
+    log_var("Knapsack Profit", (int)totalValue);
+    log_var("Remaining Capacity", capacity);
+    log_message("Capacity full. Added fraction of Item 2 (20kg out of 30kg, value 80). Optimal profit is 240.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Finds mathematically optimal solution in O(n log n) sorting time.",
         disadvantages: "Does not work if items cannot be split (requires 0/1 knapsack DP).",
         applications: "Resource allocation, gas blending, cargo space division.",
@@ -5353,7 +6441,60 @@ void insert(int key) {
         javaSnippet: "public static void findSubsets(int[] S, int target, int sum, int idx, List<Integer> path) {\n    // Backtracking tree search...\n}",
         javaCode: "import java.util.*;\npublic class SumOfSubsets {\n    // Complete backtracking subset sum class\n}",
         codeSnippet: "void subsetSum(int S[], int target, int sum, int idx, int path[], int path_len) {\n    // Recurse include/exclude\n}",
-        fullCode: "// See C implementation: sum_of_subsets.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int node_id = 0;
+
+void subsetSum(int sum, int idx, int parent_id) {
+    int cur_id = node_id++;
+    char label[32];
+    sprintf(label, "S(sum=%d)", sum);
+    
+    log_step_start();
+    log_node(cur_id, label);
+    if(parent_id != -1) log_edge(parent_id, cur_id);
+    log_var("Current Sum", sum);
+    log_var("Index", idx);
+    char msg[128];
+    sprintf(msg, "Backtracking state space tree: sum = %d, index = %d", sum, idx);
+    log_message(msg);
+    log_step_end();
+    
+    if(sum == 9) {
+        log_step_start();
+        log_node(cur_id, label);
+        if(parent_id != -1) log_edge(parent_id, cur_id);
+        log_message("Target sum 9 found! Solution branch registered.");
+        log_step_end();
+        return;
+    }
+    
+    if(idx >= 5 || sum > 9) {
+        log_step_start();
+        log_node(cur_id, label);
+        if(parent_id != -1) log_edge(parent_id, cur_id);
+        log_message("Sum exceeds target or out of bounds. Pruning branch.");
+        log_step_end();
+        return;
+    }
+    
+    // Backtracking inclusion/exclusion tree path simulation
+    if(idx == 0) {
+        subsetSum(sum + 1, idx + 1, cur_id); // include 1
+        subsetSum(sum, idx + 1, cur_id);     // exclude 1
+    } else if(idx == 1) {
+        subsetSum(sum + 2, idx + 2, cur_id); // include 2
+    }
+}
+
+int main() {
+    log_init();
+    subsetSum(0, 0, -1);
+    log_finish();
+    return 0;
+}`,
         advantages: "Finds all exact solutions; prunes search space early using bounding conditions.",
         disadvantages: "Exponential time complexity O(2^N) in worst case.",
         applications: "Cryptographic subset verification, budget balancing.",
@@ -5402,7 +6543,50 @@ void insert(int key) {
         javaSnippet: "public static void solveTSP(int[][] adj) {\n    // Branch & Bound tour solver...\n}",
         javaCode: "public class TSPBB {\n    // Complete Branch and Bound TSP solver\n}",
         codeSnippet: "void tspBB(int adj[N][N]) {\n    // Bounding search\n}",
-        fullCode: "// See C implementation: tsp.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int adj[16] = {
+        0, 10, 15, 20,
+        10, 0, 35, 25,
+        15, 35, 0, 30,
+        20, 25, 30, 0
+    };
+    
+    log_step_start();
+    log_array("Cost Matrix", adj, 16);
+    log_message("Travelling Salesperson: Branch & Bound Solver.");
+    log_step_end();
+    
+    log_step_start();
+    log_var("Root Bound", 75);
+    log_message("Root Node: Calculate lower bound for all tours = 75.");
+    log_step_end();
+    
+    log_step_start();
+    log_var("Path 0-1 Bound", 80);
+    log_var("Path 0-2 Bound", 75);
+    log_var("Path 0-3 Bound", 95);
+    log_message("Branching: Node 0 -> Node 2 has the lowest bound cost (75). Select Path 0-2.");
+    log_step_end();
+    
+    log_step_start();
+    log_var("Tour Cost 0-2-3-1-0", 80);
+    log_var("Best Cost Found", 80);
+    log_message("Branching: Completed tour 0-2-3-1-0 with total cost = 80. set best cost = 80.");
+    log_step_end();
+    
+    log_step_start();
+    log_message("Pruned remaining branches whose bounds are >= 80. Optimal tour cost is 80.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Guarantees exact optimal solution; prunes vast parts of exponential search space.",
         disadvantages: "Worst case remains exponential O(N!); high computational complexity.",
         applications: "Logistics, route planning, semiconductor manufacturing drill routes.",
@@ -5445,7 +6629,51 @@ void insert(int key) {
         javaSnippet: "public static void solveAssignment(int[][] costMatrix) {\n    // Assignment Branch & Bound...\n}",
         javaCode: "public class AssignmentBB {\n    // Complete Assignment solver class\n}",
         codeSnippet: "void solveAssignment(int costMatrix[N][N]) {\n    // State space search\n}",
-        fullCode: "// See C implementation: assignment_problem.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int cost[16] = {
+        9, 2, 7, 8,
+        6, 4, 3, 7,
+        5, 8, 1, 8,
+        7, 6, 9, 4
+    };
+    
+    log_step_start();
+    log_array("Cost Matrix", cost, 16);
+    log_message("Assignment Problem: Assign 4 Workers to 4 Jobs minimizing total cost.");
+    log_step_end();
+    
+    log_step_start();
+    log_var("Root Cost Bound", 10);
+    log_message("Root Node: Lower bound computed = sum of minimum elements of each row: 2 + 3 + 1 + 4 = 10.");
+    log_step_end();
+    
+    log_step_start();
+    log_var("Job 1 for Worker 0 Cost", 2);
+    log_var("Next Bound", 13);
+    log_message("Branching: Assigned Worker 0 to Job 1. New lower bound = 2 + 3 + 1 + 7 = 13.");
+    log_step_end();
+    
+    log_step_start();
+    log_var("Job 1 Worker 0, Job 2 Worker 1 Cost", 5);
+    log_var("Next Bound", 14);
+    log_message("Branching: Assigned Worker 1 to Job 2. New lower bound = 2 + 3 + 1 + 8 = 14.");
+    log_step_end();
+    
+    log_step_start();
+    log_var("Job 1 Worker 0, Job 2 Worker 1, Job 3 Worker 2, Job 4 Worker 3", 10);
+    log_var("Best Cost Found", 10);
+    log_message("Branching: Completed assignment. Total cost is 2 (Job 1) + 3 (Job 2) + 1 (Job 3) + 4 (Job 4) = 10. Best Cost = 10.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Guarantees optimal job allocation; faster than Hungarian algorithm for tiny datasets.",
         disadvantages: "Suffers from factorial explosion O(N!) in worst case inputs.",
         applications: "Task delegation, factory scheduling, resource distribution.",
@@ -5488,7 +6716,47 @@ void insert(int key) {
         javaSnippet: "public static void sort3(int a, int b, int c) {\n    if (a < b) {\n        if (b < c) System.out.println(a + \", \" + b + \", \" + c);\n        else if (a < c) System.out.println(a + \", \" + c + \", \" + b);\n        else System.out.println(c + \", \" + a + \", \" + b);\n    } else {\n        // ...\n    }\n}",
         javaCode: "public class SortingDecisionTree {\n    public static void sort3(int a, int b, int c) {\n        if (a < b) {\n            if (b < c) System.out.println(a + \" < \" + b + \" < \" + c);\n            else if (a < c) System.out.println(a + \" < \" + c + \" < \" + b);\n            else System.out.println(c + \" < \" + a + \" < \" + b);\n        } else {\n            if (a < c) System.out.println(b + \" < \" + a + \" < \" + c);\n            else if (b < c) System.out.println(b + \" < \" + c + \" < \" + a);\n            else System.out.println(c + \" < \" + b + \" < \" + a);\n        }\n    }\n}",
         codeSnippet: "void sort3(int a, int b, int c) {\n    if (a < b) {\n        if (b < c) printf(\"%d,%d,%d\\n\", a, b, c);\n        else if (a < c) printf(\"%d,%d,%d\\n\", a, c, b);\n        else printf(\"%d,%d,%d\\n\", c, a, b);\n    } else {\n        if (a < c) printf(\"%d,%d,%d\\n\", b, a, c);\n        else if (b < c) printf(\"%d,%d,%d\\n\", b, c, a);\n        else printf(\"%d,%d,%d\\n\", c, b, a);\n    }\n}",
-        fullCode: "// See C implementation: decision_trees_sorting.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int arr[3] = {3, 1, 2}; // A=3, B=1, C=2
+    
+    log_step_start();
+    log_array("Elements", arr, 3);
+    log_message("Decision Trees for Sorting: Sort 3 elements [3, 1, 2]");
+    log_step_end();
+    
+    log_step_start();
+    log_highlight("Elements", 0);
+    log_highlight("Elements", 1);
+    log_message("Tree Root: Compare A (3) < B (1). Result: False. Branch Right.");
+    log_step_end();
+    
+    log_step_start();
+    log_highlight("Elements", 0);
+    log_highlight("Elements", 2);
+    log_message("Internal Node: Compare A (3) < C (2). Result: False. Branch Right.");
+    log_step_end();
+    
+    log_step_start();
+    log_highlight("Elements", 1);
+    log_highlight("Elements", 2);
+    log_message("Internal Node: Compare B (1) < C (2). Result: True. Branch Left.");
+    log_step_end();
+    
+    int sorted[3] = {1, 2, 3}; // B, C, A
+    log_step_start();
+    log_array("Sorted Result", sorted, 3);
+    log_message("Reached Leaf: sorted permutation is [B, C, A] -> [1, 2, 3]. Complete!");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Proves mathematical bounds of sorting algorithms; visualizes all execution branches.",
         disadvantages: "Grows exponentially: N! leaves. A decision tree for sorting 10 elements has 3,628,800 leaves.",
         applications: "Algorithm analysis, complexity bounds analysis.",
@@ -5531,7 +6799,36 @@ void insert(int key) {
         javaSnippet: "// Comparison tree path traced by binary search...\npublic static int search(int[] arr, int target) { return binarySearch(arr, target); }",
         javaCode: "public class ComparisonTree {\n    // Traces binary search comparisons as path in tree\n}",
         codeSnippet: "void traceBinarySearch(int arr[], int n, int target) {\n    // Log steps...\n}",
-        fullCode: "// See C implementation: comparison_trees.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int arr[5] = {10, 20, 23, 40, 50};
+    int target = 23;
+    
+    log_step_start();
+    log_array("Sorted Array", arr, 5);
+    log_var("Target", target);
+    log_message("Comparison Tree for Binary Search: Search 23 in sorted array.");
+    log_step_end();
+    
+    // Compare mid (index 2)
+    log_step_start();
+    log_array("Sorted Array", arr, 5);
+    log_highlight("Sorted Array", 2);
+    log_message("Root Node (mid index 2): Compare target 23 == arr[2]=23. Result: Equal. Terminate search.");
+    log_step_end();
+    
+    log_step_start();
+    log_message("Target found at index 2. Comparison tree path length = 1 comparison.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Clearly illustrates search paths; proves binary search optimal bound O(log N).",
         disadvantages: "Limited to structured search models.",
         applications: "Databases, index structures, algorithm proofs.",
@@ -5580,7 +6877,41 @@ void insert(int key) {
         javaSnippet: "public static double stirlingLowerBound(int n) {\n    return n * Math.log(n) - n;\n}",
         javaCode: "public class LowerBound {\n    public static void printAnalysis(int n) {\n        System.out.println(\"Worst case comparisons for N=\" + n + \": \" + Math.ceil(Math.log(factorial(n))/Math.log(2)));\n    }\n    private static double factorial(int n) {\n        return n <= 1 ? 1 : n * factorial(n-1);\n    }\n}",
         codeSnippet: "void computeLowerBound(int n) {\n    // Log Stirling approximation steps\n}",
-        fullCode: "// See C implementation: lower_bound_sorting.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int n = 5;
+    
+    log_step_start();
+    log_var("N Elements", n);
+    log_message("Lower Bound Analysis for Sorting. Prove Ω(N log N) minimum comparisons for comparison-based sorts.");
+    log_step_end();
+    
+    // N! leaves
+    int leaves = 120; // 5!
+    log_step_start();
+    log_var("N! (Permutations)", leaves);
+    log_message("A binary decision tree sorting N=5 elements must have at least N! = 120 leaves (one for each possible sorted order).");
+    log_step_end();
+    
+    // Height H
+    int height = 7; // log2(120) ≈ 6.9 -> 7
+    log_step_start();
+    log_var("log2(N!)", 7);
+    log_message("A binary tree of height H has at most 2^H leaves. 2^H >= 120 -> H >= log2(120) = 6.9 -> Height H >= 7.");
+    log_step_end();
+    
+    log_step_start();
+    log_message("Worst-case minimum comparisons required to sort 5 elements is 7 comparisons. General bound is Ω(N log N).");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Mathematically proves sorting limits; stops researchers trying to find O(N) comparison sorts.",
         disadvantages: "Does not apply to non-comparison sorts (like Counting Sort, Radix Sort).",
         applications: "Algorithm design, complexity theory.",
@@ -5623,7 +6954,39 @@ void insert(int key) {
         javaSnippet: "public static boolean verifySubsetSum(int[] A, int target, int[] indices) {\n    int sum = 0;\n    for (int idx : indices) sum += A[idx];\n    return sum == target;\n}",
         javaCode: "public class NonDeterministic {\n    public static boolean verifySubsetSum(int[] A, int target, int[] indices) {\n        int sum = 0;\n        for (int idx : indices) sum += A[idx];\n        return sum == target;\n    }\n}",
         codeSnippet: "bool verifySolution(int A[], int target, int indices[], int len) {\n    int sum = 0;\n    for(int i=0; i<len; i++) sum += A[indices[i]];\n    return sum == target;\n}",
-        fullCode: "// See C implementation: non_deterministic_algorithms.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    int A[5] = {1, 2, 5, 6, 8};
+    int target = 9;
+    
+    log_step_start();
+    log_array("Set", A, 5);
+    log_var("Target", target);
+    log_message("Non-Deterministic Subset Sum Verification");
+    log_step_end();
+    
+    // Guess
+    int guess[2] = {2, 3}; // elements 5, 6 -> 11 (incorrect) or 0, 4 -> 1, 8 (correct)
+    log_step_start();
+    log_array("Guess Indices", guess, 2);
+    log_message("Guessing Stage (Non-Deterministic): Choice engine outputs candidate indices: 0 and 4.");
+    log_step_end();
+    
+    // Verify
+    int verified_sum = A[0] + A[4];
+    log_step_start();
+    log_var("Sum of Guess", verified_sum);
+    log_message("Verification Stage (Deterministic): Check if A[0] + A[4] = 1 + 8 = 9. Yes! Solution is verified in O(N) polynomial time.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Theoretical framework for defining NP problems and parallel verification.",
         disadvantages: "Requires hypothetical machine model; cannot be physically built.",
         applications: "Complexity theory, definition of Class NP.",
@@ -5678,7 +7041,30 @@ void insert(int key) {
         javaSnippet: "public static boolean isInClassP(String problemId) {\n    return problemId.equals(\"sorting\") || problemId.equals(\"searching\");\n}",
         javaCode: "public class ClassP {\n    // Theoretical demonstration of polynomial time algorithms\n}",
         codeSnippet: "void showClassP() {\n    // Log P class details\n}",
-        fullCode: "// See C implementation: class_p.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    log_step_start();
+    log_message("Class P: Complexity Class of tractable (efficiently solvable) decision problems.");
+    log_step_end();
+    
+    log_step_start();
+    log_message("An algorithm belongs to class P if its deterministic Turing machine running time is bounded by O(N^k) for some constant k.");
+    log_step_end();
+    
+    int arr[4] = {4, 2, 1, 3};
+    log_step_start();
+    log_array("Sorting Problem", arr, 4);
+    log_message("Example: Sorting is in P. Deterministic bubble sort solves it in O(N²) polynomial time.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Represents efficiently solvable problems.",
         disadvantages: "Some high degree polynomial algorithms (e.g. O(N^100)) are still practically slow.",
         applications: "Computational complexity, cryptography foundations.",
@@ -5721,7 +7107,31 @@ void insert(int key) {
         javaSnippet: "public static boolean isNPVerify(int[] cert, int target) {\n    int s = 0; for(int x : cert) s += x; return s == target;\n}",
         javaCode: "public class ClassNP {\n    // NP class verification simulator\n}",
         codeSnippet: "void showClassNP() {\n    // Log NP verification details\n}",
-        fullCode: "// See C implementation: class_np.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    log_step_start();
+    log_message("Class NP: Non-deterministic Polynomial complexity class.");
+    log_step_end();
+    
+    log_step_start();
+    log_message("A decision problem belongs to NP if any 'yes' instance has a certificate/solution that can be verified deterministically in polynomial time.");
+    log_step_end();
+    
+    int cert[2] = {1, 8};
+    log_step_start();
+    log_array("Certificate Solution", cert, 2);
+    log_var("Target Sum", 9);
+    log_message("Example: Subset Sum. Finding the subset is hard (O(2^N)), but verifying a certificate (1+8=9) is in P (O(N)). Thus it is in NP.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Encompasses a massive range of important practical optimization problems.",
         disadvantages: "Currently no known polynomial time algorithms to solve NP-complete problems.",
         applications: "Optimization, security, theorem proving.",
@@ -5764,7 +7174,28 @@ void insert(int key) {
         javaSnippet: "public static boolean isNPComplete(String problem) {\n    return problem.equals(\"TSP\") || problem.equals(\"Knapsack\");\n}",
         javaCode: "public class NPComplete {\n    // NP Complete class description\n}",
         codeSnippet: "void showNPComplete() {\n    // Log SAT/TSP properties\n}",
-        fullCode: "// See C implementation: np_complete.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    log_step_start();
+    log_message("Class NP-Complete: The hardest problems in Class NP.");
+    log_step_end();
+    
+    log_step_start();
+    log_message("A problem is NP-complete if: 1. It is in NP. 2. Every problem in NP can be reduced to it in polynomial time.");
+    log_step_end();
+    
+    log_step_start();
+    log_message("Example: Travelling Salesperson Problem (TSP). If any single NP-Complete problem is solved in polynomial time, then P = NP.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Unifies thousands of seemingly distinct hard problems under a single complexity status.",
         disadvantages: "Highly unlikely to ever find polynomial-time solutions.",
         applications: "Logistics, code verification, scheduling, games.",
@@ -5807,7 +7238,28 @@ void insert(int key) {
         javaSnippet: "public static boolean isNPHard(String problem) {\n    return problem.equals(\"HaltingProblem\") || problem.equals(\"TSP_Optimization\");\n}",
         javaCode: "public class NPHard {\n    // NP Hard complexity class representation\n}",
         codeSnippet: "void showNPHard() {\n    // Log Halting Problem details\n}",
-        fullCode: "// See C implementation: np_hard.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    log_step_start();
+    log_message("Class NP-Hard: Problems at least as hard as the hardest problems in NP, but not necessarily in NP.");
+    log_step_end();
+    
+    log_step_start();
+    log_message("A problem H is NP-hard if every problem in NP is polynomial-time reducible to H. They do not have to be decidable.");
+    log_step_end();
+    
+    log_step_start();
+    log_message("Example: Halting Problem (undecidable: cannot be verified in polynomial time, yet NP-hard). Optimization-TSP is also NP-hard.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Classifies problems that are strictly harder than NP.",
         disadvantages: "Includes undecidable problems which can NEVER be solved by any computer.",
         applications: "Advanced computer science theory, logic analysis.",
@@ -5850,7 +7302,28 @@ void insert(int key) {
         javaSnippet: "public static int[] reduceAtoB(int[] instanceA) {\n    // Transform inputs...\n    return instanceA; // mapped\n}",
         javaCode: "public class ReductionComplexity {\n    // Polynomial time reduction simulator\n}",
         codeSnippet: "void showReduction() {\n    // Log transformation mapping\n}",
-        fullCode: "// See C implementation: polynomial_time_reduction.c",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include "../include/logger.h"
+
+int main() {
+    log_init();
+    
+    log_step_start();
+    log_message("Polynomial-Time Reduction: A method to transform Problem A to Problem B in polynomial time (A <=p B).");
+    log_step_end();
+    
+    log_step_start();
+    log_message("If A reduces to B in polynomial time, it proves B is at least as hard as A. If B is solvable in P, then A is solvable in P.");
+    log_step_end();
+    
+    log_step_start();
+    log_message("Example: Reducing 3SAT to Independent Set. Map clauses to graph nodes and conflict literals to graph edges. Solve via Independent Set solver.");
+    log_step_end();
+    
+    log_finish();
+    return 0;
+}`,
         advantages: "Allows propagating NP-completeness proofs to new problems.",
         disadvantages: "Requires defining complex mathematical mappings.",
         applications: "Proving NP-completeness, designing approximation algorithms.",
