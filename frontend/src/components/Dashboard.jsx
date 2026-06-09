@@ -5,7 +5,7 @@ import {
     ArrowRight, Code2, Clock, Boxes, Search, Star, BookOpen,
     TrendingUp, ChevronDown, ChevronRight, Filter, Zap, Award,
     BarChart2, Layers, GitBranch, Hash, Database, Binary,
-    Network, Cpu, Brain, SlidersHorizontal, X
+    Network, Cpu, Brain, SlidersHorizontal, X, Sun, Moon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -153,6 +153,40 @@ export function Dashboard({ onSelectProblem }) {
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
         return () => observer.disconnect();
     }, []);
+
+    const toggleTheme = () => {
+        const newTheme = theme === 'dark' ? 'light' : 'dark';
+        
+        // Use the colors from index.css for light theme to maintain the default light color theme
+        const root = document.documentElement;
+        if (newTheme === 'light') {
+            root.style.setProperty('--color-bg-primary', '#f0e6ff');
+            root.style.setProperty('--color-bg-secondary', '#e8d9ff');
+            root.style.setProperty('--color-bg-tertiary', '#ddc7ff');
+            root.style.setProperty('--color-text-primary', '#1e1b29');
+            root.style.setProperty('--color-text-secondary', '#4a4560');
+            root.style.setProperty('--color-text-tertiary', '#6b6580');
+            root.style.setProperty('--color-border', '#d4c5f9');
+            root.style.setProperty('--color-accent-primary', '#7c3aed');
+            root.style.setProperty('--color-accent-secondary', '#6366f1');
+            root.style.setProperty('--color-accent-hover', '#8b5cf6');
+        } else {
+            root.style.setProperty('--color-bg-primary', '#0a0e1a');
+            root.style.setProperty('--color-bg-secondary', '#131825');
+            root.style.setProperty('--color-bg-tertiary', '#1a1f35');
+            root.style.setProperty('--color-text-primary', '#e2e8f0');
+            root.style.setProperty('--color-text-secondary', '#94a3b8');
+            root.style.setProperty('--color-text-tertiary', '#64748b');
+            root.style.setProperty('--color-border', '#334155');
+            root.style.setProperty('--color-accent-primary', '#8b5cf6');
+            root.style.setProperty('--color-accent-secondary', '#ec4899');
+            root.style.setProperty('--color-accent-hover', '#a78bfa');
+        }
+        
+        root.setAttribute('data-theme', newTheme);
+        localStorage.setItem('app-theme', newTheme);
+        setTheme(newTheme);
+    };
 
     useEffect(() => {
         const recent = JSON.parse(localStorage.getItem('recentProblems') || '[]');
@@ -550,6 +584,15 @@ export function Dashboard({ onSelectProblem }) {
 
                     {/* Right controls */}
                     <div className="flex items-center gap-2 ml-auto">
+                        {/* Theme Toggle */}
+                        <button
+                            onClick={toggleTheme}
+                            className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-white/10' : 'hover:bg-black/10'} text-[var(--color-text-secondary)] mr-1`}
+                            title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+                        >
+                            {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                        </button>
+
                         {/* Difficulty filter */}
                         <select
                             value={selectedDifficulty}

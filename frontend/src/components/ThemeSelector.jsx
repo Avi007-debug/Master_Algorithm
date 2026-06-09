@@ -21,16 +21,16 @@ const THEMES = {
     light: {
         name: 'Light',
         colors: {
-            '--color-bg-primary': '#ffffff',
-            '--color-bg-secondary': '#f8fafc',
-            '--color-bg-tertiary': '#f1f5f9',
-            '--color-text-primary': '#0f172a',
-            '--color-text-secondary': '#475569',
-            '--color-text-tertiary': '#94a3b8',
-            '--color-border': '#e2e8f0',
-            '--color-accent-primary': '#8b5cf6',
-            '--color-accent-secondary': '#ec4899',
-            '--color-accent-hover': '#7c3aed',
+            '--color-bg-primary': '#f0e6ff',
+            '--color-bg-secondary': '#e8d9ff',
+            '--color-bg-tertiary': '#ddc7ff',
+            '--color-text-primary': '#1e1b29',
+            '--color-text-secondary': '#4a4560',
+            '--color-text-tertiary': '#6b6580',
+            '--color-border': '#d4c5f9',
+            '--color-accent-primary': '#7c3aed',
+            '--color-accent-secondary': '#6366f1',
+            '--color-accent-hover': '#8b5cf6',
         }
     },
     nord: {
