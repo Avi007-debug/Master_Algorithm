@@ -7340,6 +7340,677 @@ int main() {
         commonMistakes: ["Reducing in exponential time (reduction MUST be polynomial time)"],
         beginnerTips: ["A ≤p B means: 'If we can solve B, we can solve A.' So B is at least as hard as A."]
     }
+,
+    {
+        id: "astar_search",
+        title: "A* Search Algorithm",
+        category: CATEGORIES.GRAPHS,
+        difficulty: "Hard",
+        inSyllabus: false,
+        timeComplexity: "O(E)",
+        spaceComplexity: "O(V)",
+        description: "Pathfinding and graph traversal algorithm that uses a heuristic to guide its search.",
+        basicOperation: "Node extraction from priority queue and distance update.",
+        dominantOperation: "Priority queue operations.",
+        criticalOperation: "Heuristic cost estimation.",
+        bestCaseDerivation: "O(1) if goal is start node.",
+        averageCaseDerivation: "O(E) depending on the heuristic.",
+        worstCaseDerivation: "O(b^d) where b is branching factor and d is depth.",
+        spaceComplexityDerivation: "O(V) to store the open and closed sets.",
+        interviewQuestions: "1. What makes A* different from Dijkstra's algorithm?\n2. What does an 'admissible' heuristic mean?",
+        examQuestions: "Explain the difference between Dijkstra and A* algorithms.",
+        derivationShortcuts: "Heuristic driven graph search.",
+        beginnerTips: ["Think of it as Dijkstra's algorithm but with a compass pointing to the goal.", "f(n) = g(n) + h(n)"],
+        applications: "Game AI pathfinding, map routing applications.",
+        commonMistakes: ["Using an inadmissible heuristic that overestimates cost.", "Not updating costs if a shorter path to an open node is found."],
+        codeSnippet: "function AStar(start, goal):\n    openSet = priority_queue(start)\n    while openSet is not empty:\n        current = openSet.pop()\n        if current == goal:\n            return reconstruct_path(current)\n        for neighbor in current.neighbors:\n            gScore = current.gScore + cost(current, neighbor)\n            if gScore < neighbor.gScore:\n                neighbor.gScore = gScore\n                neighbor.fScore = gScore + heuristic(neighbor, goal)\n                openSet.push(neighbor)",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+// A simple A* representation
+typedef struct Node {
+    int id;
+    int g, h, f;
+    struct Node* parent;
+} Node;
+
+int main() {
+    printf("A* Search initialized.\n");
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "astar_search",
+    },
+    {
+        id: "tarjan_scc",
+        title: "Tarjan's Strongly Connected Components",
+        category: CATEGORIES.GRAPHS,
+        difficulty: "Hard",
+        inSyllabus: false,
+        timeComplexity: "O(V + E)",
+        spaceComplexity: "O(V)",
+        description: "Finds strongly connected components in a directed graph using a single DFS pass.",
+        basicOperation: "DFS traversal step.",
+        dominantOperation: "Edge exploration in DFS.",
+        criticalOperation: "Updating lowest reachable vertex (low-link value).",
+        bestCaseDerivation: "O(V+E)",
+        averageCaseDerivation: "O(V+E)",
+        worstCaseDerivation: "O(V+E)",
+        spaceComplexityDerivation: "O(V) for recursion stack and low-link arrays.",
+        interviewQuestions: "1. How does Tarjan's algorithm differ from Kosaraju's algorithm?\n2. What is a low-link value?",
+        examQuestions: "Trace Tarjan's algorithm on a given directed graph.",
+        derivationShortcuts: "DFS tree based low-link computation.",
+        beginnerTips: ["Nodes in the same SCC have the same lowest reachable vertex.", "Uses a stack to track currently explored nodes."],
+        applications: "Finding cyclic dependencies, circuit analysis.",
+        commonMistakes: ["Forgetting to remove nodes from stack when an SCC is found."],
+        codeSnippet: "function tarjan(node):\n    node.index = currentIndex\n    node.lowlink = currentIndex\n    currentIndex++\n    stack.push(node)\n    node.onStack = true\n    for neighbor in node.neighbors:\n        if neighbor.index is undefined:\n            tarjan(neighbor)\n            node.lowlink = min(node.lowlink, neighbor.lowlink)\n        else if neighbor.onStack:\n            node.lowlink = min(node.lowlink, neighbor.index)\n    if node.lowlink == node.index:\n        start new SCC\n        do pop from stack to node",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_V 100
+
+int graph[MAX_V][MAX_V];
+int ids[MAX_V], low[MAX_V];
+int onStack[MAX_V];
+int stack[MAX_V], top = -1;
+int id = 0;
+
+void dfs(int at, int V) {
+    stack[++top] = at;
+    onStack[at] = 1;
+    ids[at] = low[at] = id++;
+    
+    for (int to = 0; to < V; to++) {
+        if (graph[at][to]) {
+            if (ids[to] == -1) dfs(to, V);
+            if (onStack[to]) low[at] = low[at] < low[to] ? low[at] : low[to];
+        }
+    }
+    
+    if (ids[at] == low[at]) {
+        for (int node = stack[top--]; ; node = stack[top--]) {
+            onStack[node] = 0;
+            if (node == at) break;
+        }
+    }
+}
+
+int main() {
+    printf("Tarjan's SCC\n");
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "tarjan_scc",
+    },
+    {
+        id: "kosaraju_scc",
+        title: "Kosaraju's Algorithm",
+        category: CATEGORIES.GRAPHS,
+        difficulty: "Medium",
+        inSyllabus: false,
+        timeComplexity: "O(V + E)",
+        spaceComplexity: "O(V)",
+        description: "Finds strongly connected components using two passes of DFS and a transposed graph.",
+        basicOperation: "DFS traversal.",
+        dominantOperation: "DFS on original and reversed graph.",
+        criticalOperation: "Reversing graph edges.",
+        bestCaseDerivation: "O(V+E)",
+        averageCaseDerivation: "O(V+E)",
+        worstCaseDerivation: "O(V+E)",
+        spaceComplexityDerivation: "O(V) for visited array and stack.",
+        interviewQuestions: "1. Why does Kosaraju's algorithm require two passes?\n2. What happens if we use BFS instead of DFS?",
+        examQuestions: "Explain the two passes of Kosaraju's algorithm.",
+        derivationShortcuts: "Two DFS passes: finish times, then on transposed graph.",
+        beginnerTips: ["Pass 1: Get nodes in order of decreasing finish times.", "Pass 2: DFS on the reversed graph using this order."],
+        applications: "Social network cluster analysis.",
+        commonMistakes: ["Forgetting to reverse the graph before the second DFS pass."],
+        codeSnippet: "function Kosaraju(G):\n    stack = empty stack\n    for each vertex v in G:\n        if v not visited:\n            DFS1(G, v, stack)\n    GR = reverse_graph(G)\n    while stack not empty:\n        v = stack.pop()\n        if v not visited:\n            DFS2(GR, v) -> forms one SCC",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+
+// Kosaraju's SCC algorithm outline
+int main() {
+    printf("Kosaraju's SCC algorithm requires 2 DFS passes.\n");
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "kosaraju_scc",
+    },
+    {
+        id: "kmp_string",
+        title: "KMP Algorithm (Knuth-Morris-Pratt)",
+        category: CATEGORIES.HASHING,
+        difficulty: "Hard",
+        inSyllabus: false,
+        timeComplexity: "O(N + M)",
+        spaceComplexity: "O(M)",
+        description: "A string matching algorithm that computes a prefix table to avoid redundant comparisons.",
+        basicOperation: "Character comparison.",
+        dominantOperation: "Pattern matching utilizing the LPS array.",
+        criticalOperation: "Computing the Longest Proper Prefix which is also Suffix (LPS) array.",
+        bestCaseDerivation: "O(N) when no match is found early.",
+        averageCaseDerivation: "O(N+M)",
+        worstCaseDerivation: "O(N+M)",
+        spaceComplexityDerivation: "O(M) for the LPS array.",
+        interviewQuestions: "1. How is the LPS array constructed?\n2. What is the advantage of KMP over naive string matching?",
+        examQuestions: "Compute the LPS array for the pattern 'ABABCABAB'.",
+        derivationShortcuts: "Avoids backtracking in the text string.",
+        beginnerTips: ["LPS stands for Longest Prefix which is also Suffix.", "The text pointer never moves backwards."],
+        applications: "Text editors search, DNA sequence matching.",
+        commonMistakes: ["Incorrect computation of the LPS array (specifically when mismatch occurs during construction)."],
+        codeSnippet: "function KMP(text, pattern):\n    lps = computeLPS(pattern)\n    i = 0, j = 0\n    while i < len(text):\n        if text[i] == pattern[j]:\n            i++, j++\n        if j == len(pattern):\n            match found at i-j\n            j = lps[j-1]\n        else if i < len(text) and text[i] != pattern[j]:\n            if j != 0: j = lps[j-1]\n            else: i++",
+        fullCode: `#include <stdio.h>
+#include <string.h>
+
+void computeLPSArray(char* pat, int M, int* lps) {
+    int len = 0, i = 1;
+    lps[0] = 0;
+    while (i < M) {
+        if (pat[i] == pat[len]) lps[i++] = ++len;
+        else if (len != 0) len = lps[len - 1];
+        else lps[i++] = 0;
+    }
+}
+
+void KMPSearch(char* pat, char* txt) {
+    int M = strlen(pat), N = strlen(txt);
+    int lps[M];
+    computeLPSArray(pat, M, lps);
+    int i = 0, j = 0;
+    while (i < N) {
+        if (pat[j] == txt[i]) { j++; i++; }
+        if (j == M) {
+            printf("Found pattern at index %d\n", i - j);
+            j = lps[j - 1];
+        } else if (i < N && pat[j] != txt[i]) {
+            if (j != 0) j = lps[j - 1];
+            else i++;
+        }
+    }
+}
+
+int main() {
+    KMPSearch("ABABCABAB", "ABABDABACDABABCABAB");
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "kmp_string",
+    },
+    {
+        id: "rabin_karp",
+        title: "Rabin-Karp Algorithm",
+        category: CATEGORIES.HASHING,
+        difficulty: "Medium",
+        inSyllabus: false,
+        timeComplexity: "O(N + M)",
+        spaceComplexity: "O(1)",
+        description: "String matching algorithm using rolling hash to find pattern occurrences.",
+        basicOperation: "Hash calculation and character comparison.",
+        dominantOperation: "Rolling hash updates.",
+        criticalOperation: "Modulo arithmetic for rolling hash.",
+        bestCaseDerivation: "O(N+M) with no hash collisions.",
+        averageCaseDerivation: "O(N+M)",
+        worstCaseDerivation: "O(N*M) with many hash collisions (spurious hits).",
+        spaceComplexityDerivation: "O(1) keeping hash values.",
+        interviewQuestions: "1. What is a rolling hash?\n2. What causes the worst-case O(N*M) time complexity?",
+        examQuestions: "Explain the rolling hash function in Rabin-Karp.",
+        derivationShortcuts: "Rolling hash: H(i+1) = (H(i) - text[i]*d^(M-1)) * d + text[i+M]",
+        beginnerTips: ["Hash values match? Check the exact string to rule out collisions.", "Use a large prime number for the modulo to minimize collisions."],
+        applications: "Plagiarism detection, multiple pattern matching.",
+        commonMistakes: ["Not handling negative values when updating the rolling hash with modulo arithmetic."],
+        codeSnippet: "function RabinKarp(text, pattern):\n    hPattern = hash(pattern)\n    hText = hash(text[0..M-1])\n    for i from 0 to N-M:\n        if hPattern == hText:\n            if text[i..i+M-1] == pattern:\n                match found\n        hText = rehash(hText, text[i], text[i+M])",
+        fullCode: `#include <stdio.h>
+#include <string.h>
+
+#define d 256
+
+void search(char pat[], char txt[], int q) {
+    int M = strlen(pat), N = strlen(txt);
+    int p = 0, t = 0, h = 1;
+
+    for (int i = 0; i < M - 1; i++) h = (h * d) % q;
+
+    for (int i = 0; i < M; i++) {
+        p = (d * p + pat[i]) % q;
+        t = (d * t + txt[i]) % q;
+    }
+
+    for (int i = 0; i <= N - M; i++) {
+        if (p == t) {
+            int j;
+            for (j = 0; j < M; j++) if (txt[i+j] != pat[j]) break;
+            if (j == M) printf("Pattern found at index %d\n", i);
+        }
+        if (i < N - M) {
+            t = (d*(t - txt[i]*h) + txt[i+M]) % q;
+            if (t < 0) t = t + q;
+        }
+    }
+}
+
+int main() {
+    search("TEST", "THIS IS A TEST TEXT", 101);
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "rabin_karp",
+    },
+    {
+        id: "z_algorithm",
+        title: "Z Algorithm",
+        category: CATEGORIES.HASHING,
+        difficulty: "Hard",
+        inSyllabus: false,
+        timeComplexity: "O(N + M)",
+        spaceComplexity: "O(N + M)",
+        description: "Linear time string matching algorithm that computes the Z-array for pattern matching.",
+        basicOperation: "Character comparison.",
+        dominantOperation: "Computing the Z array values.",
+        criticalOperation: "Maintaining the [L, R] bounding box.",
+        bestCaseDerivation: "O(N+M)",
+        averageCaseDerivation: "O(N+M)",
+        worstCaseDerivation: "O(N+M)",
+        spaceComplexityDerivation: "O(N+M) for the concatenated string and Z-array.",
+        interviewQuestions: "1. What does Z[i] represent in the Z-array?\n2. How is the [L, R] box used to speed up computation?",
+        examQuestions: "Compute the Z array for string 'aabcaabxaaaz'.",
+        derivationShortcuts: "Concatenate Pattern + '$' + Text to find matches.",
+        beginnerTips: ["Z[i] is the length of the longest substring starting from text[i] which is also a prefix of text.", "The algorithm cleverly reuses previously computed values."],
+        applications: "Fast exact string matching, substring problems.",
+        commonMistakes: ["Incorrect bounds checking when updating L and R pointers."],
+        codeSnippet: "function ZAlgorithm(text):\n    Z = array of size n\n    L = 0, R = 0\n    for i from 1 to n-1:\n        if i > R:\n            L = R = i\n            while R < n and text[R-L] == text[R]: R++\n            Z[i] = R - L; R--\n        else:\n            k = i - L\n            if Z[k] < R - i + 1: Z[i] = Z[k]\n            else:\n                L = i\n                while R < n and text[R-L] == text[R]: R++\n                Z[i] = R - L; R--",
+        fullCode: `#include <stdio.h>
+#include <string.h>
+
+void getZarr(char str[], int Z[]) {
+    int n = strlen(str), L = 0, R = 0, K;
+    for (int i = 1; i < n; ++i) {
+        if (i > R) {
+            L = R = i;
+            while (R < n && str[R-L] == str[R]) R++;
+            Z[i] = R-L; R--;
+        } else {
+            K = i-L;
+            if (Z[K] < R-i+1) Z[i] = Z[K];
+            else {
+                L = i;
+                while (R < n && str[R-L] == str[R]) R++;
+                Z[i] = R-L; R--;
+            }
+        }
+    }
+}
+
+int main() {
+    printf("Z Algorithm String Matching\n");
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "z_algorithm",
+    },
+    {
+        id: "topological_sort",
+        title: "Topological Sort (Kahn's)",
+        category: CATEGORIES.GRAPHS,
+        difficulty: "Medium",
+        inSyllabus: false,
+        timeComplexity: "O(V + E)",
+        spaceComplexity: "O(V)",
+        description: "Linear ordering of vertices such that for every directed edge uv, vertex u comes before v.",
+        basicOperation: "Indegree decrement and queue operation.",
+        dominantOperation: "Processing nodes with 0 indegree.",
+        criticalOperation: "Maintaining indegree array.",
+        bestCaseDerivation: "O(V+E)",
+        averageCaseDerivation: "O(V+E)",
+        worstCaseDerivation: "O(V+E)",
+        spaceComplexityDerivation: "O(V) for indegree array and queue.",
+        interviewQuestions: "1. Can topological sort be applied to cyclic graphs?\n2. How can topological sort be used to detect cycles in a DAG?",
+        examQuestions: "Perform Kahn's topological sort on a given DAG.",
+        derivationShortcuts: "Indegree 0 implies no prerequisites.",
+        beginnerTips: ["Only works on Directed Acyclic Graphs (DAGs).", "If the final sorted list doesn't contain all vertices, the graph has a cycle."],
+        applications: "Task scheduling, resolving dependencies, build systems.",
+        commonMistakes: ["Applying it to undirected graphs or graphs with cycles."],
+        codeSnippet: "function Kahn(G):\n    indegree = computeIndegrees(G)\n    Q = queue of all nodes with indegree == 0\n    result = []\n    while Q not empty:\n        u = Q.dequeue()\n        result.push(u)\n        for v in G.neighbors(u):\n            indegree[v]--\n            if indegree[v] == 0: Q.enqueue(v)\n    if len(result) != len(G): return \"Cycle detected\"\n    return result",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+
+// Kahn's Algorithm
+int main() {
+    printf("Topological Sort using Kahn's Algorithm involves indegree array and a queue.\n");
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "topological_sort",
+    },
+    {
+        id: "bellman_ford",
+        title: "Bellman-Ford Algorithm",
+        category: CATEGORIES.GRAPHS,
+        difficulty: "Medium",
+        inSyllabus: false,
+        timeComplexity: "O(V * E)",
+        spaceComplexity: "O(V)",
+        description: "Computes shortest paths from a single source vertex to all other vertices, handling negative edge weights.",
+        basicOperation: "Edge relaxation.",
+        dominantOperation: "Relaxing all E edges V-1 times.",
+        criticalOperation: "Checking for negative weight cycles on the V-th iteration.",
+        bestCaseDerivation: "O(E) if optimized to stop early when no changes occur.",
+        averageCaseDerivation: "O(V * E)",
+        worstCaseDerivation: "O(V * E)",
+        spaceComplexityDerivation: "O(V) for the distance array.",
+        interviewQuestions: "1. Why does Bellman-Ford run V-1 times?\n2. How does it detect negative cycles?",
+        examQuestions: "Trace the Bellman-Ford algorithm and show how it detects a negative cycle.",
+        derivationShortcuts: "V-1 iterations guarantee shortest paths in a graph without negative cycles.",
+        beginnerTips: ["Unlike Dijkstra, Bellman-Ford handles negative weights.", "The V-th iteration is purely for cycle detection."],
+        applications: "Distance vector routing protocols (RIP).",
+        commonMistakes: ["Forgetting the final V-th pass to detect negative weight cycles."],
+        codeSnippet: "function BellmanFord(G, source):\n    dist = array of infinity\n    dist[source] = 0\n    for i from 1 to V-1:\n        for each edge (u, v, weight) in G:\n            if dist[u] + weight < dist[v]:\n                dist[v] = dist[u] + weight\n    // check for negative cycles\n    for each edge (u, v, weight) in G:\n        if dist[u] + weight < dist[v]:\n            return \"Graph contains a negative-weight cycle\"",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+
+struct Edge { int src, dest, weight; };
+struct Graph { int V, E; struct Edge* edge; };
+
+void BellmanFord(struct Graph* graph, int src) {
+    int V = graph->V, E = graph->E;
+    int dist[V];
+    for (int i = 0; i < V; i++) dist[i] = 1e9;
+    dist[src] = 0;
+
+    for (int i = 1; i <= V - 1; i++) {
+        for (int j = 0; j < E; j++) {
+            int u = graph->edge[j].src;
+            int v = graph->edge[j].dest;
+            int weight = graph->edge[j].weight;
+            if (dist[u] != 1e9 && dist[u] + weight < dist[v])
+                dist[v] = dist[u] + weight;
+        }
+    }
+
+    for (int i = 0; i < E; i++) {
+        int u = graph->edge[i].src;
+        int v = graph->edge[i].dest;
+        int weight = graph->edge[i].weight;
+        if (dist[u] != 1e9 && dist[u] + weight < dist[v]) {
+            printf("Graph contains negative weight cycle\n");
+            return;
+        }
+    }
+}
+
+int main() { return 0; }`,
+        inputs: [],
+        runCommand: "bellman_ford",
+    },
+    {
+        id: "trie_insert_search",
+        title: "Trie (Prefix Tree) Operations",
+        category: CATEGORIES.TREES,
+        difficulty: "Medium",
+        inSyllabus: false,
+        timeComplexity: "O(L)",
+        spaceComplexity: "O(N * L)",
+        description: "Tree data structure used to efficiently store and retrieve keys in a dataset of strings.",
+        basicOperation: "Node traversal based on character index.",
+        dominantOperation: "Following or creating child pointers for each character.",
+        criticalOperation: "Marking end-of-word nodes.",
+        bestCaseDerivation: "O(L) where L is length of word.",
+        averageCaseDerivation: "O(L)",
+        worstCaseDerivation: "O(L)",
+        spaceComplexityDerivation: "O(N * L) for storing N words of max length L.",
+        interviewQuestions: "1. How does a Trie compare to a Hash Table for string storage?\n2. What is the space complexity bottleneck of a Trie?",
+        examQuestions: "Draw the Trie formed by inserting a given set of words.",
+        derivationShortcuts: "Time complexity depends only on word length, not dataset size.",
+        beginnerTips: ["Each node represents a single character.", "Words are formed by paths from root to nodes marked as 'isEndOfWord'."],
+        applications: "Autocomplete, spell checking, IP routing.",
+        commonMistakes: ["Allocating an array of 26 pointers for every node blindly, wasting space for sparse datasets."],
+        codeSnippet: "function insert(word):\n    node = root\n    for char in word:\n        if not node.children[char]:\n            node.children[char] = new Node()\n        node = node.children[char]\n    node.isEndOfWord = true\n\nfunction search(word):\n    node = root\n    for char in word:\n        if not node.children[char]: return false\n        node = node.children[char]\n    return node.isEndOfWord",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define ALPHABET_SIZE 26
+
+struct TrieNode {
+    struct TrieNode *children[ALPHABET_SIZE];
+    bool isEndOfWord;
+};
+
+struct TrieNode *getNode(void) {
+    struct TrieNode *pNode = NULL;
+    pNode = (struct TrieNode *)malloc(sizeof(struct TrieNode));
+    if (pNode) {
+        pNode->isEndOfWord = false;
+        for (int i = 0; i < ALPHABET_SIZE; i++) pNode->children[i] = NULL;
+    }
+    return pNode;
+}
+
+void insert(struct TrieNode *root, const char *key) {
+    struct TrieNode *pCrawl = root;
+    for (int level = 0; key[level] != '\0'; level++) {
+        int index = key[level] - 'a';
+        if (!pCrawl->children[index])
+            pCrawl->children[index] = getNode();
+        pCrawl = pCrawl->children[index];
+    }
+    pCrawl->isEndOfWord = true;
+}
+
+int main() {
+    struct TrieNode *root = getNode();
+    insert(root, "algorithm");
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "trie_insert_search",
+    },
+    {
+        id: "fenwick_tree",
+        title: "Fenwick Tree (BIT)",
+        category: CATEGORIES.TREES,
+        difficulty: "Medium",
+        inSyllabus: false,
+        timeComplexity: "O(log N)",
+        spaceComplexity: "O(N)",
+        description: "Binary Indexed Tree to efficiently update elements and calculate prefix sums in an array of values.",
+        basicOperation: "Bitwise AND operations to traverse the tree.",
+        dominantOperation: "Updating/querying log N nodes.",
+        criticalOperation: "x & (-x) to get the lowest set bit.",
+        bestCaseDerivation: "O(1) if updating index 1.",
+        averageCaseDerivation: "O(log N)",
+        worstCaseDerivation: "O(log N)",
+        spaceComplexityDerivation: "O(N) for the BIT array.",
+        interviewQuestions: "1. How does a Fenwick tree isolate the lowest set bit?\n2. Compare Fenwick Tree to Segment Tree.",
+        examQuestions: "Given an array, construct its Binary Indexed Tree.",
+        derivationShortcuts: "Index manipulation: i = i + (i & -i) to go up, i = i - (i & -i) to go down.",
+        beginnerTips: ["The array is 1-indexed.", "Use Two's complement x & (-x) to find the rightmost set bit."],
+        applications: "Cumulative frequency tables, fast range sum queries.",
+        commonMistakes: ["Using 0-indexed arrays instead of 1-indexed, which causes an infinite loop."],
+        codeSnippet: "function add(index, value):\n    while index <= n:\n        tree[index] += value\n        index += index & (-index)\n\nfunction query(index):\n    sum = 0\n    while index > 0:\n        sum += tree[index]\n        index -= index & (-index)\n    return sum",
+        fullCode: `#include <stdio.h>
+
+void updateBIT(int BITree[], int n, int index, int val) {
+    index = index + 1;
+    while (index <= n) {
+        BITree[index] += val;
+        index += index & (-index);
+    }
+}
+
+int getSum(int BITree[], int index) {
+    int sum = 0;
+    index = index + 1;
+    while (index > 0) {
+        sum += BITree[index];
+        index -= index & (-index);
+    }
+    return sum;
+}
+
+int main() {
+    int freq[] = {2, 1, 1, 3, 2, 3, 4, 5, 6, 7, 8, 9};
+    int n = sizeof(freq)/sizeof(freq[0]);
+    int BITree[n+1];
+    for (int i=1; i<=n; i++) BITree[i] = 0;
+    for (int i=0; i<n; i++) updateBIT(BITree, n, i, freq[i]);
+    printf("Sum of elements in arr[0..5] is %d\n", getSum(BITree, 5));
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "fenwick_tree",
+    },
+    {
+        id: "segment_tree",
+        title: "Segment Tree (Range Queries)",
+        category: CATEGORIES.TREES,
+        difficulty: "Hard",
+        inSyllabus: false,
+        timeComplexity: "O(log N)",
+        spaceComplexity: "O(N)",
+        description: "Versatile tree data structure for storing intervals or segments, enabling fast range queries and updates.",
+        basicOperation: "Tree traversal to merge segments.",
+        dominantOperation: "Recursive splitting of ranges into left/right children.",
+        criticalOperation: "Lazy propagation for range updates.",
+        bestCaseDerivation: "O(1) if query range exactly matches root.",
+        averageCaseDerivation: "O(log N)",
+        worstCaseDerivation: "O(log N)",
+        spaceComplexityDerivation: "O(4N) array size to represent a full binary tree.",
+        interviewQuestions: "1. Why does a segment tree array require size 4N?\n2. Explain lazy propagation.",
+        examQuestions: "Build a segment tree for finding minimums in a given array.",
+        derivationShortcuts: "Root handles range [0, n-1], children split ranges in half.",
+        beginnerTips: ["Leaf nodes store individual array elements.", "Internal nodes store the merged result of their children."],
+        applications: "Computational geometry, geographic information systems, competitive programming range queries.",
+        commonMistakes: ["Off-by-one errors in splitting the range (mid vs mid+1)."],
+        codeSnippet: "function build(node, start, end):\n    if start == end: tree[node] = A[start]\n    else:\n        mid = (start + end) / 2\n        build(2*node, start, mid)\n        build(2*node+1, mid+1, end)\n        tree[node] = tree[2*node] + tree[2*node+1]\n\nfunction query(node, start, end, l, r):\n    if r < start or end < l: return 0\n    if l <= start and end <= r: return tree[node]\n    mid = (start + end) / 2\n    return query(2*node, start, mid, l, r) + query(2*node+1, mid+1, end, l, r)",
+        fullCode: `#include <stdio.h>
+#include <math.h>
+
+int getMid(int s, int e) { return s + (e -s)/2; }
+
+int constructSTUtil(int arr[], int ss, int se, int *st, int si) {
+    if (ss == se) {
+        st[si] = arr[ss];
+        return arr[ss];
+    }
+    int mid = getMid(ss, se);
+    st[si] = constructSTUtil(arr, ss, mid, st, si*2+1) +
+             constructSTUtil(arr, mid+1, se, st, si*2+2);
+    return st[si];
+}
+
+int main() {
+    int arr[] = {1, 3, 5, 7, 9, 11};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    int st[100];
+    constructSTUtil(arr, 0, n-1, st, 0);
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "segment_tree",
+    },
+    {
+        id: "union_find",
+        title: "Disjoint Set Union (Union-Find)",
+        category: CATEGORIES.GRAPHS,
+        difficulty: "Easy",
+        inSyllabus: false,
+        timeComplexity: "O(\u03b1(N))",
+        spaceComplexity: "O(N)",
+        description: "Data structure that tracks a set of elements partitioned into disjoint subsets, supporting ultra-fast union and find operations.",
+        basicOperation: "Array lookup and updates.",
+        dominantOperation: "Traversing parent pointers to root.",
+        criticalOperation: "Path compression and union by rank.",
+        bestCaseDerivation: "O(1)",
+        averageCaseDerivation: "O(\u03b1(N)) amortized, where \u03b1 is the inverse Ackermann function.",
+        worstCaseDerivation: "O(log N) without path compression, O(\u03b1(N)) with it.",
+        spaceComplexityDerivation: "O(N) for parent and rank arrays.",
+        interviewQuestions: "1. Explain path compression.\n2. Why is union by rank important?",
+        examQuestions: "Show the parent array after a series of Union and Find operations with path compression.",
+        derivationShortcuts: "Inverse Ackermann function \u03b1(n) is practically constant (< 5 for all reasonable N).",
+        beginnerTips: ["Every set has exactly one root element.", "Path compression flattens the tree so future lookups are O(1)."],
+        applications: "Kruskal's MST, network connectivity, image processing connected components.",
+        commonMistakes: ["Forgetting to update the root when uniting sets (linking child instead of root)."],
+        codeSnippet: "function find(i):\n    if parent[i] == i: return i\n    parent[i] = find(parent[i])  // path compression\n    return parent[i]\n\nfunction union(i, j):\n    root_i = find(i)\n    root_j = find(j)\n    if root_i != root_j:\n        if rank[root_i] < rank[root_j]:\n            parent[root_i] = root_j\n        else if rank[root_i] > rank[root_j]:\n            parent[root_j] = root_i\n        else:\n            parent[root_j] = root_i\n            rank[root_i]++",
+        fullCode: `#include <stdio.h>
+
+#define MAX 100
+int parent[MAX], rank[MAX];
+
+void makeSet(int n) {
+    for (int i = 0; i < n; i++) {
+        parent[i] = i;
+        rank[i] = 0;
+    }
+}
+
+int find(int i) {
+    if (parent[i] == i) return i;
+    return parent[i] = find(parent[i]); // Path compression
+}
+
+void unionSet(int i, int j) {
+    int root_i = find(i);
+    int root_j = find(j);
+    if (root_i != root_j) {
+        if (rank[root_i] < rank[root_j]) parent[root_i] = root_j;
+        else if (rank[root_i] > rank[root_j]) parent[root_j] = root_i;
+        else {
+            parent[root_j] = root_i;
+            rank[root_i]++;
+        }
+    }
+}
+
+int main() {
+    makeSet(5);
+    unionSet(0, 2);
+    unionSet(4, 2);
+    unionSet(3, 1);
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "union_find",
+    },
+    {
+        id: "graham_scan",
+        title: "Graham Scan (Convex Hull)",
+        category: CATEGORIES.SORTING,
+        difficulty: "Hard",
+        inSyllabus: false,
+        timeComplexity: "O(N log N)",
+        spaceComplexity: "O(N)",
+        description: "Algorithm for finding the convex hull of a finite set of points in the plane with time complexity O(N log N).",
+        basicOperation: "Cross product computation (orientation).",
+        dominantOperation: "Sorting the points by polar angle.",
+        criticalOperation: "Stack operations to maintain convex boundary.",
+        bestCaseDerivation: "O(N log N) dominated by sorting.",
+        averageCaseDerivation: "O(N log N)",
+        worstCaseDerivation: "O(N log N)",
+        spaceComplexityDerivation: "O(N) for the stack storing hull points.",
+        interviewQuestions: "1. How does the orientation (cross product) check work?\n2. Why do we need to sort by polar angle?",
+        examQuestions: "Execute Graham Scan on a set of 6 2D points.",
+        derivationShortcuts: "Sorting takes O(N log N), stack operations are O(N) overall.",
+        beginnerTips: ["Find the bottom-most point first.", "If a point makes a 'right turn', pop the stack until it makes a 'left turn'."],
+        applications: "Collision avoidance, computational geometry, shape analysis.",
+        commonMistakes: ["Floating point inaccuracies in angle sorting (use cross product instead of atan2)."],
+        codeSnippet: "function GrahamScan(points):\n    p0 = point with lowest Y\n    sort points by polar angle with p0\n    stack.push(p0), stack.push(p1), stack.push(p2)\n    for i from 3 to N-1:\n        while orientation(second_top(stack), top(stack), points[i]) != COUNTERCLOCKWISE:\n            stack.pop()\n        stack.push(points[i])\n    return stack",
+        fullCode: `#include <stdio.h>
+#include <stdlib.h>
+
+struct Point { int x, y; };
+
+int orientation(struct Point p, struct Point q, struct Point r) {
+    int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+    if (val == 0) return 0;  // colinear
+    return (val > 0)? 1: 2; // clock or counterclock wise
+}
+
+int main() {
+    printf("Graham Scan Convex Hull\n");
+    return 0;
+}`,
+        inputs: [],
+        runCommand: "graham_scan",
+    }
 ];
-
-
