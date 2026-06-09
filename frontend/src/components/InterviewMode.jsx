@@ -425,8 +425,8 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                         </div>
 
                         {/* Pseudocode Panel */}
-                        <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-border)] font-mono text-xs overflow-auto leading-relaxed max-h-52">
-                            <pre className="whitespace-pre text-[var(--color-text-primary)]">{problem.pseudocode || problem.codeSnippet || "// Pseudocode coming soon..."}</pre>
+                        <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-border)] font-mono text-xs overflow-x-auto overflow-y-auto leading-relaxed max-h-64">
+                            <pre className="whitespace-pre-wrap break-words text-[var(--color-text-primary)] min-w-0">{problem.pseudocode || problem.codeSnippet || "// Pseudocode coming soon..."}</pre>
                         </div>
 
                         {/* Complete C Implementation (collapsible) */}
@@ -443,8 +443,8 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                                     {showFullCode ? <ChevronUp size={12} className="text-[var(--color-accent-primary)]" /> : <ChevronDown size={12} className="text-[var(--color-text-tertiary)] group-hover:text-[var(--color-accent-primary)]" />}
                                 </button>
                                 {showFullCode && (
-                                    <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-accent-cyan)]/30 font-mono text-xs overflow-auto leading-relaxed max-h-96">
-                                        <pre className="whitespace-pre text-[var(--color-text-primary)]">{sourceCode}</pre>
+                                    <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-accent-cyan)]/30 font-mono text-xs overflow-x-auto overflow-y-auto leading-relaxed max-h-[28rem]">
+                                        <pre className="whitespace-pre-wrap break-words text-[var(--color-text-primary)] min-w-0">{sourceCode}</pre>
                                     </div>
                                 )}
                             </div>

@@ -518,8 +518,8 @@ export function Dashboard({ onSelectProblem }) {
 
                     {/* Logo/Brand */}
                     <div className="flex items-center gap-2 mr-4">
-                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--color-accent-primary)] to-[var(--color-accent-secondary)] flex items-center justify-center">
-                            <Code2 size={14} className="text-white" />
+                        <div className="w-8 h-8 flex items-center justify-center">
+                            <img src="/algorithm-icon.svg" alt="Master Algorithm Logo" className="w-full h-full object-contain filter drop-shadow-sm" />
                         </div>
                         <span className="font-bold text-sm hidden sm:block">Master Algorithm</span>
                     </div>
