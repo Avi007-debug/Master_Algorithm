@@ -28,7 +28,6 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
         '3x': 3
     };
     const [showFullCode, setShowFullCode] = useState(false);
-    const [codeLanguage, setCodeLanguage] = useState('c'); // 'c', 'pseudo'
     const [showTutorial, setShowTutorial] = useState(false);
     const [resolvedFullCode, setResolvedFullCode] = useState('');
     const [theme, setTheme] = useState(() => {
@@ -87,7 +86,6 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
         let cancelled = false;
 
         setShowFullCode(false);
-        setCodeLanguage('c');
 
         const fullCode = problem?.fullCode || '';
         const needsSourceFetch = /^\/\/ See .+implementation: .+\.c$/i.test(fullCode.trim());
@@ -419,51 +417,36 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
                         </div>
                     )}
 
-                    {/* Core Code Snippet and Implementations */}
+                    {/* Pseudocode & Complete C Implementation */}
                     <div className="space-y-3">
-                        <div className="flex border-b border-[var(--color-border)] text-sm">
-                            <button
-                                onClick={() => { setCodeLanguage('c'); setShowFullCode(false); }}
-                                className={`px-4 py-2 font-semibold border-b-2 transition-colors ${codeLanguage === 'c' ? 'border-[var(--color-accent-primary)] text-[var(--color-accent-primary)]' : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}
-                            >
-                                C Code
-                            </button>
-                            <button
-                                onClick={() => { setCodeLanguage('pseudo'); setShowFullCode(false); }}
-                                className={`px-4 py-2 font-semibold border-b-2 transition-colors ${codeLanguage === 'pseudo' ? 'border-[var(--color-accent-primary)] text-[var(--color-accent-primary)]' : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}
-                            >
-                                Pseudocode
-                            </button>
+                        <div className="flex items-center gap-2 mb-1">
+                            <Code size={14} className="text-[var(--color-accent-secondary)]" />
+                            <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">Pseudocode</span>
                         </div>
 
-                        {codeLanguage === 'c' && (
-                            <div className="space-y-3">
-                                <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-border)] font-mono text-xs overflow-auto leading-relaxed max-h-48">
-                                    <pre className="whitespace-pre text-[var(--color-text-primary)]">{problem.codeSnippet || "// C Code coming soon..."}</pre>
-                                </div>
-                                {sourceCode && (
-                                    <div className="space-y-2">
-                                        <button
-                                            onClick={() => setShowFullCode(!showFullCode)}
-                                            className="flex items-center gap-2 text-xs font-bold text-[var(--color-text-primary)] hover:text-[var(--color-accent-primary)] transition-colors w-full"
-                                        >
-                                            <Code size={14} className="text-[var(--color-accent-secondary)]" />
-                                            Complete C Implementation
-                                            {showFullCode ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                                        </button>
-                                        {showFullCode && (
-                                            <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-accent-primary)]/30 font-mono text-xs overflow-auto leading-relaxed max-h-96">
-                                                <pre className="whitespace-pre text-[var(--color-text-primary)]">{sourceCode}</pre>
-                                            </div>
-                                        )}
+                        {/* Pseudocode Panel */}
+                        <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-border)] font-mono text-xs overflow-auto leading-relaxed max-h-52">
+                            <pre className="whitespace-pre text-[var(--color-text-primary)]">{problem.pseudocode || problem.codeSnippet || "// Pseudocode coming soon..."}</pre>
+                        </div>
+
+                        {/* Complete C Implementation (collapsible) */}
+                        {sourceCode && (
+                            <div className="space-y-2">
+                                <button
+                                    onClick={() => setShowFullCode(!showFullCode)}
+                                    className="flex items-center gap-2 text-xs font-bold text-[var(--color-text-primary)] hover:text-[var(--color-accent-primary)] transition-colors w-full group"
+                                >
+                                    <div className="flex items-center gap-1.5 flex-1">
+                                        <span className="text-[var(--color-accent-cyan)] text-sm">{'</>'}</span>
+                                        <span>Complete C Implementation</span>
+                                    </div>
+                                    {showFullCode ? <ChevronUp size={12} className="text-[var(--color-accent-primary)]" /> : <ChevronDown size={12} className="text-[var(--color-text-tertiary)] group-hover:text-[var(--color-accent-primary)]" />}
+                                </button>
+                                {showFullCode && (
+                                    <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-accent-cyan)]/30 font-mono text-xs overflow-auto leading-relaxed max-h-96">
+                                        <pre className="whitespace-pre text-[var(--color-text-primary)]">{sourceCode}</pre>
                                     </div>
                                 )}
-                            </div>
-                        )}
-
-                        {codeLanguage === 'pseudo' && (
-                            <div className="bg-[var(--color-bg-primary)] p-4 rounded-xl border border-[var(--color-border)] font-mono text-xs overflow-auto leading-relaxed max-h-60">
-                                <pre className="whitespace-pre text-[var(--color-text-primary)]">{problem.pseudocode || "// Pseudocode coming soon..."}</pre>
                             </div>
                         )}
                     </div>

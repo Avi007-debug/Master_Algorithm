@@ -800,7 +800,6 @@ const TUTORIALS = {
             }
         ]
     },
-    // Searching Algorithms
     bst_search: {
         title: "BST Search Tutorial",
         steps: [
@@ -834,6 +833,367 @@ const TUTORIALS = {
                 content: "Both are O(log n) search, but BST allows O(log n) insertion/deletion too! Arrays need O(n) for insertions. This is BST's killer advantage!",
                 highlight: "complexity",
                 checkpoint: "When would you use array over BST?"
+            }
+        ]
+    },
+    // New Sem 4 Tutorials
+    quick_sort: {
+        title: "Quick Sort Tutorial",
+        steps: [
+            {
+                title: "Welcome to Quick Sort!",
+                content: "Quick Sort is a divide-and-conquer algorithm that picks a 'pivot' element and partitions the array around it. Elements smaller go left, larger go right!",
+                highlight: "description",
+                checkpoint: "Do you understand the pivot concept?"
+            },
+            {
+                title: "The Partition Step",
+                content: "Partition rearranges the array so all elements < pivot are on its left, all elements > pivot are on its right. The pivot ends up in its final sorted position!",
+                highlight: "visualization",
+                checkpoint: "Can you trace the partition of [3,6,8,10,1,2,1]?"
+            },
+            {
+                title: "Watch the Partition",
+                content: "Click 'Visualize' and observe how the pivot is placed at the correct position, and then Quick Sort is recursively applied to the two sub-arrays!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see where the pivot landed?"
+            },
+            {
+                title: "Recursion on Sub-arrays",
+                content: "After partition, the pivot is fixed. Quick Sort is called on the left sub-array and right sub-array. Base case: arrays of size 0 or 1 are already sorted!",
+                highlight: "visualization",
+                checkpoint: "Can you see how the recursion tree looks?"
+            },
+            {
+                title: "Complexity & Pivot Choice",
+                content: "Average case: O(n log n). Worst case: O(n²) if always picking smallest/largest as pivot (sorted array). Randomized pivot selection avoids this!",
+                highlight: "complexity",
+                checkpoint: "Why is random pivot selection important?"
+            }
+        ]
+    },
+    knapsack_01: {
+        title: "0/1 Knapsack Problem Tutorial",
+        steps: [
+            {
+                title: "The Classic DP Problem!",
+                content: "Given items with weights and values, and a knapsack with weight capacity W, select items to maximize total value without exceeding capacity. Each item can only be taken once (0 or 1)!",
+                highlight: "description",
+                checkpoint: "Why can't we use a greedy approach here?"
+            },
+            {
+                title: "The DP Table",
+                content: "Build a 2D table dp[i][w] = max value using first i items with weight capacity w. For each item: either exclude it (take dp[i-1][w]) or include it (take value[i] + dp[i-1][w-weight[i]])!",
+                highlight: "visualization",
+                checkpoint: "Can you see the optimal substructure?"
+            },
+            {
+                title: "Watch Table Construction",
+                content: "Click 'Visualize' and watch the DP table fill up row by row. Each cell represents the best value achievable with the current item set and capacity!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see how each row builds on the previous?"
+            },
+            {
+                title: "The Decision Rule",
+                content: "dp[i][w] = max(dp[i-1][w], value[i] + dp[i-1][w-weight[i]]) if weight[i] <= w, else dp[i-1][w]. The key: we only include an item if it improves the solution!",
+                highlight: "visualization",
+                checkpoint: "Can you apply the rule for an item of weight 3 and value 5?"
+            },
+            {
+                title: "Backtracking the Solution",
+                content: "The answer is dp[n][W]. To find WHICH items to include: trace back from dp[n][W]. If dp[i][w] != dp[i-1][w], item i was included! O(nW) time and space.",
+                highlight: "complexity",
+                checkpoint: "Can you trace back which items were selected?"
+            }
+        ]
+    },
+    horspool_algorithm: {
+        title: "Horspool String Matching Tutorial",
+        steps: [
+            {
+                title: "Welcome to Horspool's Algorithm!",
+                content: "Horspool's algorithm is an improved string matching method. Instead of shifting the pattern by 1 every time a mismatch occurs, it uses a shift table to jump further!",
+                highlight: "description",
+                checkpoint: "What is the problem with naive string matching?"
+            },
+            {
+                title: "The Bad Character Shift Table",
+                content: "Preprocess the pattern to build a shift table: for each character c, shift[c] = distance from c's rightmost occurrence in the pattern (excluding the last) to the end. Default shift = pattern length!",
+                highlight: "visualization",
+                checkpoint: "Can you compute the shift table for pattern 'BARBER'?"
+            },
+            {
+                title: "Watch the Algorithm",
+                content: "Click 'Visualize'. Notice how the algorithm aligns pattern's right end with text, compares right-to-left, and when a mismatch occurs, jumps using the shift table instead of just 1!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you observe the larger shifts compared to naive search?"
+            },
+            {
+                title: "Why It's Faster",
+                content: "By using the shift table, Horspool often skips large portions of the text. Best case: O(n/m) — it examines only 1 in m characters! Average case far better than O(nm).",
+                highlight: "visualization",
+                checkpoint: "When would Horspool perform similarly to naive search?"
+            },
+            {
+                title: "Complexity Summary",
+                content: "Preprocessing: O(m + |Σ|) where m is pattern length and Σ is alphabet size. Search: O(nm) worst case but O(n/m) best/average case. Great for long patterns!",
+                highlight: "complexity",
+                checkpoint: "How does Horspool compare to KMP algorithm?"
+            }
+        ]
+    },
+    boyer_moore_algorithm: {
+        title: "Boyer-Moore String Matching Tutorial",
+        steps: [
+            {
+                title: "The Most Efficient Matcher!",
+                content: "Boyer-Moore is one of the most efficient string search algorithms in practice. It uses two heuristics — Bad Character and Good Suffix — to skip as much text as possible!",
+                highlight: "description",
+                checkpoint: "What two heuristics does Boyer-Moore use?"
+            },
+            {
+                title: "Bad Character Heuristic",
+                content: "When a mismatch occurs at text character T[i], shift the pattern right so the rightmost occurrence of T[i] in the pattern aligns with T[i]. If T[i] not in pattern, shift past the whole mismatch!",
+                highlight: "visualization",
+                checkpoint: "Can you see how this is similar to Horspool?"
+            },
+            {
+                title: "Watch Boyer-Moore Work",
+                content: "Click 'Visualize' and observe how comparisons happen right-to-left, and mismatches trigger potentially large jumps based on the precomputed shift tables!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the right-to-left comparison order?"
+            },
+            {
+                title: "Good Suffix Heuristic",
+                content: "When a suffix of the pattern matches but then fails, shift so the next occurrence of that suffix in the pattern aligns with what we already matched. Maximizes skipping!",
+                highlight: "visualization",
+                checkpoint: "Can you visualize why the good suffix shift works?"
+            },
+            {
+                title: "Sub-linear Performance",
+                content: "Boyer-Moore achieves O(n/m) best case — it can find patterns in sub-linear time! Worst case O(nm) but average case is excellent. Used in grep, text editors, bioinformatics.",
+                highlight: "complexity",
+                checkpoint: "Why is Boyer-Moore the preferred choice in practice?"
+            }
+        ]
+    },
+    heapify: {
+        title: "Heapify Tutorial",
+        steps: [
+            {
+                title: "Welcome to Heapify!",
+                content: "Heapify restores the heap property for a node. Given that both children's subtrees are valid heaps, heapify ensures the root satisfies the heap property too!",
+                highlight: "description",
+                checkpoint: "What is the max-heap property?"
+            },
+            {
+                title: "The Three-Node Comparison",
+                content: "Compare root with left child (2i+1) and right child (2i+2). If root is not the largest, swap it with the largest child. Then recursively heapify the affected subtree!",
+                highlight: "visualization",
+                checkpoint: "Can you identify left and right child indices for node at index 3?"
+            },
+            {
+                title: "Watch Heapify in Action",
+                content: "Click 'Visualize' with a tree that violates the heap property. Watch the algorithm compare parent with children and bubble the correct value up to maintain max-heap order!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see which element was swapped?"
+            },
+            {
+                title: "Building a Heap",
+                content: "To build a heap from scratch, call heapify on all internal nodes from bottom up (from n/2-1 to 0). This takes O(n) time — better than inserting one by one (O(n log n))!",
+                highlight: "visualization",
+                checkpoint: "Why start from n/2-1 and not from the root?"
+            },
+            {
+                title: "Complexity",
+                content: "Single heapify call: O(log n) — it traverses one path from root to leaf. Building entire heap: O(n). Used in Heap Sort, Priority Queues, Dijkstra's algorithm!",
+                highlight: "complexity",
+                checkpoint: "Why is building a heap O(n) and not O(n log n)?"
+            }
+        ]
+    },
+    topological_sort: {
+        title: "Topological Sort Tutorial",
+        steps: [
+            {
+                title: "Ordering Dependencies!",
+                content: "Topological Sort produces a linear ordering of vertices in a Directed Acyclic Graph (DAG) such that for every edge u→v, u comes before v. Think of it as scheduling tasks with dependencies!",
+                highlight: "description",
+                checkpoint: "Can you think of a real dependency system?"
+            },
+            {
+                title: "Kahn's Algorithm (BFS Approach)",
+                content: "1) Calculate in-degrees of all nodes. 2) Add all nodes with in-degree 0 to queue. 3) Dequeue a node, add to result, reduce neighbors' in-degrees. 4) If in-degree becomes 0, enqueue it!",
+                highlight: "visualization",
+                checkpoint: "What does in-degree represent?"
+            },
+            {
+                title: "Watch the Ordering",
+                content: "Click 'Visualize' and observe how nodes with no remaining dependencies are processed first. The queue always holds the 'ready' nodes — those with no unfulfilled prerequisites!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see how in-degrees decreased?"
+            },
+            {
+                title: "Cycle Detection",
+                content: "If after processing all nodes, some nodes remain unprocessed (result.length < V), the graph has a cycle! Topological sort is only possible on DAGs (Directed Acyclic Graphs).",
+                highlight: "visualization",
+                checkpoint: "Why does a cycle make topological sort impossible?"
+            },
+            {
+                title: "Applications",
+                content: "Used in: build systems (make, webpack), task scheduling, course prerequisite ordering, package dependency resolution (npm), spreadsheet formula evaluation. O(V+E) time!",
+                highlight: "complexity",
+                checkpoint: "Which tools in your daily workflow use topological sort?"
+            }
+        ]
+    },
+    dijkstra_algorithm: {
+        title: "Dijkstra's Shortest Path Tutorial",
+        steps: [
+            {
+                title: "The Shortest Path Problem!",
+                content: "Dijkstra's algorithm finds the shortest path from a source vertex to all other vertices in a weighted graph (non-negative weights). It's the GPS navigation algorithm!",
+                highlight: "description",
+                checkpoint: "What makes this problem hard?"
+            },
+            {
+                title: "Greedy Strategy with Priority Queue",
+                content: "Key idea: always process the closest unvisited vertex next. Use a min-priority queue to always get the vertex with smallest tentative distance. Update neighbors if we found a shorter path!",
+                highlight: "visualization",
+                checkpoint: "Why do we process the closest vertex first?"
+            },
+            {
+                title: "Watch Dijkstra Explore",
+                content: "Click 'Visualize'. The algorithm starts at source (distance 0), explores neighbors, and updates distances. Watch how the 'frontier' expands outward like ripples in water!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the frontier expansion pattern?"
+            },
+            {
+                title: "Relaxation Step",
+                content: "For each neighbor v of current node u: if dist[u] + weight(u,v) < dist[v], update dist[v]. This 'relaxation' always improves our best known distance to v!",
+                highlight: "visualization",
+                checkpoint: "Can you manually relax edges from node 0 to its neighbors?"
+            },
+            {
+                title: "Complexity & Limitations",
+                content: "With binary heap: O((V+E) log V). Doesn't work with negative weights (use Bellman-Ford instead). Applications: GPS, network routing protocols (OSPF), social networks!",
+                highlight: "complexity",
+                checkpoint: "Why does Dijkstra fail with negative weights?"
+            }
+        ]
+    },
+    prim_algorithm: {
+        title: "Prim's MST Algorithm Tutorial",
+        steps: [
+            {
+                title: "Minimum Spanning Tree!",
+                content: "A Minimum Spanning Tree (MST) connects all vertices with minimum total edge weight, using exactly V-1 edges. Prim's algorithm builds it greedily, one edge at a time!",
+                highlight: "description",
+                checkpoint: "What is the difference between MST and shortest path?"
+            },
+            {
+                title: "Growing the Tree",
+                content: "Start with any vertex. At each step, add the cheapest edge that connects a vertex IN the tree to a vertex NOT yet in the tree. This greedy choice always leads to MST!",
+                highlight: "visualization",
+                checkpoint: "Why does the greedy choice work here?"
+            },
+            {
+                title: "Watch Prim's Algorithm",
+                content: "Click 'Visualize' and watch the MST grow edge by edge. The algorithm always picks the minimum weight edge connecting the current tree to a new vertex. No cycles possible!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the tree grow while avoiding cycles?"
+            },
+            {
+                title: "Key Array",
+                content: "key[v] stores the minimum weight edge connecting v to the current MST. parent[v] stores which tree vertex v is connected to. Update these as we add new vertices to MST!",
+                highlight: "visualization",
+                checkpoint: "What happens to key[] when we add a new vertex to MST?"
+            },
+            {
+                title: "Complexity & Applications",
+                content: "O(V² with adjacency matrix, O(E log V) with binary heap. Applications: network design (minimum cable), cluster analysis, approximate TSP, circuit design!",
+                highlight: "complexity",
+                checkpoint: "How is Prim's different from Kruskal's MST algorithm?"
+            }
+        ]
+    },
+    huffman_coding: {
+        title: "Huffman Coding Tutorial",
+        steps: [
+            {
+                title: "Lossless Data Compression!",
+                content: "Huffman coding is a greedy algorithm for lossless data compression. Frequent characters get shorter codes, rare characters get longer codes. Result: smaller file size!",
+                highlight: "description",
+                checkpoint: "Why should frequent characters have shorter codes?"
+            },
+            {
+                title: "Building the Frequency Table",
+                content: "First, count how many times each character appears. Then create leaf nodes for each character. The character with highest frequency should eventually get the shortest code!",
+                highlight: "visualization",
+                checkpoint: "In 'abracadabra', which character is most frequent?"
+            },
+            {
+                title: "Watch Huffman Tree Build",
+                content: "Click 'Visualize'. The algorithm repeatedly merges the two nodes with smallest frequencies into a parent node. This builds a binary tree — the Huffman tree!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the two-smallest merge pattern?"
+            },
+            {
+                title: "Generating Codes",
+                content: "Traverse the Huffman tree: going left = 0, going right = 1. Each character's code is its path from root to leaf. Prefix-free property: no code is prefix of another!",
+                highlight: "visualization",
+                checkpoint: "Can you generate codes for a small Huffman tree?"
+            },
+            {
+                title: "Compression Ratio",
+                content: "Huffman coding guarantees optimal prefix-free encoding. Used in: JPEG, MP3, ZIP, gzip. O(n log n) to build tree. Can reduce file size by 20-90% depending on content!",
+                highlight: "complexity",
+                checkpoint: "What type of data compresses best with Huffman?"
+            }
+        ]
+    },
+    presorting: {
+        title: "Presorting (Transform & Conquer) Tutorial",
+        steps: [
+            {
+                title: "Sort First, Then Solve!",
+                content: "Presorting is a transform-and-conquer technique: sort the input first, then the actual problem becomes trivially easy. Many O(n²) problems become O(n log n) this way!",
+                highlight: "description",
+                checkpoint: "Can you think of a problem that becomes easy after sorting?"
+            },
+            {
+                title: "Finding Duplicates Example",
+                content: "Brute force duplicate check: O(n²) — compare every pair. With presorting: sort in O(n log n), then scan once in O(n) comparing adjacent elements. Total: O(n log n)!",
+                highlight: "visualization",
+                checkpoint: "Why do duplicates appear adjacent after sorting?"
+            },
+            {
+                title: "Watch Presorting Work",
+                content: "Click 'Visualize' and observe: first the array is sorted, then a single linear scan finds duplicates by checking if arr[i] == arr[i+1]. Simple and efficient!",
+                highlight: "controls",
+                action: "run",
+                checkpoint: "Did you see the two-phase approach?"
+            },
+            {
+                title: "Other Applications",
+                content: "Presorting enables: finding median in O(n log n), binary search after sorting, closest pair of points, element uniqueness checks, and many more problems!",
+                highlight: "visualization",
+                checkpoint: "What other problems can presorting simplify?"
+            },
+            {
+                title: "The Trade-off",
+                content: "Presorting modifies original data order. It's O(n log n) minimum (comparison-based sorting lower bound). Use when multiple queries on same data — amortize sorting cost!",
+                highlight: "complexity",
+                checkpoint: "When is it NOT worth presorting the data?"
             }
         ]
     }
