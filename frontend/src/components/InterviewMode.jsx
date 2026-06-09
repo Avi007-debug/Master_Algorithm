@@ -871,8 +871,8 @@ export function InterviewMode({ problem, onBack, onSelectProblem }) {
 
                 {/* Canvas */}
                 <div className={`flex-1 p-8 pb-6 flex flex-col items-center justify-center bg-gradient-to-br from-[var(--color-bg-secondary)] via-[var(--color-bg-primary)] to-[var(--color-bg-secondary)] relative overflow-auto min-h-0`}>
-                    {/* Background decoration */}
-                    <div className={`absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] ${isDark ? 'opacity-[0.03]' : 'opacity-[0.02]'} pointer-events-none`}></div>
+                    {/* Background decoration - using CSS noise pattern instead of external URL */}
+                    <div className={`absolute inset-0 ${isDark ? 'opacity-[0.03]' : 'opacity-[0.02]'} pointer-events-none`} style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' result=\'noise\' /%3E%3CfeColorMatrix in=\'noise\' type=\'saturate\' values=\'0.3\' /%3E%3C/filter%3E%3Crect width=\'100\' height=\'100\' filter=\'url(%23noise)\' /%3E%3C/svg%3E")'}}></div>
 
                     {/* Current Step Explanation */}
                     {!isLoading && !error && logs.length > 0 && logs[currentStep]?.message && (
