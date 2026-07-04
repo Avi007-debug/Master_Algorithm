@@ -59,7 +59,9 @@ function validateInputs(inputs) {
         return { valid: false, error: 'Inputs must be an array' };
     }
     
-    // Empty inputs are allowed for algorithms that run with default inputs.
+    if (inputs.length === 0) {
+        return { valid: false, error: 'Please provide input values. The input cannot be empty.' };
+    }
     
     if (inputs.length > MAX_INPUTS) {
         return { valid: false, error: `Too many inputs. Maximum ${MAX_INPUTS} allowed.` };

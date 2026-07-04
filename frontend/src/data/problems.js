@@ -7379,7 +7379,10 @@ int main() {
     printf("A* Search initialized.\n");
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "start", label: "Start Node", type: "number", defaultValue: "0" },
+            { name: "goal", label: "Goal Node", type: "number", defaultValue: "4" }
+        ],
         runCommand: "astar_search",
     },
     {
@@ -7440,7 +7443,9 @@ int main() {
     printf("Tarjan's SCC\n");
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "edges", label: "Directed Edges (u->v, comma separated)", type: "string", defaultValue: "0->1, 1->2, 2->0, 2->3, 3->4, 4->3" }
+        ],
         runCommand: "tarjan_scc",
     },
     {
@@ -7474,7 +7479,9 @@ int main() {
     printf("Kosaraju's SCC algorithm requires 2 DFS passes.\n");
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "edges", label: "Directed Edges (u->v, comma separated)", type: "string", defaultValue: "0->1, 1->2, 2->0, 2->3, 3->4, 4->3" }
+        ],
         runCommand: "kosaraju_scc",
     },
     {
@@ -7534,7 +7541,10 @@ int main() {
     KMPSearch("ABABCABAB", "ABABDABACDABABCABAB");
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "text", label: "Text String", type: "string", defaultValue: "abacabadabacaba" },
+            { name: "pattern", label: "Pattern String", type: "string", defaultValue: "abacaba" }
+        ],
         runCommand: "kmp_string",
     },
     {
@@ -7593,7 +7603,10 @@ int main() {
     search("TEST", "THIS IS A TEST TEXT", 101);
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "text", label: "Text String", type: "string", defaultValue: "abacabadabacaba" },
+            { name: "pattern", label: "Pattern String", type: "string", defaultValue: "abacaba" }
+        ],
         runCommand: "rabin_karp",
     },
     {
@@ -7645,7 +7658,10 @@ int main() {
     printf("Z Algorithm String Matching\n");
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "text", label: "Text String", type: "string", defaultValue: "abacabadabacaba" },
+            { name: "pattern", label: "Pattern String", type: "string", defaultValue: "abacaba" }
+        ],
         runCommand: "z_algorithm",
     },
     {
@@ -7679,7 +7695,9 @@ int main() {
     printf("Topological Sort using Kahn's Algorithm involves indegree array and a queue.\n");
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "edges", label: "Directed Edges (u->v, comma separated)", type: "string", defaultValue: "0->1, 0->2, 1->3, 2->3" }
+        ],
         runCommand: "topological_sort",
     },
     {
@@ -7739,7 +7757,10 @@ void BellmanFord(struct Graph* graph, int src) {
 }
 
 int main() { return 0; }`,
-        inputs: [],
+                inputs: [
+            { name: "edges", label: "Weighted Edges (u->v:w, comma separated)", type: "string", defaultValue: "0->1:4, 0->2:5, 1->2:-3, 2->3:3" },
+            { name: "source", label: "Source Vertex", type: "number", defaultValue: "0" }
+        ],
         runCommand: "bellman_ford",
     },
     {
@@ -7802,7 +7823,9 @@ int main() {
     insert(root, "algorithm");
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "words", label: "Words to Insert (comma separated)", type: "string", defaultValue: "cat,car,dog" }
+        ],
         runCommand: "trie_insert_search",
     },
     {
@@ -7857,7 +7880,9 @@ int main() {
     printf("Sum of elements in arr[0..5] is %d\n", getSum(BITree, 5));
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "nums", label: "Initial Array", type: "array", defaultValue: "3, 2, -1, 6, 5, 4, -3, 2" }
+        ],
         runCommand: "fenwick_tree",
     },
     {
@@ -7906,7 +7931,9 @@ int main() {
     constructSTUtil(arr, 0, n-1, st, 0);
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "nums", label: "Initial Array", type: "array", defaultValue: "1, 3, 5, 7" }
+        ],
         runCommand: "segment_tree",
     },
     {
@@ -7969,7 +7996,9 @@ int main() {
     unionSet(3, 1);
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "operations", label: "Unions (u-v, comma separated)", type: "string", defaultValue: "0-2, 4-2, 3-1" }
+        ],
         runCommand: "union_find",
     },
     {
@@ -8010,7 +8039,9 @@ int main() {
     printf("Graham Scan Convex Hull\n");
     return 0;
 }`,
-        inputs: [],
+                inputs: [
+            { name: "points", label: "2D Points (x,y; x,y; ...)", type: "string", defaultValue: "0,0; 3,1; 2,2; 4,4; 0,3; 1,2" }
+        ],
         runCommand: "graham_scan",
     }
 ];
