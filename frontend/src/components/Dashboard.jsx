@@ -5,9 +5,11 @@ import {
     ArrowRight, Code2, Clock, Boxes, Search, Star, BookOpen,
     TrendingUp, ChevronDown, ChevronRight, Filter, Zap, Award,
     BarChart2, Layers, GitBranch, Hash, Database, Binary,
-    Network, Cpu, Brain, SlidersHorizontal, X, Sun, Moon
+    Network, Cpu, Brain, SlidersHorizontal, X, Sun, Moon,
+    LifeBuoy
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { TUTORIALS } from './GuidedTutorial';
 
 // ── Category metadata: icon + colour accent ──────────────────────────────────
 const CATEGORY_META = {
@@ -202,19 +204,7 @@ export function Dashboard({ onSelectProblem }) {
         localStorage.setItem('expandedCats', JSON.stringify([...expandedCategories]));
     }, [expandedCategories]);
 
-    const algorithmsWithTutorials = new Set([
-        'bubble_sort', 'merge_sort', 'quick_sort', 'binary_search',
-        'infix_to_postfix', 'infix_to_prefix', 'postfix_evaluation',
-        'stack_ll', 'valid_parentheses', 'queue_ll', 'deque_ll',
-        'circular_queue', 'message_queue',
-        'two_sum', 'three_sum', 'longest_substring',
-        'bst_search', 'bst_insert', 'bst_delete',
-        'towers_of_hanoi', 'dfs_graph', 'open_hashing', 'avl_tree',
-        'heap_sort', 'heapify',
-        'knapsack_01', 'horspool_algorithm', 'boyer_moore_algorithm',
-        'topological_sort', 'dijkstra_algorithm', 'prim_algorithm',
-        'huffman_coding', 'presorting'
-    ]);
+    const algorithmsWithTutorials = new Set(Object.keys(TUTORIALS));
 
     const isDark = theme === 'dark';
 
@@ -584,6 +574,14 @@ export function Dashboard({ onSelectProblem }) {
 
                     {/* Right controls */}
                     <div className="flex items-center gap-2 ml-auto">
+                        {/* Support Icon */}
+                        <a 
+                            href="mailto:avimore088@gmail.com" 
+                            title="Support: avimore088@gmail.com | +91 9322564784 (Avishkar More)"
+                            className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-white/10 text-white/80' : 'hover:bg-black/10 text-black/80'}`}
+                        >
+                            <LifeBuoy size={18} />
+                        </a>
                         {/* Theme Toggle */}
                         <button
                             onClick={toggleTheme}

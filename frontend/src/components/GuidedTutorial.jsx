@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 // ─── Tutorial data ─────────────────────────────────────────────────────────
 // Each step has: title, content, highlight, action?, checkpoint (question text),
 // options (4 MCQ choices), correctIndex (0-3), explanation (shown after answer)
-const TUTORIALS = {
+export const TUTORIALS = {
     // ── UNIT I : Brute Force ──────────────────────────────────────────────
     bubble_sort: {
         title: "Bubble Sort Tutorial",
