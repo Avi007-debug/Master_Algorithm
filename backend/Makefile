@@ -19,7 +19,8 @@ ALGORITHMS = two_sum three_sum valid-parentheses reverse_linked_list binary_sear
 	naive_string_matching horspool_algorithm boyer_moore_algorithm binomial_coefficient warshall_algorithm floyd_algorithm \
 	knapsack_01 memoization prim_algorithm dijkstra_algorithm huffman_coding fractional_knapsack \
 	sum_of_subsets tsp assignment_problem decision_trees_sorting comparison_trees lower_bound_sorting \
-	non_deterministic_algorithms class_p class_np np_complete np_hard polynomial_time_reduction
+	non_deterministic_algorithms class_p class_np np_complete np_hard polynomial_time_reduction \
+	astar_search tarjan_scc kosaraju_scc kmp_string rabin_karp z_algorithm bellman_ford trie_insert_search fenwick_tree segment_tree union_find graham_scan
 
 # Default target
 all: $(ALGORITHMS)
